@@ -67,7 +67,6 @@ ShaderProgram::ShaderProgram(const std::string& shaderPath)
 	glAttachShader(m_program, m_fragmentShader);
 	glLinkProgram(m_program);
 	glValidateProgram(m_program);
-
 	bindAttributes();
 }
 

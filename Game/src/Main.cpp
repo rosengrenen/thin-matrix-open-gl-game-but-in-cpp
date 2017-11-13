@@ -5,6 +5,9 @@
 #include <vector>
 #include <tuple>
 
+#include "models\RawModel.h"
+#include "models\TexturedModel.h"
+#include "textures\ModelTexture.h"
 #include "shaders/StaticShader.h"
 #include "renderEngine/DisplayManager.h"
 #include "renderEngine/Loader.h"
@@ -23,17 +26,24 @@ int main(void)
 	Loader loader;
 	Renderer renderer;
 	std::vector<float> vertexes {
-		-0.95f,  0.95f, 1.0f,
-		 0.95f,  0.95f, 1.0f,
-		 0.95f, -0.95f, 1.0f,
-		-0.95f, -0.95f, 1.0f
+		-0.95f,  0.95f, 0.0f, // V0
+		-0.95f, -0.95f, 0.0f, // V1
+		 0.95f, -0.95f, 0.0f, // V2
+		 0.95f,  0.95f, 0.0f, // V3
+	};
+	std::vector<float> texCoords {
+		0, 0, // V0
+		1, 0, // V1
+		1, 1, // V2
+		0, 1, // V3
 	};
 	std::vector<int> indices {
-		0, 3, 1,
-		1, 3, 2
+		0, 1, 3,
+		3, 1, 2,
 	};
-	RawModel triangle = loader.loadToVAO(vertexes, indices);
-	//SomeStuff texture = loader.loadTexture(std::string& fileName);
+	RawModel model = loader.loadToVAO(vertexes, texCoords, indices);
+	ModelTexture texture = loader.loadTexture("wall.jpg");
+	TexturedModel texturedModel(model, texture);
 	StaticShader triangleProgram("res/shaders/triangle.shader");
 	triangleProgram.use();
 
@@ -44,7 +54,7 @@ int main(void)
 		renderer.prepare();
 
 		triangleProgram.use();
-		renderer.render(triangle);
+		renderer.render(texturedModel);
 		triangleProgram.stop();
 
 		/* Swap front and back buffers */

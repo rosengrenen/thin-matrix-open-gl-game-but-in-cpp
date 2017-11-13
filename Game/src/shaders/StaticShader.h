@@ -12,6 +12,7 @@ public:
 	virtual void bindAttributes() override
 	{
 		bindAttribute(0, "position");
+		bindAttribute(1, "texCoords");
 	}
 };
 

@@ -2,24 +2,26 @@
 #version 330 core
 
 in vec3 position;
+in vec2 texCoords;
 
-out vec3 colour;
+out vec2 pass_texCoords;
 
 void main()
 {
 	gl_Position = vec4(position, 1.0);
-	colour = position;
+	pass_texCoords = texCoords;
 };
 
 #shader fragment
 #version 330 core
 
-in vec3 colour;
+in vec2 pass_texCoords;
 
 out vec4 out_Color;
 
+uniform sampler2D texSampler;
+
 void main()
 {
-	vec3 otherVar = 0.5*(colour + 1.0);
-	out_Color = vec4(otherVar, 1.0);
+	out_Color = texture(texSampler, pass_texCoords);
 };

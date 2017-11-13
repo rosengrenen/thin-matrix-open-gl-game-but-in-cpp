@@ -154,12 +154,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dependencies\stb_image.h" />
+    <ClInclude Include="src\models\TexturedModel.h" />
     <ClInclude Include="src\renderEngine\DisplayManager.h" />
     <ClInclude Include="src\renderEngine\Loader.h" />
-    <ClInclude Include="src\renderEngine\RawModel.h" />
+    <ClInclude Include="src\models\RawModel.h" />
     <ClInclude Include="src\renderEngine\Renderer.h" />
     <ClInclude Include="src\shaders\ShaderProgram.h" />
     <ClInclude Include="src\shaders\StaticShader.h" />
+    <ClInclude Include="src\textures\ModelTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container.jpg" />
