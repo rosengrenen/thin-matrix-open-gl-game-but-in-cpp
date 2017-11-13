@@ -65,9 +65,10 @@ ShaderProgram::ShaderProgram(const std::string& shaderPath)
 
 	glAttachShader(m_program, m_vertexShader);
 	glAttachShader(m_program, m_fragmentShader);
+	bindAttributes();
 	glLinkProgram(m_program);
 	glValidateProgram(m_program);
-	bindAttributes();
+	getAllUniformLocations();
 }
 
 ShaderProgram::~ShaderProgram()
@@ -93,4 +94,29 @@ void ShaderProgram::use()
 void ShaderProgram::stop()
 {
 	glUseProgram(0);
+}
+
+int ShaderProgram::getUniformLocation(std::string uniformName) const
+{
+	return glGetUniformLocation(m_program, uniformName.c_str());
+}
+
+void ShaderProgram::setMatrix4(const int location, const glm::mat4 matrix) const
+{ 
+	glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
+}
+
+void ShaderProgram::setBool(const int location, const bool value) const
+{
+	glUniform1i(location, value);
+}
+
+void ShaderProgram::setFloat(const int location, const float value) const
+{
+	glUniform1f(location, value);
+}
+
+void ShaderProgram::setVec3f(const int location, const glm::vec3 vector) const
+{
+	glUniform3f(location, vector.x, vector.y, vector.z);
 }
