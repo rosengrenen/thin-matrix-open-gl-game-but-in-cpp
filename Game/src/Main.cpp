@@ -5,6 +5,7 @@
 #include <vector>
 #include <tuple>
 
+#include "entities\Entity.h"
 #include "models\RawModel.h"
 #include "models\TexturedModel.h"
 #include "textures\ModelTexture.h"
@@ -12,6 +13,27 @@
 #include "renderEngine/DisplayManager.h"
 #include "renderEngine/Loader.h"
 #include "renderEngine/Renderer.h"
+#include "utilities\Maths.h"
+
+#define ASSERT(x) if (!(x)) __debugbreak();
+#define GLCall(x) GLClearError();\
+x;\
+ASSERT(GLLogCall(#x, __FILE__, __LINE__))
+
+static void GLClearError()
+{
+	while (glGetError() != GL_NO_ERROR);
+}
+
+static bool GLLogCall(const char* function, const char* file, int line)
+{
+	while (GLenum error = glGetError())
+	{
+		std::cout << "[OpenGL Error] (" << error << "): " << function << " " << file << ":" << line << std::endl;
+		return false;
+	}
+	return true;
+}
 
 int main(void)
 {
@@ -42,10 +64,12 @@ int main(void)
 		3, 1, 2,
 	};
 	RawModel model = loader.loadToVAO(vertexes, texCoords, indices);
-	ModelTexture texture = loader.loadTexture("wall.jpg");
-	TexturedModel texturedModel(model, texture);
-	StaticShader triangleProgram("res/shaders/triangle.shader");
-	triangleProgram.use();
+	ModelTexture texture(loader.loadTexture("wall.jpg"));
+	TexturedModel staticModel(model, texture);
+	StaticShader shader("res/shaders/triangle.shader");
+
+	Entity entity(staticModel, glm::vec3(0.5f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), 1.0f);
+
 
 	/* Loop until the user closes the window */
 	while (!window.shouldClose())
@@ -53,9 +77,9 @@ int main(void)
 		/* Render here */
 		renderer.prepare();
 
-		triangleProgram.use();
-		renderer.render(texturedModel);
-		triangleProgram.stop();
+		GLCall(shader.use());
+		GLCall(renderer.render(entity, shader));
+		GLCall(shader.stop());
 
 		/* Swap front and back buffers */
 		window.swapBuffers();

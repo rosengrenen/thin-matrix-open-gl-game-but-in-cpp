@@ -4,9 +4,11 @@
 #include <sstream>
 #include <fstream>
 
+#include <glm\gtc\type_ptr.hpp>
+
 #include "ShaderProgram.h"
 
-std::tuple<std::string, std::string> ShaderProgram::ParseShaderSource(const std::string& filePath)
+std::tuple<std::string, std::string> ShaderProgram::parseShaderSource(const std::string& filePath)
 {
 	std::ifstream stream;
 
@@ -33,7 +35,7 @@ std::tuple<std::string, std::string> ShaderProgram::ParseShaderSource(const std:
 	return std::make_tuple<std::string, std::string>(ss[0].str(), ss[1].str());
 }
 
-unsigned int ShaderProgram::CompileShader(const unsigned int type, const std::string& source)
+unsigned int ShaderProgram::compileShader(const unsigned int type, const std::string& source)
 {
 	unsigned int id = glCreateShader(type);
 	const char* src = source.c_str();
@@ -56,12 +58,12 @@ unsigned int ShaderProgram::CompileShader(const unsigned int type, const std::st
 	return id;
 }
 
-ShaderProgram::ShaderProgram(const std::string& shaderPath)
+void ShaderProgram::createProgram(const std::string& shaderPath)
 {
-	std::tuple<std::string, std::string> shaderSources = ParseShaderSource(shaderPath);
+	std::tuple<std::string, std::string> shaderSources = parseShaderSource(shaderPath);
 	m_program = glCreateProgram();
-	m_vertexShader = CompileShader(GL_VERTEX_SHADER, std::get<0>(shaderSources));
-	m_fragmentShader = CompileShader(GL_FRAGMENT_SHADER, std::get<1>(shaderSources));
+	m_vertexShader = compileShader(GL_VERTEX_SHADER, std::get<0>(shaderSources));
+	m_fragmentShader = compileShader(GL_FRAGMENT_SHADER, std::get<1>(shaderSources));
 
 	glAttachShader(m_program, m_vertexShader);
 	glAttachShader(m_program, m_fragmentShader);
@@ -103,7 +105,7 @@ int ShaderProgram::getUniformLocation(std::string uniformName) const
 
 void ShaderProgram::setMatrix4(const int location, const glm::mat4 matrix) const
 { 
-	glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
+	glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void ShaderProgram::setBool(const int location, const bool value) const

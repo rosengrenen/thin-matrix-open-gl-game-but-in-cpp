@@ -7,12 +7,16 @@ class StaticShader : public ShaderProgram
 {
 private:
 	int m_transformationMatrixLocation;
+	int m_texSamplerLocation;
 public:
-	StaticShader(const std::string& filePath) : ShaderProgram(filePath)
-	{ }
+	StaticShader(const std::string& filePath)
+	{
+		createProgram(filePath);
+	}
 	void getAllUniformLocations() override
 	{
 		m_transformationMatrixLocation = getUniformLocation("transformationMatrix");
+		m_texSamplerLocation = getUniformLocation("texSampler");
 	}
 	void bindAttributes() override
 	{
