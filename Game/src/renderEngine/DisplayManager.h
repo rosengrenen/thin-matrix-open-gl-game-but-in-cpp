@@ -69,9 +69,15 @@ public:
 	{
 		glfwSetWindowPos(m_window, left, top);
 	}
+
 	void setSize(const int width, const int height)
 	{
 		glfwSetWindowSize(m_window, width, height);
+	}
+
+	GLFWwindow* getWindow() const
+	{
+		return m_window;
 	}
 };
 

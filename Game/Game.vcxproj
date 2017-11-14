@@ -154,7 +154,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dependencies\stb_image.h" />
+    <ClInclude Include="src\entities\Camera.h" />
     <ClInclude Include="src\entities\Entity.h" />
+    <ClInclude Include="src\input\Input.h" />
+    <ClInclude Include="src\input\Keyboard.h" />
+    <ClInclude Include="src\input\Mouse.h" />
+    <ClInclude Include="src\input\Scroll.h" />
     <ClInclude Include="src\models\TexturedModel.h" />
     <ClInclude Include="src\renderEngine\DisplayManager.h" />
     <ClInclude Include="src\renderEngine\Loader.h" />
@@ -167,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container.jpg" />
+    <Image Include="res\textures\stallTexture.png" />
     <Image Include="res\textures\wall.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

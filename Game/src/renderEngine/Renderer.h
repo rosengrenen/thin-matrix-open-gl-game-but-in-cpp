@@ -10,11 +10,29 @@
 
 class Renderer
 {
+private:
+	const float m_FOV = 70;
+	const float m_NEAR_PLANE = 0.1f;
+	const float m_FAR_PLANE = 1000;
+	glm::mat4 m_projectionMatrix;
+private:
+	void createProjectMatrix()
+	{
+		m_projectionMatrix = glm::perspective(glm::radians(m_FOV), 800.0f / 600.0f, m_NEAR_PLANE, m_FAR_PLANE);
+	}
 public:
+	Renderer(StaticShader& shader)
+	{
+		createProjectMatrix();
+		shader.use();
+		shader.loadProjectionMatrix(m_projectionMatrix);
+		shader.stop();
+	}
 	void prepare()
 	{
+		glEnable(GL_DEPTH_TEST);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
 	}
 
 	void render(Entity entity, StaticShader& shader)

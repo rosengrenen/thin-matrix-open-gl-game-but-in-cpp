@@ -6,10 +6,12 @@
 #include <glm\matrix.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 
+#include "..\entities\Camera.h"
+
 class Maths
 {
 public:
-	static glm::mat4 createTransformationMatrix(const glm::vec3 translation, const glm::vec3 rotation,  const float scale)
+	static glm::mat4 createTransformationMatrix(const glm::vec3 translation, const glm::vec3 rotation, const float scale)
 	{
 		// Translate
 		glm::mat4 matrix = glm::translate(glm::mat4(1.0f), translation);
