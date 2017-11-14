@@ -1,5 +1,4 @@
-#ifndef MODEL_TEXTURE_H
-#define MODEL_TEXTURE_H
+#pragma once
 
 class ModelTexture
 {
@@ -14,5 +13,3 @@ public:
 		return m_texture;
 	}
 };
-
-#endif

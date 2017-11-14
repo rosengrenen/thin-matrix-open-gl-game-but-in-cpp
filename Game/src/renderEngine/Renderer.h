@@ -43,7 +43,7 @@ public:
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 
-		glm::mat4 transMat = Maths::createTransformationMatrix(entity.getPosition(), entity.getRotation(), entity.getScale());
+		glm::mat4 transMat = entity.getTransformationMatrix();
 		shader.loadTransformationMatrix(transMat);
 		int test = model.getTexture().getID();
 		glActiveTexture(GL_TEXTURE0);
