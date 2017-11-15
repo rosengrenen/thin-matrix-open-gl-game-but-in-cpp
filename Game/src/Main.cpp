@@ -255,7 +255,7 @@ int main(void)
 
 	// Cube properties !! ENTITY
 	glm::vec3 translation(-0.2f, 0.3f, -0.5);
-	glm::vec3 rotation(0, 0, 0);
+	glm::vec3 rotation(0, -90, 0);
 	float scale = 0.8f;
 
 	// World properties !! WORLD
@@ -265,9 +265,9 @@ int main(void)
 	// Location of the camera
 	glm::vec3 position(0, 0, 1);
 	// Focus point
-	glm::vec3 front(0, 0, -1);
+	glm::vec3 front;
 	// Up direction of camera, wont be changed yet, tilting the camera isn't necessary yet
-	glm::vec3 up(0, 1, 0);
+	glm::vec3 up;
 	// Vector used to caluclate up
 	glm::vec3 right;
 	// Rotation around y axis
