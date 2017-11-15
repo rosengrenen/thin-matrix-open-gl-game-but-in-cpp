@@ -14,6 +14,7 @@
 #include "dependencies\stb_image.h"
 
 #include "ShaderProgram.h"
+#include "Window.h"
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCall(x) GLClearError();\
@@ -35,6 +36,7 @@ static bool GLLogCall(const char* function, const char* file, int line)
 	return true;
 }
 
+// The object in question
 static glm::mat4 getTransformationMatrix(const glm::vec3& translation, const glm::vec3& rotation, const float scale)
 {
 	// Translate
@@ -50,11 +52,13 @@ static glm::mat4 getTransformationMatrix(const glm::vec3& translation, const glm
 	return transformationMatrix;
 }
 
+// Camera
 static glm::mat4 getViewMatrix(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up)
 {
 	return glm::lookAt(eye, center, up);
 }
 
+// Related to the window and fov (camera)
 static glm::mat4 getProjectionMatrix(const float fov)
 {
 	return glm::perspective(fov, 800.0f / 600.0f, 0.1f, 100.0f);
@@ -67,15 +71,10 @@ int main(void)
 		return 0;
 
 	/* Create a windowed mode window and its OpenGL context */
-	GLFWwindow* window = glfwCreateWindow(800, 600, "De-abstraction of everything", NULL, NULL);
-	if (!window)
-	{
-		glfwTerminate();
-		return 0;
-	}
+	Window mWindow(800, 600, "New window");
 
-	/* Make the window's context current */
-	glfwMakeContextCurrent(window);
+	// Temporary solution to get rid of errors, need more abstractions
+	GLFWwindow* window = mWindow.getWindow();
 
 	// Unlimit the framerate
 	glfwSwapInterval(1);
@@ -158,6 +157,7 @@ int main(void)
 		23,21,22
 	};
 
+	// How to abstract this?? VAO -> VBOS (VERTICES, TEXTURES) -> TRANSFORMATION -> Entity
 	#pragma region DATA
 	unsigned int vao;
 	unsigned int vbos[2];
@@ -199,6 +199,7 @@ int main(void)
 	}
 	#pragma endregion Loads and binds a texture (container.jpg)
 
+	// All of this in a separate file, make it a class or something // think of the abstraction and virtual functions
 	#pragma region SHADER_PROGRAM
 	unsigned int program = glCreateProgram();
 
@@ -252,21 +253,23 @@ int main(void)
 	unsigned int viewMatrixLoc = glGetUniformLocation(program, "viewMatrix");
 	#pragma endregion Creates shader program, attaches shaders, links, and validates
 
-	// Cube properties
+	// Cube properties !! ENTITY
 	glm::vec3 translation(-0.2f, 0.3f, -0.5);
 	glm::vec3 rotation(0, 0, 0);
 	float scale = 0.8f;
 
-	// World properties
+	// World properties !! WORLD
 	glm::vec3 worldUp(0, 1, 0);
 
-	// Camera properties
+	// Camera properties !! CAMERA
 	// Location of the camera
 	glm::vec3 position(0, 0, 1);
 	// Focus point
 	glm::vec3 front(0, 0, -1);
 	// Up direction of camera, wont be changed yet, tilting the camera isn't necessary yet
 	glm::vec3 up(0, 1, 0);
+	// Vector used to caluclate up
+	glm::vec3 right;
 	// Rotation around y axis
 	float yaw = 0;
 	// Rotation around x axis
@@ -276,39 +279,76 @@ int main(void)
 	// Field of View
 	float FoV = 45;
 
+	// !! WINDOW
 	float deltaTime = 0.0f;	// Time between current frame and last frame
 	float lastFrame = 0.0f; // Time of last frame
 	int frames = 0;
 	float frameTime = 0;
 
-	double mouseX;
-	double mouseY;
+	double mouseX = 400;
+	double mouseY = 300;
 	double mouseOffsetX;
 	double mouseOffsetY;
 	double mouseLastX = 0;
 	double mouseLastY = 0;
-	double mouseSensitivity = 0.3f;
+	double mouseSensitivity = 0.3;
 
+	glfwSetCursorPos(window, mouseX, mouseY);
 
 	GLCall(glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED));
+
+	float movementSpeed = 0.2f;
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
-		// Change entity properites
+		// Change entity properites !! ENTITY
 		rotation.y += 0.01f;
+
+		// Mouse movement !! WINDOW !! CAMERA
 		glfwGetCursorPos(window, &mouseX, &mouseY);
-		mouseOffsetX = mouseX - mouseLastX;
-		mouseOffsetY = mouseLastY - mouseY;
+		mouseOffsetX = mouseLastX - mouseX;
+		mouseOffsetY = mouseY - mouseLastY;
 		yaw += mouseOffsetY * mouseSensitivity;
 		yaw = yaw < -89 ? -89 : yaw;
 		yaw = yaw > 89 ? 89 : yaw;
 		pitch += mouseOffsetX * mouseSensitivity;
 		mouseLastX = mouseX;
 		mouseLastY = mouseY;
-		front = glm::vec3(glm::cos(glm::radians(pitch)), glm::sin(glm::radians(yaw)), glm::sin(glm::radians(pitch)));
+		front.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
+		front.y = glm::sin(glm::radians(yaw));
+		front.z = glm::sin(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
+		front = glm::normalize(front);
+		right = glm::normalize(glm::cross(front, worldUp));
+		up = glm::normalize(glm::cross(front, right));
 
-		/* Render here */
+		// Keyboard input !! WINDOW
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		{
+			position += glm::vec3(front.x, 0, front.z) * movementSpeed;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		{
+			position -= glm::vec3(front.x, 0, front.z) * movementSpeed;
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		{
+			position += right * movementSpeed;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		{
+			position -= right * movementSpeed;
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		{
+			position.y -= movementSpeed;
+		}
+		else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		{
+			position.y += movementSpeed;
+		}
+
+		// Render here !! WHERE DOES THIS BELONG?
 		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 		GLCall(glEnable(GL_DEPTH_TEST));
@@ -338,16 +378,16 @@ int main(void)
 
 		GLCall(glDisable(GL_DEPTH_TEST));
 
-		/* Swap front and back buffers */
+		/* Swap front and back buffers !! WINDOW */
 		GLCall(glfwSwapBuffers(window));
 
-		/* Poll for and process events */
+		/* Poll for and process events !! WINDOW?? */
 		GLCall(glfwPollEvents());
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		// FPS
+		// FPS !! WINDOW? !! FPS?
 		frames++;
 		if (currentFrame - frameTime > 1.0f)
 		{
@@ -355,8 +395,6 @@ int main(void)
 			frameTime = currentFrame;
 			frames = 0;
 		}
-
-		//std::cout << 1000 / deltaTime << std::endl;
 	}
 
 	glfwTerminate();

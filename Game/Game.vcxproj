@@ -153,8 +153,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dependencies\stb_image.h" />
-    <ClInclude Include="src\entities\Camera.h" />
     <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container.jpg" />
