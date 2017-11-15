@@ -4,7 +4,11 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
-#include <string>
+
+#include <glm\vec3.hpp>
+#include <glm\mat4x4.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\constants.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "dependencies\stb_image.h"
@@ -31,6 +35,21 @@ static bool GLLogCall(const char* function, const char* file, int line)
 	return true;
 }
 
+static glm::mat4 getTransformationMatrix(const glm::vec3& translation, const glm::vec3& rotation, const float scale)
+{
+	// Translate
+	glm::mat4 transformationMatrix = glm::translate(glm::mat4(1), translation);
+	// RotateX
+	transformationMatrix = glm::rotate(transformationMatrix, rotation.x, glm::vec3(1, 0, 0));
+	// RotateY
+	transformationMatrix = glm::rotate(transformationMatrix, rotation.y, glm::vec3(0, 1, 0));
+	// RotateZ
+	transformationMatrix = glm::rotate(transformationMatrix, rotation.z, glm::vec3(0, 0, 1));
+	// Scale
+	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(scale));
+	return transformationMatrix;
+}
+
 int main(void)
 {
 	/* Initialize the library */
@@ -48,14 +67,16 @@ int main(void)
 	/* Make the window's context current */
 	glfwMakeContextCurrent(window);
 
+	// Unlimit the framerate
+	//glfwSwapInterval(0);
+
 	unsigned int err = glewInit();
 	if (err != GLEW_OK)
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 
 	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
-	//Loader loader;
-	/*std::vector<float> vertices {
+	std::vector<float> vertices {
 		-0.5f,0.5f,-0.5f,
 		-0.5f,-0.5f,-0.5f,
 		0.5f,-0.5f,-0.5f,
@@ -125,18 +146,37 @@ int main(void)
 		19,17,18,
 		20,21,23,
 		23,21,22
-	};*/
-
-	std::vector<float> vertices = {
-		0
 	};
 
-	// Generate cube vao and pass data
+	/*std::vector<float> vertices {
+		-0.5f,  0.5f, 0.0f,
+		 0.5f,  0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		-0.5f, -0.5f, 0.0f,
+	};
+
+	std::vector<float> texCoords {
+		0, 0,
+		1, 0,
+		1, 1,
+		0, 1,
+	};
+
+	std::vector<int> indices {
+		3, 2, 1,
+		1, 0, 3,
+	};*/
+
+	#pragma region DATA
 	unsigned int vao;
 	unsigned int vbos[2];
 	unsigned int ibo;
 	GLCall(glGenVertexArrays(1, &vao));
 	GLCall(glBindVertexArray(vao));
+
+	GLCall(glGenBuffers(1, &ibo));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices.front(), GL_STATIC_DRAW));
 
 	GLCall(glGenBuffers(2, vbos));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbos[0]));
@@ -147,11 +187,11 @@ int main(void)
 	GLCall(glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(float), &texCoords.front(), GL_STATIC_DRAW));
 	GLCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0));
 
-	GLCall(glGenBuffers(1, &ibo));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices.front(), GL_STATIC_DRAW));
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	#pragma endregion Generates the VAO, array buffers and index buffer
 
-	// Bind a texture to the cube
+	#pragma region TEXTURE
 	unsigned int texture;
 	GLCall(glGenTextures(1, &texture));
 	int width, height, nrChannels;
@@ -166,8 +206,9 @@ int main(void)
 	{
 		std::cout << "Couldn't load texture" << std::endl;
 	}
+	#pragma endregion Loads and binds a texture (container.jpg)
 
-	// Generate shader program
+	#pragma region SHADER_PROGRAM
 	unsigned int program = glCreateProgram();
 
 	std::tuple<std::string, std::string> shaderSource = parseShaderSource("res/shaders/triangle.shader");
@@ -215,32 +256,43 @@ int main(void)
 	GLCall(glLinkProgram(program));
 	GLCall(glValidateProgram(program));
 
-	//unsigned int transformationMatrixLoc = glGetUniformLocation(program, "transformationMatrix");
-	//unsigned int projectionMatrixLoc = glGetUniformLocation(program, "projectionMatrix");
-	//unsigned int viewMatrixLoc = glGetUniformLocation(program, "viewMatrix");
-	/*RawModel model = loader.loadToVAO(vertexes, texCoords, indices);
-	//ModelTexture texture(loader.loadTexture("wall.jpg"));
-	//TexturedModel staticModel(model, texture);
-	StaticShader shader("res/shaders/trianGLCall(gle.shader"));
-	//Renderer renderer(shader);
-	Entity entity(staticModel, GLCall(glm::vec3(0), glm::vec3(0), 0.8f));
+	unsigned int transformationMatrixLoc = glGetUniformLocation(program, "transformationMatrix");
+	unsigned int projectionMatrixLoc = glGetUniformLocation(program, "projectionMatrix");
+	unsigned int viewMatrixLoc = glGetUniformLocation(program, "viewMatrix");
+	#pragma endregion Creates shader program, attaches shaders, links, and validates
 
-	Camera camera;*/
+	// Cube properties
+	glm::vec3 translation(-0.2f, 0.3f, -0.5);
+	glm::vec3 rotation(0, 0, 0);
+	float scale = 0.8f;
+
+	#pragma region VIEW_MATRIX Creates the view matrix
+
+	#pragma endregion
+
 
 	float deltaTime = 0.0f;	// Time between current frame and last frame
 	float lastFrame = 0.0f; // Time of last frame
+	int frames = 0;
+	float frameTime = 0;
+
 
 	//GLCall(glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED));
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
+		// Change entity properites
+		rotation.y += 0.01f;
+
 		/* Render here */
 		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 		GLCall(glEnable(GL_DEPTH_TEST));
 
 		GLCall(glUseProgram(program));
+
+		glUniformMatrix4fv(transformationMatrixLoc, 1, GL_FALSE, &getTransformationMatrix(translation, rotation, scale)[0][0]);
 
 		GLCall(glBindVertexArray(vao));
 		GLCall(glEnableVertexAttribArray(0));
@@ -249,7 +301,7 @@ int main(void)
 		GLCall(glActiveTexture(GL_TEXTURE0));
 		GLCall(glBindTexture(GL_TEXTURE_2D, texture));
 
-		GLCall(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, &indices.front()));
+		GLCall(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0));
 
 		GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 
@@ -259,7 +311,7 @@ int main(void)
 
 		GLCall(glUseProgram(0));
 
-		GLCall(glDisable(GL_DEPTH_TEST));
+		//GLCall(glDisable(GL_DEPTH_TEST));
 
 		/* Swap front and back buffers */
 		GLCall(glfwSwapBuffers(window));
@@ -269,6 +321,17 @@ int main(void)
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
+
+		// FPS
+		frames++;
+		if (currentFrame - frameTime > 1.0f)
+		{
+			std::cout << "[FPS] "<< frames << std::endl;
+			frameTime = currentFrame;
+			frames = 0;
+		}
+
+		//std::cout << 1000 / deltaTime << std::endl;
 	}
 
 	glfwTerminate();

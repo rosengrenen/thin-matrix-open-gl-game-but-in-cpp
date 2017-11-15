@@ -2,7 +2,6 @@
 #define CAMERA_H
 
 #include <glm\mat4x4.hpp>
-#include <glm\gtc\matrix_transform.hpp>
 #include <glm\vec3.hpp>
 
 // Initial camera values
