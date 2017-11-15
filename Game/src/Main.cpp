@@ -50,6 +50,16 @@ static glm::mat4 getTransformationMatrix(const glm::vec3& translation, const glm
 	return transformationMatrix;
 }
 
+static glm::mat4 getViewMatrix(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up)
+{
+	return glm::lookAt(eye, center, up);
+}
+
+static glm::mat4 getProjectionMatrix(const float fov)
+{
+	return glm::perspective(fov, 800.0f / 600.0f, 0.1f, 100.0f);
+}
+
 int main(void)
 {
 	/* Initialize the library */
@@ -68,7 +78,7 @@ int main(void)
 	glfwMakeContextCurrent(window);
 
 	// Unlimit the framerate
-	//glfwSwapInterval(0);
+	glfwSwapInterval(1);
 
 	unsigned int err = glewInit();
 	if (err != GLEW_OK)
@@ -147,25 +157,6 @@ int main(void)
 		20,21,23,
 		23,21,22
 	};
-
-	/*std::vector<float> vertices {
-		-0.5f,  0.5f, 0.0f,
-		 0.5f,  0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-	};
-
-	std::vector<float> texCoords {
-		0, 0,
-		1, 0,
-		1, 1,
-		0, 1,
-	};
-
-	std::vector<int> indices {
-		3, 2, 1,
-		1, 0, 3,
-	};*/
 
 	#pragma region DATA
 	unsigned int vao;
@@ -266,24 +257,56 @@ int main(void)
 	glm::vec3 rotation(0, 0, 0);
 	float scale = 0.8f;
 
-	#pragma region VIEW_MATRIX Creates the view matrix
+	// World properties
+	glm::vec3 worldUp(0, 1, 0);
 
-	#pragma endregion
-
+	// Camera properties
+	// Location of the camera
+	glm::vec3 position(0, 0, 1);
+	// Focus point
+	glm::vec3 front(0, 0, -1);
+	// Up direction of camera, wont be changed yet, tilting the camera isn't necessary yet
+	glm::vec3 up(0, 1, 0);
+	// Rotation around y axis
+	float yaw = 0;
+	// Rotation around x axis
+	float pitch = 0;
+	// Rotation around z axis
+	float roll = 0;
+	// Field of View
+	float FoV = 45;
 
 	float deltaTime = 0.0f;	// Time between current frame and last frame
 	float lastFrame = 0.0f; // Time of last frame
 	int frames = 0;
 	float frameTime = 0;
 
+	double mouseX;
+	double mouseY;
+	double mouseOffsetX;
+	double mouseOffsetY;
+	double mouseLastX = 0;
+	double mouseLastY = 0;
+	double mouseSensitivity = 0.3f;
 
-	//GLCall(glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED));
+
+	GLCall(glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED));
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
 		// Change entity properites
 		rotation.y += 0.01f;
+		glfwGetCursorPos(window, &mouseX, &mouseY);
+		mouseOffsetX = mouseX - mouseLastX;
+		mouseOffsetY = mouseLastY - mouseY;
+		yaw += mouseOffsetY * mouseSensitivity;
+		yaw = yaw < -89 ? -89 : yaw;
+		yaw = yaw > 89 ? 89 : yaw;
+		pitch += mouseOffsetX * mouseSensitivity;
+		mouseLastX = mouseX;
+		mouseLastY = mouseY;
+		front = glm::vec3(glm::cos(glm::radians(pitch)), glm::sin(glm::radians(yaw)), glm::sin(glm::radians(pitch)));
 
 		/* Render here */
 		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
@@ -293,6 +316,8 @@ int main(void)
 		GLCall(glUseProgram(program));
 
 		glUniformMatrix4fv(transformationMatrixLoc, 1, GL_FALSE, &getTransformationMatrix(translation, rotation, scale)[0][0]);
+		glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, &getViewMatrix(position, position + front, up)[0][0]);
+		glUniformMatrix4fv(projectionMatrixLoc, 1, GL_FALSE, &getProjectionMatrix(FoV)[0][0]);
 
 		GLCall(glBindVertexArray(vao));
 		GLCall(glEnableVertexAttribArray(0));
@@ -311,7 +336,7 @@ int main(void)
 
 		GLCall(glUseProgram(0));
 
-		//GLCall(glDisable(GL_DEPTH_TEST));
+		GLCall(glDisable(GL_DEPTH_TEST));
 
 		/* Swap front and back buffers */
 		GLCall(glfwSwapBuffers(window));
@@ -326,7 +351,7 @@ int main(void)
 		frames++;
 		if (currentFrame - frameTime > 1.0f)
 		{
-			std::cout << "[FPS] "<< frames << std::endl;
+			std::cout << "[FPS] " << frames << std::endl;
 			frameTime = currentFrame;
 			frames = 0;
 		}
