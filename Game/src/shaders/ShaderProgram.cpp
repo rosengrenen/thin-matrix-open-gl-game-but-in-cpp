@@ -6,36 +6,7 @@
 
 #include <glm\gtc\type_ptr.hpp>
 
-#include "ShaderProgram.h"
-
-std::tuple<std::string, std::string> ShaderProgram::parseShaderSource(const std::string& filePath)
-{
-	std::ifstream stream;
-
-	std::string line;
-	std::stringstream ss[2];
-	Type type = Type::NONE;
-	stream.open(filePath);
-	while (getline(stream, line))
-	{
-		if (line.find("#shader") != std::string::npos)
-		{
-			if (line.find("vertex") != std::string::npos)
-				type = Type::VERTEX;
-			else if (line.find("fragment") != std::string::npos)
-				type = Type::FRAGMENT;
-		}
-		else
-		{
-			if (type == Type::NONE)
-				std::cout << "Shader type not found" << std::endl;
-			ss[(int) type] << line << '\n';
-		}
-	}
-	return std::make_tuple<std::string, std::string>(ss[0].str(), ss[1].str());
-}
-
-unsigned int ShaderProgram::compileShader(const unsigned int type, const std::string& source)
+unsigned int compileShader(const unsigned int type, const std::string& source)
 {
 	unsigned int id = glCreateShader(type);
 	const char* src = source.c_str();

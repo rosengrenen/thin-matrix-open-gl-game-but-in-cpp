@@ -147,7 +147,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\shaders\ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\triangle.shader" />
@@ -161,7 +160,7 @@
     <ClInclude Include="src\renderEngine\Loader.h" />
     <ClInclude Include="src\models\RawModel.h" />
     <ClInclude Include="src\renderEngine\Renderer.h" />
-    <ClInclude Include="src\shaders\ShaderProgram.h" />
+    <ClInclude Include="src\ShaderProgram.h" />
     <ClInclude Include="src\shaders\StaticShader.h" />
     <ClInclude Include="src\textures\ModelTexture.h" />
     <ClInclude Include="src\utilities\Maths.h" />

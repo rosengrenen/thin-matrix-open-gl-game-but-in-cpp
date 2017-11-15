@@ -4,20 +4,12 @@
 #include <iostream>
 #include <vector>
 #include <tuple>
-
-#include "entities\Entity.h"
-#include "entities\Camera.h"
-#include "models\RawModel.h"
-#include "models\TexturedModel.h"
-#include "textures\ModelTexture.h"
-#include "shaders/StaticShader.h"
-#include "renderEngine/DisplayManager.h"
-#include "renderEngine/Loader.h"
-#include "renderEngine/Renderer.h"
-#include "utilities\Maths.h"
+#include <string>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "dependencies\stb_image.h"
+
+#include "ShaderProgram.h"
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCall(x) GLClearError();\
@@ -43,14 +35,14 @@ int main(void)
 {
 	/* Initialize the library */
 	if (!glfwInit())
-		return;
+		return 0;
 
 	/* Create a windowed mode window and its OpenGL context */
 	GLFWwindow* window = glfwCreateWindow(800, 600, "De-abstraction of everything", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
-		return;
+		return 0;
 	}
 
 	/* Make the window's context current */
@@ -63,7 +55,7 @@ int main(void)
 	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
 	//Loader loader;
-	std::vector<float> vertices {
+	/*std::vector<float> vertices {
 		-0.5f,0.5f,-0.5f,
 		-0.5f,-0.5f,-0.5f,
 		0.5f,-0.5f,-0.5f,
@@ -133,71 +125,147 @@ int main(void)
 		19,17,18,
 		20,21,23,
 		23,21,22
+	};*/
+
+	std::vector<float> vertices = {
+		0
 	};
 
 	// Generate cube vao and pass data
 	unsigned int vao;
 	unsigned int vbos[2];
 	unsigned int ibo;
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	glGenBuffers(2, vbos);
-	glBindBuffer(GL_ARRAY_BUFFER, vbos[0]);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices.begin(), GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-	glBindBuffer(GL_ARRAY_BUFFER, vbos[1]);
-	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(float), &texCoords.begin(), GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
+	GLCall(glGenVertexArrays(1, &vao));
+	GLCall(glBindVertexArray(vao));
 
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	GLCall(glGenBuffers(2, vbos));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbos[0]));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices.front(), GL_STATIC_DRAW));
+	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0));
+
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, vbos[1]));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(float), &texCoords.front(), GL_STATIC_DRAW));
+	GLCall(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0));
+
+	GLCall(glGenBuffers(1, &ibo));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices.front(), GL_STATIC_DRAW));
 
 	// Bind a texture to the cube
 	unsigned int texture;
-	glGenTextures(1, &texture);
+	GLCall(glGenTextures(1, &texture));
 	int width, height, nrChannels;
-	unsigned char* data = stbi_load("res/textures/container.jps", &width, &height, &nrChannels, 0);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	glGenerateMipmap(GL_TEXTURE_2D);
+	unsigned char* data = stbi_load("res/textures/container.jpg", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		GLCall(glBindTexture(GL_TEXTURE_2D, texture));
+		GLCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data));
+		GLCall(glGenerateMipmap(GL_TEXTURE_2D));
+	}
+	else
+	{
+		std::cout << "Couldn't load texture" << std::endl;
+	}
 
 	// Generate shader program
-	unsigned int program;
+	unsigned int program = glCreateProgram();
 
+	std::tuple<std::string, std::string> shaderSource = parseShaderSource("res/shaders/triangle.shader");
+	const char* vertexSource = std::get<0>(shaderSource).c_str();
+	const char* fragmentSource = std::get<1>(shaderSource).c_str();
+
+	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	GLCall(glShaderSource(vertexShader, 1, &vertexSource, nullptr));
+	GLCall(glCompileShader(vertexShader));
+	int result;
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &result);
+	if (result == GL_FALSE)
+	{
+		int length;
+		glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &length);
+		char* message = (char*) alloca(length * sizeof(char));
+		glGetShaderInfoLog(vertexShader, length, &length, message);
+		std::cout << "Failed to compile vertex shader!" << std::endl;
+		std::cout << message << std::endl;
+		glDeleteShader(vertexShader);
+	}
+
+	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	GLCall(glShaderSource(fragmentShader, 1, &fragmentSource, nullptr));
+	GLCall(glCompileShader(fragmentShader));
+
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &result);
+	if (result == GL_FALSE)
+	{
+		int length;
+		glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &length);
+		char* message = (char*) alloca(length * sizeof(char));
+		glGetShaderInfoLog(fragmentShader, length, &length, message);
+		std::cout << "Failed to compile fragment shader!" << std::endl;
+		std::cout << message << std::endl;
+		glDeleteShader(fragmentShader);
+	}
+
+	GLCall(glAttachShader(program, vertexShader));
+	GLCall(glAttachShader(program, fragmentShader));
+
+	GLCall(glBindAttribLocation(program, 0, "position"));
+	GLCall(glBindAttribLocation(program, 1, "texCoords"));
+
+	GLCall(glLinkProgram(program));
+	GLCall(glValidateProgram(program));
+
+	//unsigned int transformationMatrixLoc = glGetUniformLocation(program, "transformationMatrix");
+	//unsigned int projectionMatrixLoc = glGetUniformLocation(program, "projectionMatrix");
+	//unsigned int viewMatrixLoc = glGetUniformLocation(program, "viewMatrix");
 	/*RawModel model = loader.loadToVAO(vertexes, texCoords, indices);
 	//ModelTexture texture(loader.loadTexture("wall.jpg"));
 	//TexturedModel staticModel(model, texture);
-	StaticShader shader("res/shaders/triangle.shader");
+	StaticShader shader("res/shaders/trianGLCall(gle.shader"));
 	//Renderer renderer(shader);
-	Entity entity(staticModel, glm::vec3(0), glm::vec3(0), 0.8f);
+	Entity entity(staticModel, GLCall(glm::vec3(0), glm::vec3(0), 0.8f));
 
 	Camera camera;*/
 
 	float deltaTime = 0.0f;	// Time between current frame and last frame
 	float lastFrame = 0.0f; // Time of last frame
 
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//GLCall(glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED));
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
-		//camera.processInput(gWindow, deltaTime);
-		//entity.rotate(glm::vec3(0, 1, 0));
 		/* Render here */
-		glClearColor(1.0f, 0.5f, 0.2f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
+		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+		GLCall(glEnable(GL_DEPTH_TEST));
 
-		/*renderer.prepare();
-		GLCall(shader.use());
-		shader.loadViewMatrix(camera);
-		GLCall(renderer.render(entity, shader));
-		GLCall(shader.stop());*/
+		GLCall(glUseProgram(program));
+
+		GLCall(glBindVertexArray(vao));
+		GLCall(glEnableVertexAttribArray(0));
+		GLCall(glEnableVertexAttribArray(1));
+
+		GLCall(glActiveTexture(GL_TEXTURE0));
+		GLCall(glBindTexture(GL_TEXTURE_2D, texture));
+
+		GLCall(glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, &indices.front()));
+
+		GLCall(glBindTexture(GL_TEXTURE_2D, 0));
+
+		GLCall(glDisableVertexAttribArray(0));
+		GLCall(glDisableVertexAttribArray(1));
+		GLCall(glBindVertexArray(0));
+
+		GLCall(glUseProgram(0));
+
+		GLCall(glDisable(GL_DEPTH_TEST));
 
 		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
+		GLCall(glfwSwapBuffers(window));
 
 		/* Poll for and process events */
-		glfwPollEvents();
+		GLCall(glfwPollEvents());
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
