@@ -22,12 +22,14 @@ public:
 	}
 	void setState(int key, int scancode, int action, int mods)
 	{
-		m_keys.at(key) = { scancode, action, mods };
+		m_keys.at(key).scancode = scancode;
+		m_keys.at(key).action = action;
+		m_keys.at(key).mods = mods;
 	}
 
 	bool isPressed(int key)
 	{
-		return m_keys.at(key).action == GLFW_PRESS || GLFW_REPEAT;
+		return m_keys.at(key).action == GLFW_PRESS || isRepeated(key);
 	}
 
 	bool isReleased(int key)

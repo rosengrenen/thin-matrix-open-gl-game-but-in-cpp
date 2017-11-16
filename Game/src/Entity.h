@@ -2,9 +2,14 @@
 
 #include <glm\gtc\matrix_transform.hpp>
 
+#include "Model.h"
+#include "Texture.h"
+
 class Entity
 {
 private:
+	Model m_model;
+	Texture m_texture;
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;
 	float m_scale;

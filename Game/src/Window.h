@@ -11,8 +11,8 @@ class Window
 {
 private:
 	GLFWwindow* m_window;
-	Keyboard* m_keyboard = new Keyboard();
-	Mouse* m_mouse = new Mouse();
+	Keyboard m_keyboard;
+	Mouse m_mouse;
 public:
 	Window(int width, int height, const char* name)
 	{
@@ -48,17 +48,17 @@ public:
 
 	bool isKeyPressed(int key)
 	{
-		return m_keyboard->isPressed(key);
+		return m_keyboard.isPressed(key);
 	}
 
 	bool isKeyReleased(int key)
 	{
-		return m_keyboard->isReleased(key);
+		return m_keyboard.isReleased(key);
 	}
 
 	bool isKeyRepeated(int key)
 	{
-		return m_keyboard->isRepeated(key);
+		return m_keyboard.isRepeated(key);
 	}
 	float getAspectRatio()
 	{
@@ -70,7 +70,7 @@ private:
 	static void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		Window* instance = (Window*) glfwGetWindowUserPointer(window);
-		instance->m_keyboard->setState(key, scancode, action, mods);
+		instance->m_keyboard.setState(key, scancode, action, mods);
 	}
 
 	static void onMouse(GLFWwindow* window, int button, int action, int mods)

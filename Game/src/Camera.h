@@ -31,7 +31,9 @@ public:
 		m_yaw(yaw),
 		m_pitch(pitch),
 		m_roll(roll),
-		m_fieldOfView(fov)
+		m_fieldOfView(fov),
+		m_nearPlane(0.1f),
+		m_farPlane(100.0f)
 	{
 		updateVectors();
 	}
@@ -44,5 +46,44 @@ public:
 	glm::mat4 getProjectionMatrix(float aspectRatio)
 	{
 		return glm::perspective(m_fieldOfView, aspectRatio, m_nearPlane, m_farPlane);
+	}
+
+	void rotate(float yaw, float pitch = 0.0f, float roll = 0.0f)
+	{
+		m_yaw += yaw;
+		m_pitch += pitch;
+		m_roll += roll;
+
+		if (m_pitch > 89.0f)
+		{
+			m_pitch = 89.0f;
+		}
+		else if (m_pitch < -89.0f)
+		{
+			m_pitch = -89.0f;
+		}
+		updateVectors();
+	}
+
+	void move(float dx, float dy = 0, float dz = 0)
+	{
+		m_position.x += dx;
+		m_position.y += dy;
+		m_position.z += dz;
+
+	}
+
+	void moveFront(float xspeed, float yspeed, float zspeed)
+	{
+		m_position.x += m_front.x * xspeed;
+		m_position.y += m_front.y * yspeed;
+		m_position.z += m_front.z * zspeed;
+	}
+
+	void moveRight(float xspeed, float yspeed, float zspeed)
+	{
+		m_position.x += m_right.x * xspeed;
+		m_position.y += m_right.y * yspeed;
+		m_position.z += m_right.z * zspeed;
 	}
 };

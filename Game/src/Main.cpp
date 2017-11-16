@@ -15,6 +15,7 @@
 
 #include "Camera.h"
 #include "Entity.h"
+#include "Renderer.h"
 #include "StaticShader.h"
 #include "Window.h"
 
@@ -40,18 +41,6 @@ static bool GLLogCall(const char* function, const char* file, int line)
 }
 #pragma endregion
 
-// Camera
-static glm::mat4 getViewMatrix(const glm::vec3& eye, const glm::vec3& center, const glm::vec3& up)
-{
-	return glm::lookAt(eye, center, up);
-}
-
-// Related to the window and fov (camera)
-static glm::mat4 getProjectionMatrix(const float fov)
-{
-	return glm::perspective(fov, 800.0f / 600.0f, 0.1f, 100.0f);
-}
-
 int main(void)
 {
 	/* Initialize the library */
@@ -64,11 +53,13 @@ int main(void)
 	// Temporary solution to get rid of errors, need more abstractions
 	GLFWwindow* window = mWindow.getWindow();
 
+	#pragma region GLEW_INIT
 	unsigned int err = glewInit();
 	if (err != GLEW_OK)
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 
 	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+	#pragma endregion
 
 	#pragma region VERTEX DATA
 	std::vector<float> vertices {
@@ -186,94 +177,17 @@ int main(void)
 	}
 	#pragma endregion Loads and binds a texture (container.jpg)
 
-	// All of this in a separate file, make it a class or something // think of the abstraction and virtual functions
 	StaticShader shader("res/shaders/triangle.shader");
-	#pragma region SHADER_PROGRAM
-	/*unsigned int program = glCreateProgram();
 
-	std::tuple<std::string, std::string> shaderSource = parseShaderSource("res/shaders/triangle.shader");
-	const char* vertexSource = std::get<0>(shaderSource).c_str();
-	const char* fragmentSource = std::get<1>(shaderSource).c_str();
-
-	// REPEAT 1
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	GLCall(glShaderSource(vertexShader, 1, &vertexSource, nullptr));
-	GLCall(glCompileShader(vertexShader));
-	int result;
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE)
-	{
-		int length;
-		glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &length);
-		char* message = (char*) alloca(length * sizeof(char));
-		glGetShaderInfoLog(vertexShader, length, &length, message);
-		std::cout << "Failed to compile vertex shader!" << std::endl;
-		std::cout << message << std::endl;
-		glDeleteShader(vertexShader);
-	}
-	// REPEAT 1 END
-
-	// REPEAT 2
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	GLCall(glShaderSource(fragmentShader, 1, &fragmentSource, nullptr));
-	GLCall(glCompileShader(fragmentShader));
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &result);
-	if (result == GL_FALSE)
-	{
-		int length;
-		glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &length);
-		char* message = (char*) alloca(length * sizeof(char));
-		glGetShaderInfoLog(fragmentShader, length, &length, message);
-		std::cout << "Failed to compile fragment shader!" << std::endl;
-		std::cout << message << std::endl;
-		glDeleteShader(fragmentShader);
-	}
-	// REPEAT 2 END
-
-	GLCall(glAttachShader(program, vertexShader));
-	GLCall(glAttachShader(program, fragmentShader));
-
-	// EXTERNAL BIND
-	GLCall(glBindAttribLocation(program, 0, "position"));
-	GLCall(glBindAttribLocation(program, 1, "texCoords"));
-
-	GLCall(glLinkProgram(program));
-	GLCall(glValidateProgram(program));
-
-	// EXTERNAL BIND
-	unsigned int transformationMatrixLoc = glGetUniformLocation(program, "transformationMatrix");
-	unsigned int projectionMatrixLoc = glGetUniformLocation(program, "projectionMatrix");
-	unsigned int viewMatrixLoc = glGetUniformLocation(program, "viewMatrix");*/
-	#pragma endregion Creates shader program, attaches shaders, links, and validates
-
-	// Cube properties !! ENTITY
 	Entity cube(
 		glm::vec3(2, 0, 2),
-		glm::vec3(0, -40, 0),
+		glm::vec3(0, 0, 0),
 		0.8f
 	);
 
-	// World properties !! WORLD
-	glm::vec3 worldUp(0, 1, 0);
+	Camera camera(glm::vec3(0));
 
-	// Camera properties !! CAMERA
-	// Location of the camera
-	glm::vec3 position(0, 0, 1);
-	// Focus point
-	glm::vec3 front;
-	// Up direction of camera, wont be changed yet, tilting the camera isn't necessary yet
-	glm::vec3 up;
-	// Vector used to caluclate up
-	glm::vec3 right;
-	// Rotation around y axis
-	float yaw = 0;
-	// Rotation around x axis
-	float pitch = 0;
-	// Rotation around z axis
-	float roll = 0;
-	// Field of View
-	float FoV = 45;
+	Renderer renderer;
 
 	// !! WINDOW
 	float deltaTime = 0.0f;	// Time between current frame and last frame
@@ -291,7 +205,7 @@ int main(void)
 
 	glfwSetCursorPos(window, mouseX, mouseY);
 
-	GLCall(glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED));
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	float movementSpeed = 0.2f;
 
@@ -306,64 +220,47 @@ int main(void)
 		glfwGetCursorPos(window, &mouseX, &mouseY);
 		mouseOffsetX = mouseLastX - mouseX;
 		mouseOffsetY = mouseY - mouseLastY;
-		yaw += mouseOffsetY * mouseSensitivity;
-		yaw = yaw < -89 ? -89 : yaw;
-		yaw = yaw > 89 ? 89 : yaw;
-		pitch += mouseOffsetX * mouseSensitivity;
+		camera.rotate(mouseOffsetY * mouseSensitivity, mouseOffsetX * mouseSensitivity);
 		mouseLastX = mouseX;
 		mouseLastY = mouseY;
-		front.x = glm::cos(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
-		front.y = glm::sin(glm::radians(yaw));
-		front.z = glm::sin(glm::radians(pitch)) * glm::cos(glm::radians(yaw));
-		front = glm::normalize(front);
-		right = glm::normalize(glm::cross(front, worldUp));
-		up = glm::normalize(glm::cross(front, right));
 
-		std::cout << "Position: (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
+		/*std::cout << "Position: (" << camera.m_front.x << ", " << camera.m_front.y << ", " << camera.m_front.z << ")" << std::endl;*/
 
 		// Keyboard input !! WINDOW !! CAMERA POSITION !! NEEDS SOME TESTING, ALWAYS INCREASING
-		/*if (mWindow.isKeyPressed(GLFW_KEY_W))
+		//std::cout << (mWindow.isKeyPressed(GLFW_KEY_W) ? "W is down" : "W is up") << std::endl;
+		if (mWindow.isKeyPressed(GLFW_KEY_W))
 		{
-			position += glm::vec3(front.x, 0, front.z) * movementSpeed;
+			camera.moveFront(movementSpeed, 0, movementSpeed);
 		}
 		else if (mWindow.isKeyPressed(GLFW_KEY_S))
 		{
-			position -= glm::vec3(front.x, 0, front.z) * movementSpeed;
+			camera.moveFront(-movementSpeed, 0, -movementSpeed);
 		}
 		if (mWindow.isKeyPressed(GLFW_KEY_A))
 		{
-			position += right * movementSpeed;
+			camera.moveRight(movementSpeed, 0, movementSpeed);
 		}
 		else if (mWindow.isKeyPressed(GLFW_KEY_D))
 		{
-			position -= right * movementSpeed;
+			camera.moveRight(-movementSpeed, 0, -movementSpeed);
 		}
 		if (mWindow.isKeyPressed(GLFW_KEY_SPACE))
 		{
-			position.y -= movementSpeed;
+			camera.move(0, -movementSpeed, 0);
 		}
 		else if (mWindow.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
 		{
-			position.y += movementSpeed;
-		}*/
+			camera.move(0, movementSpeed, 0);
+		}
 
 		// Render here !! WHERE DOES THIS BELONG? PREPARATION !! NOT IMPORTANT FOR NOW
-		GLCall(glClearColor(0.2f, 0.3f, 0.3f, 1.0f));
-		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-		// ADDITIONAL PREP
-		GLCall(glEnable(GL_DEPTH_TEST));
+		
+		renderer.prepare();
 
-		// Done
 		shader.use();
-		// Done
 		shader.setTransformationMatrix(cube.getTransformationMatrix());
-
-		// camera.getProjectionMatrix(mWindow.getAspectRatio()); v v
-		shader.setProjectionMatrix(getProjectionMatrix(FoV));
-		shader.setViewMatrix(getViewMatrix(position, position + front, up));
-		//glUniformMatrix4fv(transformationMatrixLoc, 1, GL_FALSE, &getTransformationMatrix(translation, rotation, scale)[0][0]);
-		//glUniformMatrix4fv(viewMatrixLoc, 1, GL_FALSE, &getViewMatrix(position, position + front, up)[0][0]);
-		//glUniformMatrix4fv(projectionMatrixLoc, 1, GL_FALSE, &getProjectionMatrix(FoV)[0][0]);
+		shader.setProjectionMatrix(camera.getProjectionMatrix(mWindow.getAspectRatio()));
+		shader.setViewMatrix(camera.getViewMatrix());
 
 		// ENTITY STUFF (COORDS)
 		GLCall(glBindVertexArray(vao));
@@ -385,7 +282,7 @@ int main(void)
 
 		GLCall(glUseProgram(0));
 
-		GLCall(glDisable(GL_DEPTH_TEST));
+		//GLCall(glDisable(GL_DEPTH_TEST));
 
 		mWindow.swapBuffers();
 
