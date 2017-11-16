@@ -12,6 +12,18 @@ private:
 	float m_pitch;
 	float m_roll;
 	float m_fieldOfView;
+	float m_nearPlane;
+	float m_farPlane;
+private:
+	void updateVectors()
+	{
+		m_front.x = glm::cos(glm::radians(m_pitch)) * glm::cos(glm::radians(m_yaw));
+		m_front.y = glm::sin(glm::radians(m_yaw));
+		m_front.z = glm::sin(glm::radians(m_pitch)) * glm::cos(glm::radians(m_yaw));
+		m_front = glm::normalize(m_front);
+		m_right = glm::normalize(glm::cross(m_front, m_worldUp));
+		m_up = glm::normalize(glm::cross(m_front, m_right));
+	}
 public:
 	Camera(glm::vec3 position, float fov = 45, float yaw = 0, float pitch = 0, float roll = 0)
 		: m_position(position),
@@ -21,7 +33,7 @@ public:
 		m_roll(roll),
 		m_fieldOfView(fov)
 	{
-		updateViewMatrix();
+		updateVectors();
 	}
 
 	glm::mat4 getViewMatrix()
@@ -29,15 +41,8 @@ public:
 		return glm::lookAt(m_position, m_position + m_front, m_up);;
 	}
 
-	void updateViewMatrix()
+	glm::mat4 getProjectionMatrix(float aspectRatio)
 	{
-		m_front.x = glm::cos(glm::radians(m_pitch)) * glm::cos(glm::radians(m_yaw));
-		m_front.y = glm::sin(glm::radians(m_yaw));
-		m_front.z = glm::sin(glm::radians(m_pitch)) * glm::cos(glm::radians(m_yaw));
-		m_front = glm::normalize(m_front);
-		m_right = glm::normalize(glm::cross(m_front, m_worldUp));
-		m_up = glm::normalize(glm::cross(m_front, m_right));
+		return glm::perspective(m_fieldOfView, aspectRatio, m_nearPlane, m_farPlane);
 	}
-
-	
 };

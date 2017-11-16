@@ -321,7 +321,7 @@ int main(void)
 
 		std::cout << "Position: (" << position.x << ", " << position.y << ", " << position.z << ")" << std::endl;
 
-		// Keyboard input !! WINDOW !! CAMERA POSITION
+		// Keyboard input !! WINDOW !! CAMERA POSITION !! NEEDS SOME TESTING, ALWAYS INCREASING
 		/*if (mWindow.isKeyPressed(GLFW_KEY_W))
 		{
 			position += glm::vec3(front.x, 0, front.z) * movementSpeed;
@@ -358,6 +358,7 @@ int main(void)
 		// Done
 		shader.setTransformationMatrix(cube.getTransformationMatrix());
 
+		// camera.getProjectionMatrix(mWindow.getAspectRatio()); v v
 		shader.setProjectionMatrix(getProjectionMatrix(FoV));
 		shader.setViewMatrix(getViewMatrix(position, position + front, up));
 		//glUniformMatrix4fv(transformationMatrixLoc, 1, GL_FALSE, &getTransformationMatrix(translation, rotation, scale)[0][0]);

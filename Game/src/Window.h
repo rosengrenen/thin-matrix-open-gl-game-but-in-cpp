@@ -60,6 +60,12 @@ public:
 	{
 		return m_keyboard->isRepeated(key);
 	}
+	float getAspectRatio()
+	{
+		int width, height;
+		glfwGetWindowSize(m_window, &width, &height);
+		return static_cast<float>(width) / height;
+	}
 private:
 	static void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
