@@ -4,10 +4,15 @@
 
 #include <GLFW\glfw3.h>
 
+#include "Keyboard.h"
+#include "Mouse.h"
+
 class Window
 {
 private:
 	GLFWwindow* m_window;
+	Keyboard* m_keyboard = new Keyboard();
+	Mouse* m_mouse = new Mouse();
 public:
 	Window(int width, int height, const char* name)
 	{
@@ -31,23 +36,44 @@ public:
 		glfwMakeContextCurrent(m_window);
 	}
 
+	void swapBuffers()
+	{
+		glfwSwapBuffers(m_window);
+	}
+
 	GLFWwindow* getWindow()
 	{
 		return m_window;
 	}
+
+	bool isKeyPressed(int key)
+	{
+		return m_keyboard->isPressed(key);
+	}
+
+	bool isKeyReleased(int key)
+	{
+		return m_keyboard->isReleased(key);
+	}
+
+	bool isKeyRepeated(int key)
+	{
+		return m_keyboard->isRepeated(key);
+	}
 private:
 	static void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-		Window* obj = (Window*)glfwGetWindowUserPointer(window);
+		Window* instance = (Window*) glfwGetWindowUserPointer(window);
+		instance->m_keyboard->setState(key, scancode, action, mods);
 	}
 
 	static void onMouse(GLFWwindow* window, int button, int action, int mods)
 	{
-
+		Window* instance = (Window*) glfwGetWindowUserPointer(window);
 	}
 
 	static void onScroll(GLFWwindow* window, double xoffset, double yoffset)
 	{
-
+		Window* instance = (Window*) glfwGetWindowUserPointer(window);
 	}
 };

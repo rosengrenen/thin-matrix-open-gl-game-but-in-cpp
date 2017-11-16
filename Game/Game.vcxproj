@@ -152,8 +152,14 @@
     <None Include="res\shaders\triangle.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\dependencies\stb_image.h" />
-    <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\Entity.h" />
+    <ClInclude Include="src\Keyboard.h" />
+    <ClInclude Include="src\Mouse.h" />
+    <ClInclude Include="src\Renderer.h" />
+    <ClInclude Include="src\BaseShader.h" />
+    <ClInclude Include="src\StaticShader.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
