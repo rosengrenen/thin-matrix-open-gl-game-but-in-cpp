@@ -4,6 +4,8 @@
 
 #include <GLFW\glfw3.h>
 
+#include <glm\vec2.hpp>
+
 #include "Keyboard.h"
 #include "Mouse.h"
 
@@ -41,6 +43,7 @@ public:
 		glfwSwapBuffers(m_window);
 	}
 
+	// Temporary
 	GLFWwindow* getWindow()
 	{
 		return m_window;
@@ -60,6 +63,44 @@ public:
 	{
 		return m_keyboard.isRepeated(key);
 	}
+
+	bool isMousePressed(int key)
+	{
+
+	}
+
+	bool isMouseReleased(int key)
+	{
+
+	}
+
+	bool isMouseRepeated(int key)
+	{
+
+	}
+
+	void prepare()
+	{
+		m_mouse.prepare(m_window);
+	}
+
+	float mouseOffsetX()
+	{
+		return m_mouse.getOffset().x;
+	}
+
+	float mouseOffsetY()
+	{
+		return m_mouse.getOffset().y;
+	}
+
+	glm::vec2 getMousePos()
+	{
+		double xpos, ypos;
+		glfwGetCursorPos(m_window, &xpos, &ypos);
+		return glm::vec2(xpos, ypos);
+	}
+
 	float getAspectRatio()
 	{
 		int width, height;

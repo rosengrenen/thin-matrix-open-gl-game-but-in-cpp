@@ -14,7 +14,7 @@ private:
 	glm::vec3 m_rotation;
 	float m_scale;
 public:
-	Entity(glm::vec3 position, glm::vec3 rotation, float scale) : m_position(position), m_rotation(rotation), m_scale(scale)
+	Entity(Model model, Texture texture, glm::vec3 position, glm::vec3 rotation, float scale) : m_model(model), m_texture(texture), m_position(position), m_rotation(rotation), m_scale(scale)
 	{ }
 
 	void move(float dx, float dy, float dz)

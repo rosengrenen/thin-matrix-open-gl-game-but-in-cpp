@@ -54,13 +54,13 @@ public:
 		m_pitch += pitch;
 		m_roll += roll;
 
-		if (m_pitch > 89.0f)
+		if (m_yaw > 89.0f)
 		{
-			m_pitch = 89.0f;
+			m_yaw = 89.0f;
 		}
-		else if (m_pitch < -89.0f)
+		else if (m_yaw < -89.0f)
 		{
-			m_pitch = -89.0f;
+			m_yaw = -89.0f;
 		}
 		updateVectors();
 	}
@@ -85,5 +85,12 @@ public:
 		m_position.x += m_right.x * xspeed;
 		m_position.y += m_right.y * yspeed;
 		m_position.z += m_right.z * zspeed;
+	}
+
+	void moveUp(float xspeed, float yspeed, float zspeed)
+	{
+		m_position.x += m_up.x * xspeed;
+		m_position.y += m_up.y * yspeed;
+		m_position.z += m_up.z * zspeed;
 	}
 };

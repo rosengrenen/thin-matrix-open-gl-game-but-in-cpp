@@ -47,7 +47,9 @@ int main(void)
 	if (!glfwInit())
 		return 0;
 
-	/* Create a windowed mode window and its OpenGL context */
+	/* Create a windowed mode window and its OpenGL context 
+	 * Keyboard and Mouse classes should be separate to the Window class, they'll just take the Window pointer as a constructor argument
+	 */
 	Window mWindow(800, 600, "New window");
 
 	// Temporary solution to get rid of errors, need more abstractions
@@ -179,7 +181,13 @@ int main(void)
 
 	StaticShader shader("res/shaders/triangle.shader");
 
+	Model cubeModel(vertices, texCoords, indices);
+
+	Texture cubeTexture("res/textures/container.jpg");
+
 	Entity cube(
+		cubeModel,
+		cubeTexture,
 		glm::vec3(2, 0, 2),
 		glm::vec3(0, 0, 0),
 		0.8f
@@ -189,45 +197,30 @@ int main(void)
 
 	Renderer renderer;
 
-	// !! WINDOW
+	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?
 	float deltaTime = 0.0f;	// Time between current frame and last frame
 	float lastFrame = 0.0f; // Time of last frame
 	int frames = 0;
 	float frameTime = 0;
 
-	double mouseX = 400;
-	double mouseY = 300;
-	double mouseOffsetX;
-	double mouseOffsetY;
-	double mouseLastX = 0;
-	double mouseLastY = 0;
 	double mouseSensitivity = 0.3;
 
-	glfwSetCursorPos(window, mouseX, mouseY);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	float movementSpeed = 0.2f;
+	float movementSpeed = 0.1f;
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
-		// Change entity properites !! ENTITY
-		//rotation.y += 0.01f;
-		//cube.rotate(0, 0.01f, 0);
+		// Method naming should be changed...
+		mWindow.prepare();
 
-		// Mouse movement !! WINDOW !! CAMERA
-		glfwGetCursorPos(window, &mouseX, &mouseY);
-		mouseOffsetX = mouseLastX - mouseX;
-		mouseOffsetY = mouseY - mouseLastY;
-		camera.rotate(mouseOffsetY * mouseSensitivity, mouseOffsetX * mouseSensitivity);
-		mouseLastX = mouseX;
-		mouseLastY = mouseY;
+		cube.rotate(0, 0.005f, 0);
 
-		/*std::cout << "Position: (" << camera.m_front.x << ", " << camera.m_front.y << ", " << camera.m_front.z << ")" << std::endl;*/
+		/* Rotate camera from mouse input */
+		camera.rotate(mWindow.mouseOffsetY() * mouseSensitivity, mWindow.mouseOffsetX() * mouseSensitivity);
 
-		// Keyboard input !! WINDOW !! CAMERA POSITION !! NEEDS SOME TESTING, ALWAYS INCREASING
-		//std::cout << (mWindow.isKeyPressed(GLFW_KEY_W) ? "W is down" : "W is up") << std::endl;
+		/* Mouse the camera from keyboard input */
 		if (mWindow.isKeyPressed(GLFW_KEY_W))
 		{
 			camera.moveFront(movementSpeed, 0, movementSpeed);
