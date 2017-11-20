@@ -12,8 +12,8 @@ public:
 		double mouseX, mouseY;
 		glfwGetCursorPos(window, &mouseX, &mouseY);
 
-		m_offset.x = m_position.x - mouseX;
-		m_offset.y = mouseY - m_position.y;
+		m_offset.x = mouseX - m_position.x;
+		m_offset.y = m_position.y - mouseY;
 
 		m_position.x = mouseX;
 		m_position.y = mouseY;
@@ -23,4 +23,4 @@ public:
 	{
 		return m_offset;
 	}
-}; 
+};

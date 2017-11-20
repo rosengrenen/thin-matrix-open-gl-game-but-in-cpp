@@ -110,5 +110,15 @@ public:
 	{
 		glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 	}
+
+	void setVector3f(unsigned int location, const glm::vec3& vector) const
+	{
+		glUniform3f(location, vector.x, vector.y, vector.z);
+	}
+
+	void setFloat(unsigned int location, float value)
+	{
+		glUniform1f(location, value);
+	}
 };
 

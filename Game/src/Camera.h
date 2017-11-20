@@ -22,10 +22,10 @@ private:
 		m_front.z = glm::sin(glm::radians(m_pitch)) * glm::cos(glm::radians(m_yaw));
 		m_front = glm::normalize(m_front);
 		m_right = glm::normalize(glm::cross(m_front, m_worldUp));
-		m_up = glm::normalize(glm::cross(m_front, m_right));
+		m_up = glm::normalize(glm::cross(m_right, m_front));
 	}
 public:
-	Camera(glm::vec3 position, float fov = 45, float yaw = 0, float pitch = 0, float roll = 0)
+	Camera(glm::vec3 position, float yaw = 0, float pitch = 0, float roll = 0, float fov = 45)
 		: m_position(position),
 		m_worldUp(glm::vec3(0, 1, 0)),
 		m_yaw(yaw),

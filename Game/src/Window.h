@@ -31,6 +31,7 @@ public:
 		glfwSetScrollCallback(m_window, onScroll);
 
 		makeContext();
+		m_mouse.prepare(m_window);
 	}
 
 	void makeContext()
@@ -107,6 +108,17 @@ public:
 		glfwGetWindowSize(m_window, &width, &height);
 		return static_cast<float>(width) / height;
 	}
+
+	bool shouldClose()
+	{
+		return glfwWindowShouldClose(m_window);
+	}
+
+	void setCursorPos(float x, float y)
+	{
+		glfwSetCursorPos(m_window, x, y);
+	}
+
 private:
 	static void onKey(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{

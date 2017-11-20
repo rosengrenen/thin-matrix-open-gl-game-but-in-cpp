@@ -156,6 +156,8 @@
     <ClInclude Include="src\dependencies\stb_image.h" />
     <ClInclude Include="src\Entity.h" />
     <ClInclude Include="src\Keyboard.h" />
+    <ClInclude Include="src\Light.h" />
+    <ClInclude Include="src\Loader.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Mouse.h" />
     <ClInclude Include="src\Renderer.h" />
@@ -166,8 +168,24 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container.jpg" />
+    <Image Include="res\textures\falcon.jpg" />
     <Image Include="res\textures\stallTexture.png" />
     <Image Include="res\textures\wall.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\objects\stall.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\objects\millenium-falcon.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\objects\dragon.obj">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
