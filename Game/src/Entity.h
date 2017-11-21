@@ -2,8 +2,7 @@
 
 #include <glm\gtc\matrix_transform.hpp>
 
-#include "Model.h"
-#include "Texture.h"
+#include "TexturedModel.h"
 
 class Entity
 {
@@ -12,10 +11,9 @@ private:
 	glm::vec3 m_rotation;
 	float m_scale;
 public:
-	Model model;
-	Texture texture;
+	TexturedModel texturedModel;
 public:
-	Entity(const Model& model, const Texture& texture, const glm::vec3& position, const glm::vec3& rotation, float scale) : model(model), texture(texture), m_position(position), m_rotation(rotation), m_scale(scale)
+	Entity(const TexturedModel& texturedModel, const glm::vec3& position, const glm::vec3& rotation, float scale) : texturedModel(texturedModel), m_position(position), m_rotation(rotation), m_scale(scale)
 	{ }
 
 	void move(float dx, float dy, float dz)
@@ -32,7 +30,7 @@ public:
 		m_rotation.z += dz;
 	}
 
-	glm::mat4 getTransformationMatrix()
+	glm::mat4 getModelMatrix() const
 	{
 		// Translate
 		glm::mat4 transformation = glm::translate(glm::mat4(1), m_position);

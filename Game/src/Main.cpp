@@ -1,9 +1,12 @@
+#pragma once
 #include <GL\glew.h>
 #include <GLFW\glfw3.h>
 
 #include <iostream>
 #include <vector>
 #include <tuple>
+#include <random>
+#include <ctime>
 
 #include <glm\vec3.hpp>
 #include <glm\mat4x4.hpp>
@@ -17,8 +20,11 @@
 #include "Entity.h"
 #include "Light.h"
 #include "Loader.h"
-#include "Renderer.h"
-#include "StaticShader.h"
+#include "MasterRenderer.h"
+#include "EntityRenderer.h"
+#include "EntityShader.h"
+#include "TerrainRenderer.h"
+#include "TerrainShader.h"
 #include "Window.h"
 
 #pragma region GL_DEBUG_TOOLS
@@ -49,7 +55,7 @@ int main(void)
 	if (!glfwInit())
 		return 0;
 
-	/* Create a windowed mode window and its OpenGL context 
+	/* Create a windowed mode window and its OpenGL context
 	 * Keyboard and Mouse classes should be separate to the Window class, they'll just take the Window pointer as a constructor argument
 	 */
 	Window window(800, 600, "New window");
@@ -65,28 +71,41 @@ int main(void)
 
 	Loader loader;
 
-	StaticShader shader("res/shaders/triangle.shader");
+	
 
 	//Model cubeModel = loader.loadToVao(vertices, texCoords, normals, indices);
-	Model stall = loader.loadObj("dragon");
+	Model model = loader.loadObj("stall");
+	Texture texture("res/textures/stallTexture.png");
+	texture.shineDamper = 3;
+	texture.reflectivity = 0.3f;
+	TexturedModel texturedModel(model, texture);
 
-	Texture cubeTexture("res/textures/stallTexture.png");
-	cubeTexture.shineDamper = 3;
-	cubeTexture.reflectivity = 0.3f;
+	std::vector<Entity> entities;
+	srand((unsigned int) time(0));
+	for (int i = 0; i < 100; i++)
+	{
+		glm::vec3 position((float) (rand() % 100 - 50), rand() % 100 - 50, (rand() % 100) * -3);
+		glm::vec3 rotation((float) (rand() % 180), rand() % 180, rand() % 180);
+		float scale = static_cast<float>(rand() % 100) / 100.0f + 0.5f;
+		entities.push_back(Entity(texturedModel, position, rotation, scale));
+	}
 
-	Entity cube(
-		stall,
-		cubeTexture,
-		glm::vec3(0, 0, -50),
-		glm::vec3(0, 0, 0),
-		1.8f
-	);
-
-	Light light(glm::vec3(0, 0, 20), glm::vec3(1, 1, 1));
+	Light light(glm::vec3(2000, 2000, 2000), glm::vec3(1, 1, 1));
 
 	Camera camera(glm::vec3(0), 0, -90);
 
-	Renderer renderer;
+	EntityShader entityShader;
+	EntityRenderer entityRenderer(entityShader);
+
+	TerrainShader terrainShader;
+	TerrainRenderer terrainRenderer(terrainShader);
+
+	MasterRenderer renderer(entityRenderer, terrainRenderer, entityShader, terrainShader);
+
+	Texture container("res/textures/container.jpg");
+	Texture grass("res/textures/grass.png");
+	Terrain terrain(0, 0, loader, container);
+	Terrain terrain2(1, 0, loader, grass);
 
 	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?
 	float deltaTime = 0.0f;	// Time between current frame and last frame
@@ -99,14 +118,12 @@ int main(void)
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	float movementSpeed = 1.0f;
-
+	glfwSwapInterval(0);
 	/* Loop until the user closes the window */
 	while (!window.shouldClose())
 	{
 		// Method naming should be changed...
 		window.prepare();
-
-		cube.rotate(0, 0.02f, 0);
 
 		/* Rotate camera from mouse input */
 		//std::cout << window.mouseOffsetX() << std::endl;
@@ -137,17 +154,16 @@ int main(void)
 		{
 			camera.move(0, -movementSpeed, 0);
 		}
-		
-		renderer.prepare();
 
-		shader.use();
-		shader.setTransformationMatrix(cube.getTransformationMatrix());
-		shader.setProjectionMatrix(camera.getProjectionMatrix(window.getAspectRatio()));
-		shader.setViewMatrix(camera.getViewMatrix());
-		shader.setLight(light);
-		shader.setShineVariables(cube.texture.reflectivity, cube.texture.shineDamper);
-		renderer.render(cube);
+		for (Entity e : entities)
+		{
+			renderer.processEntity(e);
+		}
 
+		renderer.processTerrains(terrain);
+		renderer.processTerrains(terrain2);
+
+		renderer.render(light, camera);
 		window.swapBuffers();
 
 		/* Poll for and process events !! WINDOW?? */

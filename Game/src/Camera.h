@@ -25,7 +25,7 @@ private:
 		m_up = glm::normalize(glm::cross(m_right, m_front));
 	}
 public:
-	Camera(glm::vec3 position, float yaw = 0, float pitch = 0, float roll = 0, float fov = 45)
+	Camera(const glm::vec3& position, float yaw = 0, float pitch = 0, float roll = 0, float fov = 45)
 		: m_position(position),
 		m_worldUp(glm::vec3(0, 1, 0)),
 		m_yaw(yaw),
@@ -33,17 +33,17 @@ public:
 		m_roll(roll),
 		m_fieldOfView(fov),
 		m_nearPlane(0.1f),
-		m_farPlane(100.0f)
+		m_farPlane(4000.0f)
 	{
 		updateVectors();
 	}
 
-	glm::mat4 getViewMatrix()
+	glm::mat4 getViewMatrix() const
 	{
 		return glm::lookAt(m_position, m_position + m_front, m_up);;
 	}
 
-	glm::mat4 getProjectionMatrix(float aspectRatio)
+	glm::mat4 getProjectionMatrix(float aspectRatio) const
 	{
 		return glm::perspective(m_fieldOfView, aspectRatio, m_nearPlane, m_farPlane);
 	}

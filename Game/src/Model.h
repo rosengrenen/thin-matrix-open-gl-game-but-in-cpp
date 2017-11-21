@@ -10,13 +10,18 @@ public:
 	Model(unsigned int vao, int numVertices) : m_vao(vao), numVertices(numVertices)
 	{ }
 
-	void bind()
+	void bind() const
 	{
 		glBindVertexArray(m_vao);
 	}
 
-	void unbind()
+	void unbind() const
 	{
 		glBindVertexArray(0);
+	}
+
+	unsigned int getID() const
+	{
+		return m_vao;
 	}
 };

@@ -149,6 +149,7 @@
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\terrain.shader" />
     <None Include="res\shaders\triangle.shader" />
   </ItemGroup>
   <ItemGroup>
@@ -158,19 +159,28 @@
     <ClInclude Include="src\Keyboard.h" />
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Loader.h" />
+    <ClInclude Include="src\MasterRenderer.h" />
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Mouse.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\BaseShader.h" />
-    <ClInclude Include="src\StaticShader.h" />
+    <ClInclude Include="src\EntityRenderer.h" />
+    <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\EntityShader.h" />
+    <ClInclude Include="src\Terrain.h" />
+    <ClInclude Include="src\TerrainRenderer.h" />
+    <ClInclude Include="src\TerrainShader.h" />
     <ClInclude Include="src\Texture.h" />
+    <ClInclude Include="src\TexturedModel.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\container.jpg" />
     <Image Include="res\textures\falcon.jpg" />
+    <Image Include="res\textures\grass.png" />
+    <Image Include="res\textures\image.png" />
     <Image Include="res\textures\stallTexture.png" />
+    <Image Include="res\textures\tree.png" />
     <Image Include="res\textures\wall.jpg" />
+    <Image Include="res\textures\white.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\objects\stall.obj">
@@ -184,6 +194,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\objects\dragon.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\objects\bunny.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\exampleOBJ.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\tree.obj">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

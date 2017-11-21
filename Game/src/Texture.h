@@ -25,18 +25,18 @@ public:
 		}
 	}
 
-	Texture()
-	{
-		m_id = 0;
-	}
-
-	void bind()
+	void bind() const
 	{
 		glBindTexture(GL_TEXTURE_2D, m_id);
 	}
 
-	void unbind()
+	void unbind() const
 	{
 		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	unsigned int getID() const
+	{
+		return m_id;
 	}
 };
