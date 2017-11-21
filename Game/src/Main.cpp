@@ -155,9 +155,9 @@ int main(void)
 			camera.move(0, -movementSpeed, 0);
 		}
 
-		for (Entity e : entities)
+		for (int i = 0; i < entities.size(); i++)
 		{
-			renderer.processEntity(e);
+			renderer.processEntity(entities.at(i));
 		}
 
 		renderer.processTerrains(terrain);

@@ -175,8 +175,13 @@
   <ItemGroup>
     <Image Include="res\textures\container.jpg" />
     <Image Include="res\textures\falcon.jpg" />
+    <Image Include="res\textures\fern.png" />
+    <Image Include="res\textures\flower.png" />
     <Image Include="res\textures\grass.png" />
+    <Image Include="res\textures\grassTexture.png" />
+    <Image Include="res\textures\grassy.png" />
     <Image Include="res\textures\image.png" />
+    <Image Include="res\textures\lowPolyTree.png" />
     <Image Include="res\textures\stallTexture.png" />
     <Image Include="res\textures\tree.png" />
     <Image Include="res\textures\wall.jpg" />
@@ -205,6 +210,20 @@
       <FileType>Document</FileType>
     </None>
     <None Include="res\objects\tree.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\objects\drone.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\fern.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\grassModel.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\lowPolyTree.obj">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -37,11 +37,10 @@ private:
 
 	void prepareInstance(const Entity& entity)
 	{
-		glm::mat4 model = entity.getModelMatrix();
 		m_shader.setModelMatrix(entity.getModelMatrix());
 	}
 public:
-	EntityRenderer(const EntityShader& shader) : m_shader(shader)
+	EntityRenderer(const EntityShader shader) : m_shader(shader)
 	{ 
 		glEnable(GL_DEPTH_TEST);
 
@@ -60,10 +59,11 @@ public:
 		for (auto& t : entities)
 		{
 			bindTexturedModel(t.first);
-			for (Entity e : t.second)
+			int numVertices = t.first.model.numVertices;
+			for (Entity& e : t.second)
 			{
 				prepareInstance(e);
-				glDrawElements(GL_TRIANGLES, t.first.model.numVertices, GL_UNSIGNED_INT, nullptr);
+				glDrawElements(GL_TRIANGLES, numVertices, GL_UNSIGNED_INT, nullptr);
 			}
 			unbindTexturedModel();
 		}
