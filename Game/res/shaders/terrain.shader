@@ -26,6 +26,7 @@ void main()
 	vec4 positionRelativeToCam = view * worldPosition;
 	gl_Position = projection * positionRelativeToCam;
 	pass_texCoords = texCoords;
+
 	surfaceNormal = (model * vec4(normal, 0.0)).xyz;
 	toLightVector = lightPosition - worldPosition.xyz;
 	toCameraVector = (inverse(view) * vec4(0.0, 0.0, 0.0, 1.0)).xyz - worldPosition.xyz;
@@ -45,7 +46,11 @@ in float visibility;
 
 out vec4 out_Colour;
 
-uniform sampler2D texSampler;
+uniform sampler2D backgroundTexture;
+uniform sampler2D rTexture;
+uniform sampler2D gTexture;
+uniform sampler2D bTexture;
+uniform sampler2D blendMap;
 uniform vec3 lightColour;
 uniform float shineDamper;
 uniform float reflectivity;
@@ -53,6 +58,17 @@ uniform vec3 skyColour;
 
 void main()
 {
+	vec4 blendMapColour = texture(blendMap, pass_texCoords);
+
+	float bgTextureAmount = 1 - (blendMapColour.r + blendMapColour.g + blendMapColour.b);
+	vec2 tiledCoords = pass_texCoords * 40.0;
+	vec4 bgTexColour = texture(backgroundTexture, tiledCoords) * bgTextureAmount;
+	vec4 rTexColour = texture(rTexture, tiledCoords) * blendMapColour.r;
+	vec4 gTexColour = texture(gTexture, tiledCoords) * blendMapColour.g;
+	vec4 bTexColour = texture(bTexture, tiledCoords) * blendMapColour.b;
+
+	vec4 totalColour = bgTexColour + rTexColour + gTexColour + bTexColour;
+
 	vec3 unitNormal = normalize(surfaceNormal);
 	vec3 unitLightVector = normalize(toLightVector);
 
@@ -69,6 +85,6 @@ void main()
 	float dampedFactor = pow(specularFactor, shineDamper);
 	vec3 finalSpecular = dampedFactor * lightColour * reflectivity;
 
-	out_Colour = vec4(diffuse, 1.0) * texture(texSampler, pass_texCoords) + vec4(finalSpecular, 1.0);
+	out_Colour = vec4(diffuse, 1.0) * totalColour + vec4(finalSpecular, 1.0);
 	out_Colour = mix(vec4(skyColour, 1.0), out_Colour, visibility);
 };

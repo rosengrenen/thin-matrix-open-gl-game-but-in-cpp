@@ -120,5 +120,10 @@ public:
 	{
 		glUniform1f(location, value);
 	}
+
+	void setInt(unsigned int location, int value)
+	{
+		glUniform1i(location, value);
+	}
 };
 

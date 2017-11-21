@@ -107,6 +107,12 @@
     <ClInclude Include="src\EntityShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
+    <ClInclude Include="src\TerrainTexture.h">
+      <Filter>Header Files\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainTexturePack.h">
+      <Filter>Header Files\Textures</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\wall.jpg">
@@ -148,6 +154,21 @@
     <Image Include="res\textures\lowPolyTree.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
+    <Image Include="res\textures\path.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\blendMap.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\grassFlowers.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\grassy2.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\mud.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\objects\stall.obj">
@@ -185,6 +206,9 @@
     </None>
     <None Include="res\shaders\entity.shader">
       <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="res\objects\grass.obj">
+      <Filter>Resource Files\Objects</Filter>
     </None>
   </ItemGroup>
 </Project>

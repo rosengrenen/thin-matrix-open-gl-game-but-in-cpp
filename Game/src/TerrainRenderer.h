@@ -19,11 +19,24 @@ private:
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
+		bindTexture(terrain);
+		shader.setShineVariables(1, 0);
 
-		shader.setShineVariables(terrain.texture.reflectivity, terrain.texture.shineDamper);
 
+	}
+
+	void bindTexture(Terrain terrain)
+	{
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, terrain.texture.getID());
+		glBindTexture(GL_TEXTURE_2D, terrain.texturePack.bgTex.textureID);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, terrain.texturePack.rTex.textureID);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, terrain.texturePack.gTex.textureID);
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, terrain.texturePack.bTex.textureID);
+		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D, terrain.blendMap.textureID);
 	}
 
 	void unbindTerrain()
@@ -37,7 +50,7 @@ private:
 public:
 	TerrainRenderer(TerrainShader shader) : shader(shader)
 	{
-
+		shader.connectTextureUnits();
 	}
 
 	void render(std::vector<Terrain> terrains)

@@ -5,6 +5,7 @@
 #include "Model.h"
 #include "Texture.h"
 #include "Loader.h"
+#include "TerrainTexturePack.h"
 
 class Terrain
 {
@@ -15,7 +16,8 @@ public:
 	float x;
 	float z;
 	Model model;
-	Texture texture;
+	TerrainTexturePack texturePack;
+	TerrainTexture blendMap;
 private:
 	Model generateTerrain(Loader loader)
 	{
@@ -79,7 +81,7 @@ private:
 		return loader.loadToVao(vertices, texCoords, normals, indices);
 	}
 public:
-	Terrain(int gridX, int gridZ, const Loader& loader, const Texture& texture) : x(gridX * SIZE), z(gridZ * SIZE), model(generateTerrain(loader)), texture(texture)
+	Terrain(int gridX, int gridZ, const Loader& loader, const TerrainTexturePack& texturePack, const TerrainTexture& blendMap) : x(gridX * SIZE), z(gridZ * SIZE), model(generateTerrain(loader)), texturePack(texturePack), blendMap(blendMap)
 	{ }
 
 	glm::mat4 getModelMatrix() const
