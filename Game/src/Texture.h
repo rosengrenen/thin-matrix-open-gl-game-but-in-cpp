@@ -8,6 +8,7 @@ public:
 	float shineDamper = 1;
 	float reflectivity = 0;
 	bool hasTransparency = false;
+	bool useFakeLighting = false;
 public:
 	Texture(const std::string& filePath)
 	{
@@ -39,6 +40,7 @@ public:
 		{
 			std::cout << "Couldn't load texture" << std::endl;
 		}
+		//TODO: Decide whether it should be automatic or not
 		if (nrChannels == 4)
 		{
 			hasTransparency = true;

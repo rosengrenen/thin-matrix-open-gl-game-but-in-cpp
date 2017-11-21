@@ -82,8 +82,10 @@ int main(void)
 
 	Model fernModel = loader.loadObj("grassModel");
 	Texture fernTexture("res/textures/grassTexture.png");
-	fernTexture.shineDamper = 3;
-	fernTexture.reflectivity = 0.3f;
+	fernTexture.shineDamper = 10;
+	fernTexture.reflectivity = 0.2f;
+	fernTexture.hasTransparency = true;
+	fernTexture.useFakeLighting = true;
 	TexturedModel fern(fernModel, fernTexture);
 
 	Model treeModel = loader.loadObj("tree");

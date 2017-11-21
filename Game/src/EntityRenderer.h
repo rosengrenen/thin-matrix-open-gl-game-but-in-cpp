@@ -29,6 +29,7 @@ private:
 		{
 			disableCulling();
 		}
+		m_shader.setFakeLighting(model.texture.useFakeLighting);
 	}
 
 	void unbindTexturedModel()

@@ -13,6 +13,7 @@ private:
 	unsigned int m_lightColourLoc;
 	unsigned int m_reflectivityLoc;
 	unsigned int m_shineDamperLoc;
+	unsigned int m_fakeNormalsLoc;
 public:
 	EntityShader()
 	{
@@ -35,6 +36,7 @@ public:
 		m_lightColourLoc = getUniformLocation("lightColour");
 		m_reflectivityLoc = getUniformLocation("reflectivity");
 		m_shineDamperLoc = getUniformLocation("shineDamper");
+		m_fakeNormalsLoc = getUniformLocation("useFakeLighting");
 	}
 
 	void setModelMatrix(const glm::mat4& matrix) const
@@ -62,5 +64,10 @@ public:
 	{
 		setFloat(m_reflectivityLoc, reflectivity);
 		setFloat(m_shineDamperLoc, damper);
+	}
+
+	void setFakeLighting(bool useFake)
+	{
+		setFloat(m_fakeNormalsLoc, useFake);
 	}
 };
