@@ -24,10 +24,16 @@ private:
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, model.texture.getID());
+
+		if (model.texture.hasTransparency)
+		{
+			disableCulling();
+		}
 	}
 
 	void unbindTexturedModel()
 	{
+		enableCulling();
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
@@ -38,6 +44,17 @@ private:
 	void prepareInstance(const Entity& entity)
 	{
 		m_shader.setModelMatrix(entity.getModelMatrix());
+	}
+	
+	void enableCulling()
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
+
+	void disableCulling()
+	{
+		glDisable(GL_CULL_FACE);
 	}
 public:
 	EntityRenderer(const EntityShader shader) : m_shader(shader)

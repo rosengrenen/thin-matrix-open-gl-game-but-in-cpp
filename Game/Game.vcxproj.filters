@@ -150,9 +150,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shaders\triangle.shader">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
     <None Include="res\objects\stall.obj">
       <Filter>Resource Files\Objects</Filter>
     </None>
@@ -185,6 +182,9 @@
     </None>
     <None Include="res\objects\grassModel.obj">
       <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\shaders\entity.shader">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

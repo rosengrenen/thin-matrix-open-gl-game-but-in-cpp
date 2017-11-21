@@ -5,7 +5,7 @@
 class EntityShader : public ShaderProgram
 {
 private:
-	const std::string m_shaderPath = "res/shaders/triangle.shader";
+	const std::string m_shaderPath = "res/shaders/entity.shader";
 	unsigned int m_modelMatrixLoc;
 	unsigned int m_viewMatrixLoc;
 	unsigned int m_projectionMatrixLoc;

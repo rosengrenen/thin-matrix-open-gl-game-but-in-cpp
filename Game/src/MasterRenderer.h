@@ -45,6 +45,17 @@ public:
 		entities.clear();
 	}
 
+	static void enableCulling()
+	{
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+	}
+
+	static void disableCulling()
+	{
+		glDisable(GL_CULL_FACE);
+	}
+
 	void processEntity(const Entity& entity)
 	{
 		if (entities.find(entity.texturedModel) != entities.end())

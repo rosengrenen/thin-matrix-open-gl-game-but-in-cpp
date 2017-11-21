@@ -7,6 +7,7 @@ private:
 public:
 	float shineDamper = 1;
 	float reflectivity = 0;
+	bool hasTransparency = false;
 public:
 	Texture(const std::string& filePath)
 	{
@@ -29,10 +30,18 @@ public:
 				data // Texture data
 			);
 			glGenerateMipmap(GL_TEXTURE_2D);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		}
 		else
 		{
 			std::cout << "Couldn't load texture" << std::endl;
+		}
+		if (nrChannels == 4)
+		{
+			hasTransparency = true;
 		}
 	}
 

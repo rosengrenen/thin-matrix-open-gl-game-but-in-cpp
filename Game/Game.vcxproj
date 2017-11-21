@@ -150,7 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\terrain.shader" />
-    <None Include="res\shaders\triangle.shader" />
+    <None Include="res\shaders\entity.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
