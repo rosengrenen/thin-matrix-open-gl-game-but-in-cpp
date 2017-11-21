@@ -14,6 +14,7 @@ private:
 	unsigned int m_reflectivityLoc;
 	unsigned int m_shineDamperLoc;
 	unsigned int m_fakeNormalsLoc;
+	unsigned int m_skyColourLoc;
 public:
 	EntityShader()
 	{
@@ -37,6 +38,7 @@ public:
 		m_reflectivityLoc = getUniformLocation("reflectivity");
 		m_shineDamperLoc = getUniformLocation("shineDamper");
 		m_fakeNormalsLoc = getUniformLocation("useFakeLighting");
+		m_skyColourLoc = getUniformLocation("skyColour");
 	}
 
 	void setModelMatrix(const glm::mat4& matrix) const
@@ -69,5 +71,10 @@ public:
 	void setFakeLighting(bool useFake)
 	{
 		setFloat(m_fakeNormalsLoc, useFake);
+	}
+
+	void setSkyColour( float r, float g,float b)
+	{
+		setVector3f(m_skyColourLoc, glm::vec3(r, g, b));
 	}
 };

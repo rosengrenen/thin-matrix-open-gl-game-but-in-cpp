@@ -16,6 +16,7 @@ private:
 	unsigned int m_lightColourLoc;
 	unsigned int m_reflectivityLoc;
 	unsigned int m_shineDamperLoc;
+	unsigned int m_skyColourLoc;
 public:
 	TerrainShader()
 	{
@@ -38,6 +39,7 @@ public:
 		m_lightColourLoc = getUniformLocation("lightColour");
 		m_reflectivityLoc = getUniformLocation("reflectivity");
 		m_shineDamperLoc = getUniformLocation("shineDamper");
+		m_skyColourLoc = getUniformLocation("skyColour");
 	}
 
 	void setModelMatrix(const glm::mat4& matrix) const
@@ -65,5 +67,10 @@ public:
 	{
 		setFloat(m_reflectivityLoc, reflectivity);
 		setFloat(m_shineDamperLoc, damper);
+	}
+
+	void setSkyColour(float r, float g, float b)
+	{
+		setVector3f(m_skyColourLoc, glm::vec3(r, g, b));
 	}
 };
