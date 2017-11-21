@@ -80,6 +80,18 @@ int main(void)
 	texture.reflectivity = 0.3f;
 	TexturedModel texturedModel(model, texture);
 
+	Model fernModel = loader.loadObj("grassModel");
+	Texture fernTexture("res/textures/grassTexture.png");
+	fernTexture.shineDamper = 3;
+	fernTexture.reflectivity = 0.3f;
+	TexturedModel fern(fernModel, fernTexture);
+
+	Model treeModel = loader.loadObj("tree");
+	Texture treeTex("res/textures/tree.png");
+	treeTex.reflectivity = 2.0f;
+	treeTex.shineDamper = 10.0f;
+	TexturedModel tree(treeModel, treeTex);
+
 	std::vector<Entity> entities;
 	srand((unsigned int) time(0));
 	for (int i = 0; i < 100; i++)
@@ -90,15 +102,24 @@ int main(void)
 		entities.push_back(Entity(texturedModel, position, rotation, scale));
 	}
 
+	std::vector<Entity> ferns;
+	for (int i = 0; i < 200; i++)
+	{
+		glm::vec3 position((float) (rand() % 1400) + 100.0f, 0.0f, (rand() % 600) + 100.0f);
+		glm::vec3 rotation(0.0f, rand() % 180, 0.0f);
+		float scale = 12.0f;
+		entities.push_back(Entity(fern, position, rotation, scale));
+	}
+
 	Light light(glm::vec3(2000, 2000, 2000), glm::vec3(1, 1, 1));
 
 	Camera camera(glm::vec3(0), 0, -90);
 
-	EntityShader entityShader;
-	EntityRenderer entityRenderer(entityShader);
-
 	TerrainShader terrainShader;
 	TerrainRenderer terrainRenderer(terrainShader);
+
+	EntityShader entityShader;
+	EntityRenderer entityRenderer(entityShader);
 
 	MasterRenderer renderer(entityRenderer, terrainRenderer, entityShader, terrainShader);
 
@@ -158,6 +179,10 @@ int main(void)
 		for (int i = 0; i < entities.size(); i++)
 		{
 			renderer.processEntity(entities.at(i));
+		}
+		for (int i = 0; i < ferns.size(); i++)
+		{
+			renderer.processEntity(ferns.at(i));
 		}
 
 		renderer.processTerrains(terrain);

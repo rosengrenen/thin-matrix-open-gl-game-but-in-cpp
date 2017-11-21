@@ -13,10 +13,21 @@ public:
 		glGenTextures(1, &m_id);
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);
+		std::cout << nrChannels << std::endl;
 		if (data)
 		{
 			glBindTexture(GL_TEXTURE_2D, m_id);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(
+				GL_TEXTURE_2D, // Target/type of texture
+				0, // Level, always 0
+				GL_RGBA, // Format to store the texture in, always store with Alpha channel
+				width, // Width of texture
+				height, // Height of texture
+				0, // Border, always 0
+				(nrChannels == 3 ? GL_RGB : GL_RGBA), // Channels of input texture
+				GL_UNSIGNED_BYTE, // Data type of input texture
+				data // Texture data
+			);
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 		else

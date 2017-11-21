@@ -134,19 +134,8 @@ public:
 				processVertex(vertex1, indices, texCoords, normals, outTexCoords, outNormals);
 				processVertex(vertex2, indices, texCoords, normals, outTexCoords, outNormals);
 				processVertex(vertex3, indices, texCoords, normals, outTexCoords, outNormals);
-				/*std::vector<std::vector<std::string>> vertexIndices {
-					explode(currentLine[1], '/'),
-					explode(currentLine[2], '/'),
-					explode(currentLine[3], '/')
-				};
-				for (auto m : vertexIndices)
-				{
-
-				}*/
 			}
 		}
-
-
 
 		return loadToVao(vertices, outTexCoords, outNormals, indices);
 	}
