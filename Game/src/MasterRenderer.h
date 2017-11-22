@@ -44,7 +44,7 @@ public:
 		entityShader.stop();
 
 		terrainShader.use();
-		entityShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
+		terrainShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
 		terrainShader.setLight(sun);
 		terrainShader.setViewMatrix(camera.getViewMatrix());
 		terrainShader.setProjectionMatrix(camera.getProjectionMatrix(800.0f / 600.0f));

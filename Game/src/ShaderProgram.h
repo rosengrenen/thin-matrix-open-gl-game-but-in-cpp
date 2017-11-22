@@ -12,6 +12,8 @@ private:
 	unsigned int m_program;
 	unsigned int m_vs;
 	unsigned int m_fs;
+	std::string vsource;
+	std::string fsource;
 private:
 	std::tuple<std::string, std::string> parseShaderSource(const std::string& filePath)
 	{
@@ -68,6 +70,8 @@ public:
 
 		std::tuple<std::string, std::string> shaderSource = parseShaderSource(shaderPath);
 
+		vsource = std::get<0>(shaderSource);
+		fsource = std::get<1>(shaderSource);
 		m_vs = createShaderFromSource(GL_VERTEX_SHADER, std::get<0>(shaderSource));
 		m_fs = createShaderFromSource(GL_FRAGMENT_SHADER, std::get<1>(shaderSource));
 
@@ -78,6 +82,8 @@ public:
 
 		glLinkProgram(m_program);
 		glValidateProgram(m_program);
+
+		glUseProgram(m_program);
 
 		getUniformLocations();
 	}

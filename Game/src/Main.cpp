@@ -76,7 +76,7 @@ int main(void)
 	/* TEXTURE STUFF */
 
 
-	TerrainTexture bgTexture(Texture("res/textures/grassy.png").getID());
+	TerrainTexture bgTexture(Texture("res/textures/grassy2.png").getID());
 	TerrainTexture rTexture(Texture("res/textures/mud.png").getID());
 	TerrainTexture gTexture(Texture("res/textures/grassFlowers.png").getID());
 	TerrainTexture bTexture(Texture("res/textures/path.png").getID());
