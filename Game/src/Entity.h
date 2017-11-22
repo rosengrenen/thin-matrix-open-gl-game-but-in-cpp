@@ -6,7 +6,7 @@
 
 class Entity
 {
-protected:
+public:
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;
 	float m_scale;

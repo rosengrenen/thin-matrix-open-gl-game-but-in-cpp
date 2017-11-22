@@ -13,27 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Shaders">
-      <UniqueIdentifier>{fb60acf7-97ea-4b74-a903-36abeeba95b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Models">
-      <UniqueIdentifier>{18eed551-9f3e-4298-9056-07769e9a4f8d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Entities">
-      <UniqueIdentifier>{8d3a30f4-c1bd-4339-8f70-8cec8fa266e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Textures">
-      <UniqueIdentifier>{48ab05c0-34d7-485d-9373-e0907be76589}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\RenderEngine">
-      <UniqueIdentifier>{5f453054-92a9-40a0-a9b8-27e58a6f2fba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Dependencies">
-      <UniqueIdentifier>{950ccbeb-d2e2-431a-8914-025248d12a3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Input">
-      <UniqueIdentifier>{b933d84b-def3-457e-bc32-711c2d7c145c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{0367c764-e474-404f-a405-d4f7153ca580}</UniqueIdentifier>
     </Filter>
@@ -43,78 +22,111 @@
     <Filter Include="Resource Files\Objects">
       <UniqueIdentifier>{ca5a5bb5-1e05-45c4-9b1b-23eae7ad7ff7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Terrains">
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{8d3a30f4-c1bd-4339-8f70-8cec8fa266e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{b933d84b-def3-457e-bc32-711c2d7c145c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Models">
+      <UniqueIdentifier>{18eed551-9f3e-4298-9056-07769e9a4f8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RenderEngine">
+      <UniqueIdentifier>{5f453054-92a9-40a0-a9b8-27e58a6f2fba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{fb60acf7-97ea-4b74-a903-36abeeba95b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Terrains">
       <UniqueIdentifier>{74b61db7-0e8b-44fd-ba0b-5ec1c4b8a9a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Textures">
+      <UniqueIdentifier>{48ab05c0-34d7-485d-9373-e0907be76589}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Dependencies">
+      <UniqueIdentifier>{950ccbeb-d2e2-431a-8914-025248d12a3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Keyboard.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Mouse.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Scroll.cpp">
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Entity.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\dependencies\stb_image.h">
       <Filter>Header Files\Dependencies</Filter>
     </ClInclude>
     <ClInclude Include="src\Texture.h">
-      <Filter>Header Files\Textures</Filter>
+      <Filter>Source Files\Textures</Filter>
     </ClInclude>
     <ClInclude Include="src\Window.h">
-      <Filter>Header Files\RenderEngine</Filter>
+      <Filter>Source Files\RenderEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\Model.h">
-      <Filter>Header Files\Models</Filter>
+      <Filter>Source Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="src\Mouse.h">
-      <Filter>Header Files\Input</Filter>
+      <Filter>Source Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\Keyboard.h">
-      <Filter>Header Files\Input</Filter>
+      <Filter>Source Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\Loader.h">
-      <Filter>Header Files\RenderEngine</Filter>
+      <Filter>Source Files\RenderEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\Light.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Source Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\MasterRenderer.h">
-      <Filter>Header Files\RenderEngine</Filter>
+      <Filter>Source Files\RenderEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\TexturedModel.h">
-      <Filter>Header Files\Textures</Filter>
+      <Filter>Source Files\Textures</Filter>
     </ClInclude>
     <ClInclude Include="src\Terrain.h">
-      <Filter>Header Files\Terrains</Filter>
+      <Filter>Source Files\Terrains</Filter>
     </ClInclude>
     <ClInclude Include="src\TerrainShader.h">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Source Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="src\ShaderProgram.h">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Source Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="src\TerrainRenderer.h">
-      <Filter>Header Files\RenderEngine</Filter>
+      <Filter>Source Files\RenderEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\EntityRenderer.h">
-      <Filter>Header Files\RenderEngine</Filter>
+      <Filter>Source Files\RenderEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\EntityShader.h">
-      <Filter>Header Files\Shaders</Filter>
+      <Filter>Source Files\Shaders</Filter>
     </ClInclude>
     <ClInclude Include="src\TerrainTexture.h">
-      <Filter>Header Files\Textures</Filter>
+      <Filter>Source Files\Textures</Filter>
     </ClInclude>
     <ClInclude Include="src\TerrainTexturePack.h">
-      <Filter>Header Files\Textures</Filter>
+      <Filter>Source Files\Textures</Filter>
     </ClInclude>
     <ClInclude Include="src\Player.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scroll.h">
+      <Filter>Source Files\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

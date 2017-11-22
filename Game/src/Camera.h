@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Player.h"
+
 class Camera
 {
 private:
@@ -14,6 +16,10 @@ private:
 	float m_fieldOfView;
 	float m_nearPlane;
 	float m_farPlane;
+
+	Player& player;
+	float distanceFromPlayer = 50;
+	float angleAroundPlayer = 0;
 private:
 	void updateVectors()
 	{
@@ -25,7 +31,7 @@ private:
 		m_up = glm::normalize(glm::cross(m_right, m_front));
 	}
 public:
-	Camera(const glm::vec3& position, float yaw = 0, float pitch = 0, float roll = 0, float fov = 45)
+	Camera(Player& player, const glm::vec3& position, float yaw = 0, float pitch = 0, float roll = 0, float fov = 45)
 		: m_position(position),
 		m_worldUp(glm::vec3(0, 1, 0)),
 		m_yaw(yaw),
@@ -33,14 +39,18 @@ public:
 		m_roll(roll),
 		m_fieldOfView(fov),
 		m_nearPlane(0.1f),
-		m_farPlane(4000.0f)
+		m_farPlane(4000.0f),
+		player(player)
 	{
 		updateVectors();
 	}
 
 	glm::mat4 getViewMatrix() const
 	{
-		return glm::lookAt(m_position, m_position + m_front, m_up);;
+		// Free camera
+		//return glm::lookAt(m_position, m_position + m_front, m_up);
+		// Player locked camera
+		return glm::lookAt(m_position, player.m_position, m_up);
 	}
 
 	glm::mat4 getProjectionMatrix(float aspectRatio) const
@@ -58,11 +68,12 @@ public:
 		{
 			m_yaw = 89.0f;
 		}
-		else if (m_yaw < -89.0f)
+		else if (m_yaw < 1.0f)
 		{
-			m_yaw = -89.0f;
+			m_yaw = 1.0f;
 		}
-		updateVectors();
+		//updateVectors();
+		calcCamPos();
 	}
 
 	void move(float dx, float dy = 0, float dz = 0)
@@ -70,7 +81,6 @@ public:
 		m_position.x += dx;
 		m_position.y += dy;
 		m_position.z += dz;
-
 	}
 
 	void moveFront(float xspeed, float yspeed, float zspeed)
@@ -92,5 +102,24 @@ public:
 		m_position.x += m_up.x * xspeed;
 		m_position.y += m_up.y * yspeed;
 		m_position.z += m_up.z * zspeed;
+	}
+
+	void zoom(float value)
+	{
+		distanceFromPlayer += value;
+	}
+
+	void calcCamPos()
+	{
+		float theta = m_pitch - player.m_rotation.y;
+		//
+		m_front.x = glm::cos(glm::radians(theta)) * glm::cos(glm::radians(m_yaw));
+		m_front.y = glm::sin(glm::radians(m_yaw));
+		m_front.z = glm::sin(glm::radians(theta)) * glm::cos(glm::radians(m_yaw));
+		m_front = glm::normalize(m_front);
+		m_right = glm::normalize(glm::cross(m_front, m_worldUp));
+		m_up = glm::normalize(glm::cross(m_right, m_front));
+		m_position = player.m_position + m_front * distanceFromPlayer;
+		//std::cout << "yaw: " << m_yaw << " x: " << m_position.x << " y: " << m_position.y << " z: " << m_position.z << std::endl;
 	}
 };

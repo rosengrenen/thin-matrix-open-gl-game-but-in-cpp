@@ -72,22 +72,9 @@ public:
 		std::vector<float> outNormals;
 
 		bool first = true;
-		int v = 0;
-		int t = 0;
-		int n = 0;
-		int f = 0;
-		int i = 0;
-
-		bool v_ = true;
-		bool t_ = true;
-		bool n_ = true;
-
 		double startTime = glfwGetTime();
-		double vTime;
-		double tTime;
-		double nTime;
 
-		std::cout << "[INFO] Loading wavefront model \"" << filePath.c_str() << "\"" << std::endl;
+
 
 		while (getline(stream, line))
 		{
@@ -97,36 +84,19 @@ public:
 				vertices.emplace_back(::atof(currentLine[1].c_str()));
 				vertices.emplace_back(::atof(currentLine[2].c_str()));
 				vertices.emplace_back(::atof(currentLine[3].c_str()));
-				v++;
 			}
 			else if (line.substr(0, 3) == "vt ")
 			{
-				if (n_)
-				{
-					vTime = glfwGetTime();
-					n_ = false;
-				}
 				texCoords.emplace_back(glm::vec2(::atof(currentLine[1].c_str()), ::atof(currentLine[2].c_str())));
-				t++;
 			}
 			else if (line.substr(0, 3) == "vn ")
 			{
-				if (t_)
-				{
-					tTime = glfwGetTime();
-					t_ = false;
-				}
 				normals.emplace_back(glm::vec3(::atof(currentLine[1].c_str()), ::atof(currentLine[2].c_str()), ::atof(currentLine[3].c_str())));
-				n++;
 			}
 			else if (line.substr(0, 2) == "f ")
 			{
 				if (first)
 				{
-					nTime = glfwGetTime();
-					std::cout << "[INFO] Loaded " << v << " vertices in " << vTime - startTime << " seconds" << std::endl; 
-					std::cout << "[INFO] Loaded " << t << " texture coordinates in " << tTime - startTime << " seconds" << std::endl; 
-					std::cout << "[INFO] Loaded " << n << " normals in " << nTime - startTime << " seconds" << std::endl;
 					first = false;
 					outTexCoords.resize(vertices.size() * 2 / 3);
 					outNormals.resize(vertices.size());
@@ -137,16 +107,15 @@ public:
 				processVertex(vertex1, indices, texCoords, normals, outTexCoords, outNormals);
 				processVertex(vertex2, indices, texCoords, normals, outTexCoords, outNormals);
 				processVertex(vertex3, indices, texCoords, normals, outTexCoords, outNormals);
-				i++;
 			}
 		}
-		std::cout << "[INFO] Loaded " << i << " indices in " << glfwGetTime() - startTime << " seconds" << std::endl;
+		std::cout << "[INFO] Loading wavefront model \"" << filePath.c_str() << "\" in " << glfwGetTime() - startTime << " seconds" << std::endl;
 
 		return loadToVao(vertices, outTexCoords, outNormals, indices);
 	}
 
 	void processVertex(
-		const std::vector<std::string>& vertexData, 
+		const std::vector<std::string>& vertexData,
 		std::vector<int>& indices,
 		const std::vector<glm::vec2>& texCoords,
 		const std::vector<glm::vec3>& normals,

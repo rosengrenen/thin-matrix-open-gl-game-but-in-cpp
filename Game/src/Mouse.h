@@ -1,26 +1,39 @@
 #pragma once
 
+#include <array>
+#include <glm\vec2.hpp>
+#include <GLFW\glfw3.h>
+
 class Mouse
 {
 private:
-	glm::vec2 m_position;
-	glm::vec2 m_offset;
+	static constexpr int NUM_KEYS = 8;
+	static std::array<bool, NUM_KEYS> m_lastKeys;
+	static GLFWwindow* m_window;
+	static double m_xpos;
+	static double m_ypos;
+private:
+	Mouse() = delete;
 public:
+	static void init(GLFWwindow* window);
 
-	void prepare(GLFWwindow* window)
-	{
-		double mouseX, mouseY;
-		glfwGetCursorPos(window, &mouseX, &mouseY);
+	static void update();
 
-		m_offset.x = mouseX - m_position.x;
-		m_offset.y = m_position.y - mouseY;
+	static bool getKey(int keyCode);
 
-		m_position.x = mouseX;
-		m_position.y = mouseY;
-	}
+	static bool getKeyDown(int keyCode);
 
-	glm::vec2 getOffset()
-	{
-		return m_offset;
-	}
+	static bool getKeyUp(int keyCode);
+
+	static glm::vec2 getOffset();
+
+	static float getOffsetX();
+
+	static float getOffsetY();
+
+	static glm::vec2 getPos();
+
+	static float getPosX();
+
+	static float getPosY();
 };

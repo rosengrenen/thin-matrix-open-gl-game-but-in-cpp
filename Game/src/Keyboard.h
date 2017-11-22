@@ -4,39 +4,22 @@
 
 #include <array>
 
-struct Key
-{
-	int scancode = 0;
-	int action = 0;
-	int mods = 0;
-};
-
 class Keyboard
 {
 private:
-	std::array<Key, 348> m_keys;
+	static constexpr int NUM_KEYS = 348;
+	static std::array<bool, NUM_KEYS> m_lastKeys;
+	static GLFWwindow* m_window;
+private:
+	Keyboard() = delete;
 public:
-	Keyboard()
-	{ }
-	void setState(int key, int scancode, int action, int mods)
-	{
-		m_keys.at(key).scancode = scancode;
-		m_keys.at(key).action = action;
-		m_keys.at(key).mods = mods;
-	}
+	static void init(GLFWwindow* window);
 
-	bool isPressed(int key)
-	{
-		return m_keys.at(key).action == GLFW_PRESS || isRepeated(key);
-	}
+	static void update();
 
-	bool isReleased(int key)
-	{
-		return m_keys.at(key).action == GLFW_RELEASE;
-	}
+	static bool getKey(int keyCode);
 
-	bool isRepeated(int key)
-	{
-		return m_keys.at(key).action == GLFW_REPEAT;
-	}
+	static bool getKeyDown(int keyCode);
+
+	static bool getKeyUp(int keyCode);
 };

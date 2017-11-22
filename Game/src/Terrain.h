@@ -71,12 +71,7 @@ private:
 			}
 		}
 
-		std::cout << "[INFO] Generating terrain..." << std::endl;
-		std::cout << "Time taken: " << glfwGetTime() - startTime << std::endl
-			<< "[INFO] Normals:  " << normals.size() << std::endl
-			<< "[INFO] Indices:  " << indices.size() << std::endl
-			<< "[INFO] Vertices: " << vertices.size() << std::endl
-			<< "[INFO] Textures: " << texCoords.size() << std::endl;
+		std::cout << "[INFO] Generated terrain in " << glfwGetTime() - startTime << " seconds" << std::endl;
 
 		return loader.loadToVao(vertices, texCoords, normals, indices);
 	}

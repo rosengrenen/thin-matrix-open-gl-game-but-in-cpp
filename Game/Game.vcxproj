@@ -146,13 +146,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Keyboard.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\Mouse.cpp" />
+    <ClCompile Include="src\Scroll.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\terrain.shader" />
     <None Include="res\shaders\entity.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scroll.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\dependencies\stb_image.h" />
     <ClInclude Include="src\Entity.h" />

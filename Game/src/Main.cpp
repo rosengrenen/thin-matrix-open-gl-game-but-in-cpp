@@ -30,6 +30,10 @@
 #include "TerrainTexturePack.h"
 #include "Player.h"
 
+#include "Keyboard.h"
+#include "Mouse.h"
+#include "Scroll.h"
+
 #pragma region GL_DEBUG_TOOLS
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCall(x) GLClearError();\
@@ -58,11 +62,7 @@ int main(void)
 	if (!glfwInit())
 		return 0;
 
-	/* Create a windowed mode window and its OpenGL context
-	 * Keyboard and Mouse classes should be separate to the Window class, they'll just take the Window pointer as a constructor argument
-	 */
 	Window window(800, 600, "New window");
-
 
 	#pragma region GLEW_INIT
 	unsigned int err = glewInit();
@@ -71,6 +71,15 @@ int main(void)
 
 	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 	#pragma endregion
+
+	/* Create a windowed mode window and its OpenGL context
+	* Keyboard and Mouse classes should be separate to the Window class, they'll just take the Window pointer as a constructor argument
+	*/
+
+	
+	Keyboard::init(window.getWindow());
+	Mouse::init(window.getWindow());
+	Scroll::init(window.getWindow());
 
 	Loader loader;
 
@@ -144,7 +153,7 @@ int main(void)
 
 	Light light(glm::vec3(2000, 2000, 2000), glm::vec3(1, 1, 1));
 
-	Camera camera(glm::vec3(800.0f, 12.0f, 805.0f), 0, 0);
+	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 0, 0);
 
 	TerrainShader terrainShader;
 	TerrainRenderer terrainRenderer(terrainShader);
@@ -171,48 +180,53 @@ int main(void)
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	float movementSpeed = 1.0f;
-	glfwSwapInterval(0);
+	glfwSwapInterval(1);
 	/* Loop until the user closes the window */
 	while (!window.shouldClose())
 	{
-		// Method naming should be changed...
-		window.prepare();
 
 		/* Rotate camera from mouse input */
-		camera.rotate(window.mouseOffsetY() * mouseSensitivity, window.mouseOffsetX() * mouseSensitivity);
-
-		player.moveP();
+		camera.zoom(-Scroll::getOffsetY() * 4);
+		if (Mouse::getKey(GLFW_MOUSE_BUTTON_RIGHT))
+		{
+			camera.rotate(-Mouse::getOffsetY(), Mouse::getOffsetX());
+		}
 
 		/* Mouve the player from keyboard input */
-		if (window.isKeyPressed(GLFW_KEY_A))
+		if (Keyboard::getKey(GLFW_KEY_A))
 		{
 			//camera.moveRight(-movementSpeed, 0, -movementSpeed);
 			player.rotateACW();
 		}
-		else if (window.isKeyPressed(GLFW_KEY_D))
+		else if (Keyboard::getKey(GLFW_KEY_D))
 		{
 			//camera.moveRight(movementSpeed, 0, movementSpeed);
 			player.rotateCW();
 		}
-		if (window.isKeyPressed(GLFW_KEY_W))
+		if (Keyboard::getKey(GLFW_KEY_W))
 		{
 			//camera.moveFront(movementSpeed, 0, movementSpeed);
 			player.moveFront();
 		}
-		else if (window.isKeyPressed(GLFW_KEY_S))
+		else if (Keyboard::getKey(GLFW_KEY_S))
 		{
 			//camera.moveFront(-movementSpeed, 0, -movementSpeed);
 			player.moveBack();
 		}
-		if (window.isKeyPressed(GLFW_KEY_SPACE))
+		if (Keyboard::getKey(GLFW_KEY_SPACE))
 		{
 			//camera.move(0, movementSpeed, 0);
 			player.jump();
 		}
-		else if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
+		else if (Keyboard::getKey(GLFW_KEY_LEFT_SHIFT))
 		{
 			//camera.move(0, -movementSpeed, 0);
 		}
+		Mouse::update();
+		Keyboard::update();
+		Scroll::update();
+
+		camera.calcCamPos();
 
 		for (int i = 0; i < grass.size(); i++)
 		{
@@ -234,10 +248,11 @@ int main(void)
 		renderer.processTerrains(terrain4);
 
 		renderer.render(light, camera);
+
 		window.swapBuffers();
 
 		/* Poll for and process events !! WINDOW?? */
-		GLCall(glfwPollEvents());
+		glfwPollEvents();
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
