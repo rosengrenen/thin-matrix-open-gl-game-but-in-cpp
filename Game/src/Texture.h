@@ -15,7 +15,6 @@ public:
 		glGenTextures(1, &m_id);
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load(filePath.c_str(), &width, &height, &nrChannels, 0);
-		std::cout << nrChannels << std::endl;
 		if (data)
 		{
 			glBindTexture(GL_TEXTURE_2D, m_id);
@@ -35,10 +34,11 @@ public:
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			std::cout << "[INFO] Successfully loaded texture: " << filePath.c_str() << std::endl;
 		}
 		else
 		{
-			std::cout << "Couldn't load texture" << std::endl;
+			std::cout << "[ERROR] Couldn't load texture: " << filePath.c_str() <<  std::endl;
 		}
 		//TODO: Decide whether it should be automatic or not
 		if (nrChannels == 4)

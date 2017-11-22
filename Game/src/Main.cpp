@@ -28,6 +28,7 @@
 #include "Window.h"
 #include "TerrainTexture.h"
 #include "TerrainTexturePack.h"
+#include "Player.h"
 
 #pragma region GL_DEBUG_TOOLS
 #define ASSERT(x) if (!(x)) __debugbreak();
@@ -85,7 +86,6 @@ int main(void)
 
 	/*****************/
 
-	//Model cubeModel = loader.loadToVao(vertices, texCoords, normals, indices);
 	Model grassModel = loader.loadObj("grassModel");
 	Texture grassTexture("res/textures/grassTexture.png");
 	grassTexture.hasTransparency = true;
@@ -105,6 +105,14 @@ int main(void)
 	treeTex.shineDamper = 10.0f;
 	treeTex.reflectivity = 2.0f;
 	TexturedModel tree(treeModel, treeTex);
+
+	Model playerModel = loader.loadObj("person");
+	Texture playerTexture("res/textures/playerTexture.png");
+	playerTexture.shineDamper = 10.0f;
+	playerTexture.reflectivity = 2.0f;
+	TexturedModel playerTM(playerModel, playerTexture);
+
+	Player player(playerTM, glm::vec3(800.0f, 0, 800.0f), glm::vec3(0), 1.0f);
 
 	std::vector<Entity> grass;
 	srand((unsigned int) time(0));
@@ -136,7 +144,7 @@ int main(void)
 
 	Light light(glm::vec3(2000, 2000, 2000), glm::vec3(1, 1, 1));
 
-	Camera camera(glm::vec3(800.0f, 12.0f, 800.0f), 0, 0);
+	Camera camera(glm::vec3(800.0f, 12.0f, 805.0f), 0, 0);
 
 	TerrainShader terrainShader;
 	TerrainRenderer terrainRenderer(terrainShader);
@@ -171,33 +179,39 @@ int main(void)
 		window.prepare();
 
 		/* Rotate camera from mouse input */
-		//std::cout << window.mouseOffsetX() << std::endl;
 		camera.rotate(window.mouseOffsetY() * mouseSensitivity, window.mouseOffsetX() * mouseSensitivity);
 
-		/* Mouse the camera from keyboard input */
-		if (window.isKeyPressed(GLFW_KEY_W))
-		{
-			camera.moveFront(movementSpeed, 0, movementSpeed);
-		}
-		else if (window.isKeyPressed(GLFW_KEY_S))
-		{
-			camera.moveFront(-movementSpeed, 0, -movementSpeed);
-		}
+		player.moveP();
+
+		/* Mouve the player from keyboard input */
 		if (window.isKeyPressed(GLFW_KEY_A))
 		{
-			camera.moveRight(-movementSpeed, 0, -movementSpeed);
+			//camera.moveRight(-movementSpeed, 0, -movementSpeed);
+			player.rotateACW();
 		}
 		else if (window.isKeyPressed(GLFW_KEY_D))
 		{
-			camera.moveRight(movementSpeed, 0, movementSpeed);
+			//camera.moveRight(movementSpeed, 0, movementSpeed);
+			player.rotateCW();
+		}
+		if (window.isKeyPressed(GLFW_KEY_W))
+		{
+			//camera.moveFront(movementSpeed, 0, movementSpeed);
+			player.moveFront();
+		}
+		else if (window.isKeyPressed(GLFW_KEY_S))
+		{
+			//camera.moveFront(-movementSpeed, 0, -movementSpeed);
+			player.moveBack();
 		}
 		if (window.isKeyPressed(GLFW_KEY_SPACE))
 		{
-			camera.move(0, movementSpeed, 0);
+			//camera.move(0, movementSpeed, 0);
+			player.jump();
 		}
 		else if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT))
 		{
-			camera.move(0, -movementSpeed, 0);
+			//camera.move(0, -movementSpeed, 0);
 		}
 
 		for (int i = 0; i < grass.size(); i++)
@@ -212,6 +226,7 @@ int main(void)
 		{
 			renderer.processEntity(trees.at(i));
 		}
+		renderer.processEntity(player);
 
 		renderer.processTerrains(terrain);
 		renderer.processTerrains(terrain2);

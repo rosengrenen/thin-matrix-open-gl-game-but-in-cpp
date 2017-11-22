@@ -6,7 +6,7 @@
 
 class Entity
 {
-private:
+protected:
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;
 	float m_scale;
@@ -35,11 +35,11 @@ public:
 		// Translate
 		glm::mat4 transformation = glm::translate(glm::mat4(1), m_position);
 		// RotateX
-		transformation = glm::rotate(transformation, m_rotation.x, glm::vec3(1, 0, 0));
+		transformation = glm::rotate(transformation, glm::radians(m_rotation.x), glm::vec3(1, 0, 0));
 		// RotateY
-		transformation = glm::rotate(transformation, m_rotation.y, glm::vec3(0, 1, 0));
+		transformation = glm::rotate(transformation, glm::radians(m_rotation.y), glm::vec3(0, 1, 0));
 		// RotateZ
-		transformation = glm::rotate(transformation, m_rotation.z, glm::vec3(0, 0, 1));
+		transformation = glm::rotate(transformation, glm::radians(m_rotation.z), glm::vec3(0, 0, 1));
 		// Scale
 		return glm::scale(transformation, glm::vec3(m_scale));
 	}

@@ -163,6 +163,7 @@
     <ClInclude Include="src\Model.h" />
     <ClInclude Include="src\Mouse.h" />
     <ClInclude Include="src\EntityRenderer.h" />
+    <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\ShaderProgram.h" />
     <ClInclude Include="src\EntityShader.h" />
     <ClInclude Include="src\Terrain.h" />
@@ -189,6 +190,7 @@
     <Image Include="res\textures\lowPolyTree.png" />
     <Image Include="res\textures\mud.png" />
     <Image Include="res\textures\path.png" />
+    <Image Include="res\textures\playerTexture.png" />
     <Image Include="res\textures\stallTexture.png" />
     <Image Include="res\textures\tree.png" />
     <Image Include="res\textures\wall.jpg" />
@@ -236,6 +238,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\objects\grass.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\objects\person.obj">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -35,14 +35,14 @@ private:
 			else
 			{
 				if (type == -1)
-					std::cout << "Shader type not found" << std::endl;
+					std::cout << "[ERROR] Shader type not found for " << filePath.c_str() << std::endl;
 				ss[(int) type] << line << '\n';
 			}
 		}
 		return std::make_tuple<std::string, std::string>(ss[0].str(), ss[1].str());
 	}
 
-	unsigned int createShaderFromSource(unsigned int type, const std::string& source)
+	unsigned int createShaderFromSource(unsigned int type, const std::string& source, const std::string& path)
 	{
 		unsigned int shader = glCreateShader(type);
 		const char* temp = source.c_str();
@@ -57,8 +57,7 @@ private:
 			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 			char* message = (char*) alloca(length * sizeof(char));
 			glGetShaderInfoLog(shader, length, &length, message);
-			std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader!" << std::endl;
-			std::cout << message << std::endl;
+			std::cout << "[ERROR] Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader for " << path << " with message: " << message << std::endl;
 			glDeleteShader(shader);
 		}
 		return shader;
@@ -72,8 +71,8 @@ public:
 
 		vsource = std::get<0>(shaderSource);
 		fsource = std::get<1>(shaderSource);
-		m_vs = createShaderFromSource(GL_VERTEX_SHADER, std::get<0>(shaderSource));
-		m_fs = createShaderFromSource(GL_FRAGMENT_SHADER, std::get<1>(shaderSource));
+		m_vs = createShaderFromSource(GL_VERTEX_SHADER, std::get<0>(shaderSource), shaderPath);
+		m_fs = createShaderFromSource(GL_FRAGMENT_SHADER, std::get<1>(shaderSource), shaderPath);
 
 		glAttachShader(m_program, m_vs);
 		glAttachShader(m_program, m_fs);

@@ -17,9 +17,7 @@ private:
 	std::array<Key, 348> m_keys;
 public:
 	Keyboard()
-	{
-		std::cout << sizeof(Key) * m_keys.size() << std::endl;
-	}
+	{ }
 	void setState(int key, int scancode, int action, int mods)
 	{
 		m_keys.at(key).scancode = scancode;
