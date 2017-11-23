@@ -128,6 +128,9 @@
     <ClInclude Include="src\Scroll.h">
       <Filter>Source Files\Input</Filter>
     </ClInclude>
+    <ClInclude Include="src\Image.h">
+      <Filter>Source Files\RenderEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\wall.jpg">
@@ -185,6 +188,12 @@
       <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\playerTexture.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\heightmap.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\test.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>

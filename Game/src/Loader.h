@@ -5,8 +5,10 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <bitset>
 
 #include "Model.h"
+#include "Image.h"
 
 const std::vector<std::string> explode(const std::string& s, const char& c)
 {
@@ -28,7 +30,7 @@ const std::vector<std::string> explode(const std::string& s, const char& c)
 class Loader
 {
 private:
-	void storeDataInAttribList(int attribNum, int size, const std::vector<float>& data)
+	static void storeDataInAttribList(int attribNum, int size, const std::vector<float>& data)
 	{
 		unsigned int vbo;
 		glGenBuffers(1, &vbo);
@@ -37,15 +39,16 @@ private:
 		glVertexAttribPointer(attribNum, size, GL_FLOAT, GL_FALSE, 0, nullptr);
 	}
 
-	void bindIndicesBuffer(const std::vector<int>& indices)
+	static void bindIndicesBuffer(const std::vector<int>& indices)
 	{
 		unsigned int ibo;
 		glGenBuffers(1, &ibo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices.front(), GL_STATIC_DRAW);
 	}
+	Loader() = delete;
 public:
-	Model loadToVao(const std::vector<float>& vertices, const std::vector<float>& texCoords, const std::vector<float>& normals, const std::vector<int>& indices)
+	static Model loadToVao(const std::vector<float>& vertices, const std::vector<float>& texCoords, const std::vector<float>& normals, const std::vector<int>& indices)
 	{
 		unsigned int vao;
 		glGenVertexArrays(1, &vao);
@@ -60,7 +63,7 @@ public:
 		return Model(vao, indices.size());
 	}
 
-	Model loadObj(const std::string& filePath)
+	static Model loadObj(const std::string& filePath)
 	{
 		std::ifstream stream("res/objects/" + filePath + ".obj");
 		std::string line;
@@ -114,14 +117,8 @@ public:
 		return loadToVao(vertices, outTexCoords, outNormals, indices);
 	}
 
-	void processVertex(
-		const std::vector<std::string>& vertexData,
-		std::vector<int>& indices,
-		const std::vector<glm::vec2>& texCoords,
-		const std::vector<glm::vec3>& normals,
-		std::vector<float>& outTexCoords,
-		std::vector<float>& outNormals
-	)
+	static void processVertex(
+		const std::vector<std::string>& vertexData, std::vector<int>& indices, const std::vector<glm::vec2>& texCoords, const std::vector<glm::vec3>& normals, std::vector<float>& outTexCoords, std::vector<float>& outNormals)
 	{
 		int currentVertexPointer = ::atoi(vertexData[0].c_str()) - 1;
 		indices.push_back(currentVertexPointer);
@@ -134,5 +131,46 @@ public:
 		outNormals.at(currentVertexPointer * 3) = currentNorm.x;
 		outNormals.at(currentVertexPointer * 3 + 1) = currentNorm.y;
 		outNormals.at(currentVertexPointer * 3 + 2) = currentNorm.z;
+	}
+
+	static Image loadTexture(const std::string& path)
+	{
+		double startTime = glfwGetTime();
+		unsigned int id;
+		glGenTextures(1, &id);
+		int width, height, nrChannels;
+		unsigned char* data = stbi_load(("res/textures/" + path).c_str(), &width, &height, &nrChannels, 4);
+		if (!data)
+		{
+			std::cout << "[ERROR] Couldn't load texture: " << path.c_str() << std::endl;
+			throw "Texture file not found";
+		}
+		std::vector<std::vector<unsigned char>> pixelData(height);
+		for (int h = 0; h < height; h++)
+		{
+			std::vector<unsigned char> row(width * 4);
+			for (int w = 0; w < width * 4; w++)
+			{
+				row.at(w) = data[h * width * 4 + w];
+			}
+			pixelData.at(h) = row;
+		}
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexImage2D(
+			GL_TEXTURE_2D, // Target/type of texture
+			0, // Level, always 0
+			GL_RGBA, // Format to store the texture in, always store with Alpha channel
+			width, // Width of texture
+			height, // Height of texture
+			0, // Border, always 0
+			GL_RGBA, // Channels of input texture
+			GL_UNSIGNED_BYTE, // Data type of input texture
+			data // Texture data
+		);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		std::cout << "[INFO] Successfully loaded texture: " << path.c_str() << " in " << glfwGetTime() - startTime << " seconds" << std::endl;
+
+		return Image(id, width, height, nrChannels, pixelData);
 	}
 };

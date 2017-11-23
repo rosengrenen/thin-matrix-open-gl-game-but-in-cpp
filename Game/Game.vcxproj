@@ -156,6 +156,7 @@
     <None Include="res\shaders\entity.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Scroll.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\dependencies\stb_image.h" />
@@ -190,12 +191,14 @@
     <Image Include="res\textures\grassTexture.png" />
     <Image Include="res\textures\grassy.png" />
     <Image Include="res\textures\grassy2.png" />
+    <Image Include="res\textures\heightmap.png" />
     <Image Include="res\textures\image.png" />
     <Image Include="res\textures\lowPolyTree.png" />
     <Image Include="res\textures\mud.png" />
     <Image Include="res\textures\path.png" />
     <Image Include="res\textures\playerTexture.png" />
     <Image Include="res\textures\stallTexture.png" />
+    <Image Include="res\textures\test.png" />
     <Image Include="res\textures\tree.png" />
     <Image Include="res\textures\wall.jpg" />
     <Image Include="res\textures\white.png" />

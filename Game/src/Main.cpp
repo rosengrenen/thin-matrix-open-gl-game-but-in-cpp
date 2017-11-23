@@ -81,49 +81,49 @@ int main(void)
 	Mouse::init(window.getWindow());
 	Scroll::init(window.getWindow());
 
-	Loader loader;
-
 	/* TEXTURE STUFF */
 
+	Image image = Loader::loadTexture("test.png");
 
-	TerrainTexture bgTexture(Texture("res/textures/grassy2.png").getID());
-	TerrainTexture rTexture(Texture("res/textures/mud.png").getID());
-	TerrainTexture gTexture(Texture("res/textures/grassFlowers.png").getID());
-	TerrainTexture bTexture(Texture("res/textures/path.png").getID());
+
+	TerrainTexture bgTexture(Texture("grassy2.png").getID());
+	TerrainTexture rTexture(Texture("mud.png").getID());
+	TerrainTexture gTexture(Texture("grassFlowers.png").getID());
+	TerrainTexture bTexture(Texture("path.png").getID());
 	TerrainTexturePack texturePack(bgTexture, rTexture, gTexture, bTexture);
-	TerrainTexture blendMap(Texture("res/textures/blendMap.png").getID());
+	TerrainTexture blendMap(Texture("blendMap.png").getID());
 
 	/*****************/
 
-	Model grassModel = loader.loadObj("grassModel");
-	Texture grassTexture("res/textures/grassTexture.png");
+	/*Model grassModel = Loader::loadObj("grassModel");
+	Texture grassTexture("grassTexture.png");
 	grassTexture.hasTransparency = true;
 	grassTexture.useFakeLighting = true;
 	grassTexture.shineDamper = 3;
 	grassTexture.reflectivity = 0.3f;
 	TexturedModel grassTM(grassModel, grassTexture);
 
-	Model fernModel = loader.loadObj("fern");
-	Texture fernTexture("res/textures/fern.png");
+	Model fernModel = Loader::loadObj("fern");
+	Texture fernTexture("fern.png");
 	fernTexture.shineDamper = 10;
 	fernTexture.reflectivity = 0.2f;
 	TexturedModel fern(fernModel, fernTexture);
 
-	Model treeModel = loader.loadObj("lowPolyTree");
-	Texture treeTex("res/textures/lowPolyTree.png");
+	Model treeModel = Loader::loadObj("lowPolyTree");
+	Texture treeTex("lowPolyTree.png");
 	treeTex.shineDamper = 10.0f;
 	treeTex.reflectivity = 2.0f;
-	TexturedModel tree(treeModel, treeTex);
+	TexturedModel tree(treeModel, treeTex);*/
 
-	Model playerModel = loader.loadObj("person");
-	Texture playerTexture("res/textures/playerTexture.png");
+	Model playerModel = Loader::loadObj("person");
+	Texture playerTexture("playerTexture.png");
 	playerTexture.shineDamper = 10.0f;
 	playerTexture.reflectivity = 2.0f;
 	TexturedModel playerTM(playerModel, playerTexture);
 
 	Player player(playerTM, glm::vec3(800.0f, 0, 800.0f), glm::vec3(0), 1.0f);
 
-	std::vector<Entity> grass;
+	/*std::vector<Entity> grass;
 	srand((unsigned int) time(0));
 	for (int i = 0; i < 400; i++)
 	{
@@ -149,9 +149,9 @@ int main(void)
 		glm::vec3 rotation(0.0f, rand() % 180, 0.0f);
 		float scale = 0.7f;
 		trees.push_back(Entity(tree, position, rotation, scale));
-	}
+	}*/
 
-	Light light(glm::vec3(2000, 2000, 2000), glm::vec3(1, 1, 1));
+	Light light(glm::vec3(0, 20000, 20000), glm::vec3(1, 1, 1));
 
 	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 0, 0);
 
@@ -163,11 +163,11 @@ int main(void)
 
 	MasterRenderer renderer(entityRenderer, terrainRenderer, entityShader, terrainShader);
 
-	Texture grassTex("res/textures/grass.png");
-	Terrain terrain(0, 0, loader, texturePack, blendMap);
-	Terrain terrain2(1, 0, loader, texturePack, blendMap);
-	Terrain terrain3(0, 1, loader, texturePack, blendMap);
-	Terrain terrain4(1, 1, loader, texturePack, blendMap);
+	Texture grassTex("grass.png");
+	Terrain terrain(0, 0, texturePack, blendMap, "heightmap.png");
+	//Terrain terrain2(1, 0, texturePack, blendMap, "heightmap.png");
+	//Terrain terrain3(0, 1, texturePack, blendMap, "heightmap.png");
+	//Terrain terrain4(1, 1, texturePack, blendMap, "heightmap.png");
 
 	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?
 	float deltaTime = 0.0f;	// Time between current frame and last frame
@@ -180,7 +180,7 @@ int main(void)
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	float movementSpeed = 1.0f;
-	glfwSwapInterval(0);
+	glfwSwapInterval(1);
 	/* Loop until the user closes the window */
 	while (!window.shouldClose())
 	{
@@ -226,7 +226,7 @@ int main(void)
 
 		camera.calcCamPos();
 
-		for (int i = 0; i < grass.size(); i++)
+		/*for (int i = 0; i < grass.size(); i++)
 		{
 			renderer.processEntity(grass.at(i));
 		}
@@ -237,13 +237,13 @@ int main(void)
 		for (int i = 0; i < trees.size(); i++)
 		{
 			renderer.processEntity(trees.at(i));
-		}
+		}*/
 		renderer.processEntity(player);
 
 		renderer.processTerrains(terrain);
-		renderer.processTerrains(terrain2);
-		renderer.processTerrains(terrain3);
-		renderer.processTerrains(terrain4);
+		//renderer.processTerrains(terrain2);
+		//renderer.processTerrains(terrain3);
+		//renderer.processTerrains(terrain4);
 
 		renderer.render(light, camera);
 
