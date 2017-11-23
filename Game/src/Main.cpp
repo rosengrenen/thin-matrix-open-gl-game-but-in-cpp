@@ -180,7 +180,7 @@ int main(void)
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	float movementSpeed = 1.0f;
-	glfwSwapInterval(1);
+	glfwSwapInterval(0);
 	/* Loop until the user closes the window */
 	while (!window.shouldClose())
 	{
@@ -218,13 +218,11 @@ int main(void)
 			//camera.move(0, movementSpeed, 0);
 			player.jump();
 		}
-		else if (Keyboard::getKey(GLFW_KEY_LEFT_SHIFT))
-		{
-			//camera.move(0, -movementSpeed, 0);
-		}
 		Mouse::update();
 		Keyboard::update();
 		Scroll::update();
+
+		player.moveP();
 
 		camera.calcCamPos();
 
