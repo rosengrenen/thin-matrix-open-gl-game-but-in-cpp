@@ -11,6 +11,7 @@ public:
 	float reflectivity = 0;
 	bool hasTransparency = false;
 	bool useFakeLighting = false;
+	int numRows = 1;
 public:
 	Texture(const std::string& filePath)
 	{

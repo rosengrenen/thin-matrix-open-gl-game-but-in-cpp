@@ -76,7 +76,7 @@ int main(void)
 	* Keyboard and Mouse classes should be separate to the Window class, they'll just take the Window pointer as a constructor argument
 	*/
 
-	
+
 	Keyboard::init(window.getWindow());
 	Mouse::init(window.getWindow());
 	Scroll::init(window.getWindow());
@@ -95,6 +95,24 @@ int main(void)
 	//TODO: Options to image creation to decide number of channels
 	Terrain terrain(0, 0, texturePack, blendMap, "heightmap.png");
 
+	Model fernModel = Loader::loadObj("fern");
+	Texture fernTex("fern.png");
+	fernTex.hasTransparency = true;
+	fernTex.reflectivity = 0.3f;
+	fernTex.shineDamper = 7.0f;
+	fernTex.numRows = 1;
+	TexturedModel fern(fernModel, fernTex);
+
+	srand(time(0));
+	std::vector<Entity> ferns;
+	for (int i = 0; i < 50; i++)
+	{
+		float x = rand() % 700 + 50.0f;
+		float z = rand() % 700 + 50.0f;
+		glm::vec3 position(x, terrain.getHeightOfTerrain(x, z), z);
+		ferns.push_back(Entity(fern, position, glm::vec3(0, static_cast<float>(rand() % 180), 0), 2.0f, rand() % 4));
+	}
+
 	Model playerModel = Loader::loadObj("person");
 	Texture playerTexture("playerTexture.png");
 	playerTexture.shineDamper = 10.0f;
@@ -103,9 +121,9 @@ int main(void)
 
 	Player player(playerTM, glm::vec3(800.0f, 0, 800.0f), glm::vec3(0), 1.0f);
 
-	Light light(glm::vec3(0, 200, 2000), glm::vec3(0.5f, 1, 0.5f));
+	Light light(glm::vec3(100, 200, 700), glm::vec3(1, 1, 1));
 
-	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 0, 0);
+	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 30, 0);
 
 	TerrainShader terrainShader;
 	TerrainRenderer terrainRenderer(terrainShader);
@@ -169,6 +187,10 @@ int main(void)
 		Scroll::update();
 
 		player.moveP(terrain);
+		for (int i = 0; i < ferns.size(); i++)
+		{
+			renderer.processEntity(ferns.at(i));
+		}
 
 		camera.calcCamPos();
 

@@ -12,10 +12,14 @@ out vec3 toLightVector;
 out vec3 toCameraVector;
 out float visibility;
 
+
 uniform mat4 model;
 uniform mat4 projection;
 uniform mat4 view;
 uniform vec3 lightPosition;
+
+uniform float numRows;
+uniform vec2 offset;
 
 uniform float useFakeLighting;
 
@@ -30,8 +34,8 @@ void main()
 
 	gl_Position = projection * positionRelativeToCam;
 	
+	//pass_texCoords = (texCoords / numRows) + offset;
 	pass_texCoords = texCoords;
-
 	vec3 actualNormal = normal;
 	if (useFakeLighting > 0.5)
 	{
@@ -88,4 +92,5 @@ void main()
 
 	out_Colour = vec4(diffuse, 1.0) * textureColour + vec4(finalSpecular, 1.0);
 	out_Colour = mix(vec4(skyColour, 1.0), out_Colour, visibility);
+	out_Colour = vec4(1.0, 1.0, 1.0, 1.0);
 };
