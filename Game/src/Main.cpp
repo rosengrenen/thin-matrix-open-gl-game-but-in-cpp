@@ -83,8 +83,6 @@ int main(void)
 
 	/* TEXTURE STUFF */
 
-	Image image = Loader::loadTexture("test.png");
-
 
 	TerrainTexture bgTexture(Texture("grassy2.png").getID());
 	TerrainTexture rTexture(Texture("mud.png").getID());
@@ -118,7 +116,7 @@ int main(void)
 	Model playerModel = Loader::loadObj("person");
 	Texture playerTexture("playerTexture.png");
 	playerTexture.shineDamper = 10.0f;
-	playerTexture.reflectivity = 2.0f;
+	playerTexture.reflectivity = 0.7f;
 	TexturedModel playerTM(playerModel, playerTexture);
 
 	Player player(playerTM, glm::vec3(800.0f, 0, 800.0f), glm::vec3(0), 1.0f);
@@ -151,7 +149,7 @@ int main(void)
 		trees.push_back(Entity(tree, position, rotation, scale));
 	}*/
 
-	Light light(glm::vec3(0, 20000, 20000), glm::vec3(1, 1, 1));
+	Light light(glm::vec3(0, 200, 20000), glm::vec3(0.5f, 1, 0.5f));
 
 	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 0, 0);
 

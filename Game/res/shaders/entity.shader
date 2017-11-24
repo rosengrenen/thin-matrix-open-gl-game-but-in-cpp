@@ -6,6 +6,7 @@ in vec2 texCoords;
 in vec3 normal;
 
 out vec2 pass_texCoords;
+
 out vec3 surfaceNormal;
 out vec3 toLightVector;
 out vec3 toCameraVector;
@@ -28,6 +29,7 @@ void main()
 	vec4 positionRelativeToCam = view * worldPosition;
 
 	gl_Position = projection * positionRelativeToCam;
+	
 	pass_texCoords = texCoords;
 
 	vec3 actualNormal = normal;
@@ -84,6 +86,6 @@ void main()
 		discard;
 	}
 
-	out_Colour = vec4(diffuse, 1.0) * vec4(0.0, 1.0, 1.0, 1.0) * textureColour + vec4(finalSpecular, 1.0);
+	out_Colour = vec4(diffuse, 1.0) * textureColour + vec4(finalSpecular, 1.0);
 	out_Colour = mix(vec4(skyColour, 1.0), out_Colour, visibility);
 };

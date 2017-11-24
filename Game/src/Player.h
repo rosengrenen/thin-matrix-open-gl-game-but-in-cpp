@@ -5,7 +5,7 @@
 class Player : public Entity
 {
 public:
-	const float RUN_SPEED = 20.0f / 60.0f; //TODO: Get time instead of divide
+	const float RUN_SPEED = 80.0f / 60.0f; //TODO: Get time instead of divide
 	const float TURN_SPEED = 160.0f / 60.0f;
 	const float GRAVITY = -50.0f;
 	const float JUMP_POWER = 30.0f;

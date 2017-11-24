@@ -6,6 +6,7 @@ in vec2 texCoords;
 in vec3 normal;
 
 out vec2 pass_texCoords;
+
 out vec3 surfaceNormal;
 out vec3 toLightVector;
 out vec3 toCameraVector;
@@ -26,6 +27,7 @@ void main()
 	vec4 positionRelativeToCam = view * worldPosition;
 
 	gl_Position = projection * positionRelativeToCam;
+	
 	pass_texCoords = texCoords;
 
 	surfaceNormal = (model * vec4(normal, 0.0)).xyz;
@@ -59,8 +61,11 @@ uniform float shineDamper;
 uniform float reflectivity;
 uniform vec3 skyColour;
 
+uniform vec3 lightPosition;
+
 void main()
 {
+	/* BLEND MAP TEXTURING */
 	vec4 blendMapColour = texture(blendMap, pass_texCoords);
 
 	float bgTextureAmount = 1 - (blendMapColour.r + blendMapColour.g + blendMapColour.b);
@@ -71,6 +76,8 @@ void main()
 	vec4 bTexColour = texture(bTexture, tiledCoords) * blendMapColour.b;
 	
 	vec4 totalColour = bgTexColour + rTexColour + gTexColour + bTexColour;
+	/* BLEND MAP TEXTURING STOP */
+
 
 	vec3 unitNormal = normalize(surfaceNormal);
 	vec3 unitLightVector = normalize(toLightVector);
@@ -86,8 +93,12 @@ void main()
 	float specularFactor = dot(reflectedLightDirection, unitVectorToCamera);
 	specularFactor = max(specularFactor, 0.0);
 	float dampedFactor = pow(specularFactor, shineDamper);
+
+
 	vec3 finalSpecular = dampedFactor * lightColour * reflectivity;
 	
-	out_Colour = vec4(diffuse, 1.0) * totalColour + vec4(finalSpecular, 1.0);
-	out_Colour = mix(vec4(skyColour, 1.0), out_Colour, visibility);
+	out_Colour = totalColour;
+	
+	out_Colour = vec4(diffuse, 1.0) * totalColour;// +vec4(finalSpecular, 1.0);
+	//out_Colour = mix(vec4(skyColour, 1.0), out_Colour, visibility);
 };

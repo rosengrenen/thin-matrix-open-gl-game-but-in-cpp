@@ -145,7 +145,12 @@ public:
 			std::cout << "[ERROR] Couldn't load texture: " << path.c_str() << std::endl;
 			throw "Texture file not found";
 		}
-		std::vector<std::vector<unsigned char>> pixelData(height);
+		std::vector<unsigned char> pixelData(width * height * 4);
+		for (int i = 0; i < width * height * 4; i++)
+		{
+			pixelData[i] = data[i];
+		}
+		/*std::vector<std::vector<unsigned char>> pixelData(height);
 		for (int h = 0; h < height; h++)
 		{
 			std::vector<unsigned char> row(width * 4);
@@ -154,7 +159,7 @@ public:
 				row.at(w) = data[h * width * 4 + w];
 			}
 			pixelData.at(h) = row;
-		}
+		}*/
 		glBindTexture(GL_TEXTURE_2D, id);
 		glTexImage2D(
 			GL_TEXTURE_2D, // Target/type of texture

@@ -46,7 +46,7 @@ private:
 				vertices[vertexPointer * 3 + 1] = getHeight(j, i, texture);
 				vertices[vertexPointer * 3 + 2] = (float) i / ((float) VERTEX_COUNT - 1) * SIZE;
 
-				glm::vec3 normal = calcNormal(x, z, texture);
+				glm::vec3 normal = calcNormal(j, i, texture);
 				normals[vertexPointer * 3] = normal.x;
 				normals[vertexPointer * 3 + 1] = normal.y;
 				normals[vertexPointer * 3 + 2] = normal.z;
@@ -102,11 +102,11 @@ private:
 
 	glm::vec3 calcNormal(int x, int z, Image heightMap)
 	{
-		float heightL = getHeight(x - 1, z, heightMap);
-		float heightR = getHeight(x + 1, z, heightMap);
-		float heightD = getHeight(x, z - 1, heightMap);
-		float heightU = getHeight(x, z + 1, heightMap);
-		return glm::normalize(glm::vec3(heightL - heightR, 2.0f, heightD - heightU));
+		glm::vec3 positionL(x - 1, getHeight(x - 1, z, heightMap), z);
+		glm::vec3 positionR(x + 1, getHeight(x + 1, z, heightMap), z);
+		glm::vec3 positionD(x, getHeight(x, z - 1, heightMap), z - 1);
+		glm::vec3 positionU(x, getHeight(x, z + 1, heightMap), z + 1);
+		return glm::normalize(glm::cross(positionU - positionD, positionR - positionL));
 	}
 public:
 	Terrain(int gridX, int gridZ, const TerrainTexturePack& texturePack, const TerrainTexture& blendMap, const std::string& heightMapPath) : x(gridX * SIZE), z(gridZ * SIZE), model(generateTerrain(heightMapPath)), texturePack(texturePack), blendMap(blendMap)

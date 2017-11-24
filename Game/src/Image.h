@@ -9,9 +9,9 @@ public:
 	int width;
 	int height;
 	int channels;
-	std::vector<std::vector<unsigned char>> data;
+	std::vector<unsigned char> data;
 public:
-	Image(int id, int width, int height, int channels, const std::vector<std::vector<unsigned char>>& data) :
+	Image(int id, int width, int height, int channels, const std::vector<unsigned char>& data) :
 		id(id),
 		width(width),
 		height(height),
@@ -28,21 +28,21 @@ public:
 
 	int getR(int x, int y) const
 	{
-		return data.at(y).at(4 * x);
+		return data[y * width * 4 + x * 4];
 	}
 
 	int getG(int x, int y) const
 	{
-		return data.at(y).at(4 * x + 1);
+		return data[y * width * 4 + x * 4 + 1];
 	}
 
 	int getB(int x, int y) const
 	{
-		return data.at(y).at(4 * x + 2);
+		return data[y * width * 4 + x * 4 + 2];
 	}
 
 	int getA(int x, int y) const
 	{
-		return data.at(y).at(4 * x + 3);
+		return data[y * width * 4 + x * 4 + 3];
 	}
 };
