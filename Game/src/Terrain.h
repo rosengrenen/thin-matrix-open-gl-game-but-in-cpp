@@ -7,6 +7,8 @@
 #include "Loader.h"
 #include "TerrainTexturePack.h"
 
+#include "Math.h"
+
 class Terrain
 {
 private:
@@ -14,9 +16,10 @@ private:
 	int VERTEX_COUNT = 128;
 	int MAX_PIXEL_COLOUR = 256 * 256 * 256;
 	float MAX_HEIGHT = 200.0f;
+	std::vector<float> heights;
 public:
-	float x;
-	float z;
+	float posX;
+	float posZ;
 	Model model;
 	TerrainTexturePack texturePack;
 	TerrainTexture blendMap;
@@ -34,25 +37,29 @@ private:
 		std::vector<float> vertices(count * 3);
 		std::vector<float> normals(count * 3);
 		std::vector<float> texCoords(count * 2);
+		heights.resize(count);
 
 		std::vector<int> indices(6 * (VERTEX_COUNT - 1) * (VERTEX_COUNT - 1));
 
 		int vertexPointer = 0;
-		for (int i = 0; i < VERTEX_COUNT; i++)
+		for (int z = 0; z < VERTEX_COUNT; z++)
 		{
-			for (int j = 0; j < VERTEX_COUNT; j++)
+			for (int x = 0; x < VERTEX_COUNT; x++)
 			{
-				vertices[vertexPointer * 3] = (float) j / ((float) VERTEX_COUNT - 1) * SIZE;
-				vertices[vertexPointer * 3 + 1] = getHeight(j, i, texture);
-				vertices[vertexPointer * 3 + 2] = (float) i / ((float) VERTEX_COUNT - 1) * SIZE;
+				float height = getHeight(x, z, texture);
+				vertices[vertexPointer * 3] = (float) x / ((float) VERTEX_COUNT - 1) * SIZE;
+				vertices[vertexPointer * 3 + 1] = height;
+				vertices[vertexPointer * 3 + 2] = (float) z / ((float) VERTEX_COUNT - 1) * SIZE;
 
-				glm::vec3 normal = calcNormal(j, i, texture);
+				glm::vec3 normal = calcNormal(x, z, texture);
 				normals[vertexPointer * 3] = normal.x;
 				normals[vertexPointer * 3 + 1] = normal.y;
 				normals[vertexPointer * 3 + 2] = normal.z;
 
-				texCoords[vertexPointer * 2] = (float) j / ((float) VERTEX_COUNT - 1);
-				texCoords[vertexPointer * 2 + 1] = (float) i / ((float) VERTEX_COUNT - 1);
+				texCoords[vertexPointer * 2] = (float) x / ((float) VERTEX_COUNT - 1);
+				texCoords[vertexPointer * 2 + 1] = (float) z / ((float) VERTEX_COUNT - 1);
+
+				heights[vertexPointer] = height;
 
 				vertexPointer++;
 			}
@@ -109,11 +116,51 @@ private:
 		return glm::normalize(glm::cross(positionU - positionD, positionR - positionL));
 	}
 public:
-	Terrain(int gridX, int gridZ, const TerrainTexturePack& texturePack, const TerrainTexture& blendMap, const std::string& heightMapPath) : x(gridX * SIZE), z(gridZ * SIZE), model(generateTerrain(heightMapPath)), texturePack(texturePack), blendMap(blendMap)
+	Terrain(int gridX, int gridZ, const TerrainTexturePack& texturePack, const TerrainTexture& blendMap, const std::string& heightMapPath) : posX(gridX * SIZE), posZ(gridZ * SIZE), model(generateTerrain(heightMapPath)), texturePack(texturePack), blendMap(blendMap)
 	{ }
 
 	glm::mat4 getModelMatrix() const
 	{
-		return glm::translate(glm::mat4(1), glm::vec3(x, 0, z));
+		return glm::translate(glm::mat4(1), glm::vec3(posX, 0, posZ));
+	}
+
+	float getHeightOfTerrain(float worldX, float worldZ)
+	{
+		float terrainX = worldX - posX;
+		float terrainZ = worldZ - posZ;
+		float gridSquareSize = SIZE / ((float) VERTEX_COUNT - 1);
+		int gridX = std::floor(terrainX / gridSquareSize);
+		int gridZ = std::floor(terrainZ / gridSquareSize);
+		if (gridX >= VERTEX_COUNT - 1 || gridZ >= VERTEX_COUNT - 1 || gridX < 0 || gridZ < 0)
+		{
+			return 0;
+		}
+		float xCoord = std::fmod(terrainX, gridSquareSize) / gridSquareSize;
+		float zCoord = std::fmod(terrainZ, gridSquareSize) / gridSquareSize;
+		float answer;
+		if (xCoord <= zCoord - 1)
+		{
+			answer = Math::barryCentric(
+				glm::vec3(0, getHeight(gridX, gridZ), 0),
+				glm::vec3(1, getHeight(gridX + 1, gridZ), 0),
+				glm::vec3(0, getHeight(gridX, gridZ + 1), 1),
+				glm::vec2(xCoord, zCoord)
+			);
+		}
+		else
+		{
+			answer = Math::barryCentric(
+				glm::vec3(0, getHeight(gridX + 1, gridZ), 0),
+				glm::vec3(1, getHeight(gridX + 1, gridZ + 1), 0),
+				glm::vec3(0, getHeight(gridX, gridZ + 1), 1),
+				glm::vec2(xCoord, zCoord)
+			);
+		}
+		return answer;
+	}
+
+	float getHeight(int x, int z)
+	{
+		return heights.at(z*VERTEX_COUNT + x);
 	}
 };

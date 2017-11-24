@@ -131,6 +131,9 @@
     <ClInclude Include="src\Image.h">
       <Filter>Source Files\RenderEngine</Filter>
     </ClInclude>
+    <ClInclude Include="src\Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\wall.jpg">

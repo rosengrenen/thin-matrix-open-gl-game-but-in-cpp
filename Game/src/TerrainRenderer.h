@@ -20,7 +20,7 @@ private:
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
 		bindTexture(terrain);
-		shader.setShineVariables(0.5f, 10.0f);
+		shader.setShineVariables(0.05f, 20.0f);
 
 
 	}

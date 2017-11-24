@@ -99,6 +99,6 @@ void main()
 	
 	out_Colour = totalColour;
 	
-	out_Colour = vec4(diffuse, 1.0) * totalColour;// +vec4(finalSpecular, 1.0);
-	//out_Colour = mix(vec4(skyColour, 1.0), out_Colour, visibility);
+	out_Colour = vec4(diffuse, 1.0) * totalColour + vec4(finalSpecular, 1.0);
+	out_Colour = mix(vec4(skyColour, 1.0), out_Colour, visibility);
 };

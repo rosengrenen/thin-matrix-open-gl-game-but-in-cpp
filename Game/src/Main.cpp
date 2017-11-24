@@ -91,27 +91,9 @@ int main(void)
 	TerrainTexturePack texturePack(bgTexture, rTexture, gTexture, bTexture);
 	TerrainTexture blendMap(Texture("blendMap.png").getID());
 
-	/*****************/
-
-	/*Model grassModel = Loader::loadObj("grassModel");
-	Texture grassTexture("grassTexture.png");
-	grassTexture.hasTransparency = true;
-	grassTexture.useFakeLighting = true;
-	grassTexture.shineDamper = 3;
-	grassTexture.reflectivity = 0.3f;
-	TexturedModel grassTM(grassModel, grassTexture);
-
-	Model fernModel = Loader::loadObj("fern");
-	Texture fernTexture("fern.png");
-	fernTexture.shineDamper = 10;
-	fernTexture.reflectivity = 0.2f;
-	TexturedModel fern(fernModel, fernTexture);
-
-	Model treeModel = Loader::loadObj("lowPolyTree");
-	Texture treeTex("lowPolyTree.png");
-	treeTex.shineDamper = 10.0f;
-	treeTex.reflectivity = 2.0f;
-	TexturedModel tree(treeModel, treeTex);*/
+	//TODO: pass heightmap texture instead of string
+	//TODO: Options to image creation to decide number of channels
+	Terrain terrain(0, 0, texturePack, blendMap, "heightmap.png");
 
 	Model playerModel = Loader::loadObj("person");
 	Texture playerTexture("playerTexture.png");
@@ -121,35 +103,7 @@ int main(void)
 
 	Player player(playerTM, glm::vec3(800.0f, 0, 800.0f), glm::vec3(0), 1.0f);
 
-	/*std::vector<Entity> grass;
-	srand((unsigned int) time(0));
-	for (int i = 0; i < 400; i++)
-	{
-		glm::vec3 position((float) (rand() % 1300) + 150.0f, 0.0f, (rand() % 1300) + 150.0f);
-		glm::vec3 rotation(0.0f, rand() % 180, 0.0f);
-		float scale = 3.0f;
-		grass.push_back(Entity(grassTM, position, rotation, scale));
-	}
-
-	std::vector<Entity> ferns;
-	for (int i = 0; i < 200; i++)
-	{
-		glm::vec3 position((float) (rand() % 1300) + 150.0f, 0.0f, (rand() % 1300) + 150.0f);
-		glm::vec3 rotation(0.0f, rand() % 180, 0.0f);
-		float scale = 1.2f;
-		ferns.push_back(Entity(fern, position, rotation, scale));
-	}
-
-	std::vector<Entity> trees;
-	for (int i = 0; i < 200; i++)
-	{
-		glm::vec3 position((float) (rand() % 1300) + 150.0f, 0.0f, (rand() % 1300) + 150.0f);
-		glm::vec3 rotation(0.0f, rand() % 180, 0.0f);
-		float scale = 0.7f;
-		trees.push_back(Entity(tree, position, rotation, scale));
-	}*/
-
-	Light light(glm::vec3(0, 200, 20000), glm::vec3(0.5f, 1, 0.5f));
+	Light light(glm::vec3(0, 200, 2000), glm::vec3(0.5f, 1, 0.5f));
 
 	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 0, 0);
 
@@ -160,12 +114,6 @@ int main(void)
 	EntityRenderer entityRenderer(entityShader);
 
 	MasterRenderer renderer(entityRenderer, terrainRenderer, entityShader, terrainShader);
-
-	Texture grassTex("grass.png");
-	Terrain terrain(0, 0, texturePack, blendMap, "heightmap.png");
-	//Terrain terrain2(1, 0, texturePack, blendMap, "heightmap.png");
-	//Terrain terrain3(0, 1, texturePack, blendMap, "heightmap.png");
-	//Terrain terrain4(1, 1, texturePack, blendMap, "heightmap.png");
 
 	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?
 	float deltaTime = 0.0f;	// Time between current frame and last frame
@@ -220,7 +168,7 @@ int main(void)
 		Keyboard::update();
 		Scroll::update();
 
-		player.moveP();
+		player.moveP(terrain);
 
 		camera.calcCamPos();
 

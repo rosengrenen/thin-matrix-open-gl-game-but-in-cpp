@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.h"
+#include "Terrain.h"
 
 class Player : public Entity
 {
@@ -50,13 +51,14 @@ public:
 		}
 	}
 
-	void moveP()
+	void moveP(Terrain terrain)
 	{
 		upSpeed += GRAVITY / 30.0f;
 		move(0, upSpeed / 30.0f, 0);
-		if (m_position.y < TERRAIN_HEIGHT)
+		float terrainHeight = terrain.getHeightOfTerrain(m_position.x, m_position.z);
+		if (m_position.y < terrainHeight)
 		{
-			m_position.y = TERRAIN_HEIGHT;
+			m_position.y = terrainHeight;
 			upSpeed = 0;
 			inAir = false;
 		}
