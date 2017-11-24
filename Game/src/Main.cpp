@@ -96,11 +96,11 @@ int main(void)
 	Terrain terrain(0, 0, texturePack, blendMap, "heightmap.png");
 
 	Model fernModel = Loader::loadObj("fern");
-	Texture fernTex("fern.png");
+	Texture fernTex("fernAtlas.png");
 	fernTex.hasTransparency = true;
 	fernTex.reflectivity = 0.3f;
 	fernTex.shineDamper = 7.0f;
-	fernTex.numRows = 1;
+	fernTex.numRows = 2;
 	TexturedModel fern(fernModel, fernTex);
 
 	srand(time(0));

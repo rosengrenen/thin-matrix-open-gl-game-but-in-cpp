@@ -10,7 +10,7 @@ public:
 	glm::vec3 m_position;
 	glm::vec3 m_rotation;
 	float m_scale;
-	int textureIndex = 0;
+	int textureIndex;
 	TexturedModel texturedModel;
 public:
 	Entity(const TexturedModel& texturedModel, const glm::vec3& position, const glm::vec3& rotation, float scale = 1.0f, int textureIndex = 0) : texturedModel(texturedModel), m_position(position), m_rotation(rotation), m_scale(scale), textureIndex(textureIndex)
@@ -42,5 +42,17 @@ public:
 		transformation = glm::rotate(transformation, glm::radians(m_rotation.z), glm::vec3(0, 0, 1));
 		// Scale
 		return glm::scale(transformation, glm::vec3(m_scale));
+	}
+
+	float getTextureXOffset() const
+	{
+		int column = textureIndex % texturedModel.texture.numRows;
+		return static_cast<float>(column) / texturedModel.texture.numRows;
+	}
+
+	float getTextureYOffset() const
+	{
+		int row = textureIndex / texturedModel.texture.numRows;
+		return static_cast<float>(row) / texturedModel.texture.numRows;
 	}
 };

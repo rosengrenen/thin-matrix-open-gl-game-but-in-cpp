@@ -121,6 +121,11 @@ public:
 		glUniform3f(location, vector.x, vector.y, vector.z);
 	}
 
+	void setVector2f(unsigned int location, const glm::vec2& vector) const
+	{
+		glUniform2f(location, vector.x, vector.y);
+	}
+
 	void setFloat(unsigned int location, float value)
 	{
 		glUniform1f(location, value);

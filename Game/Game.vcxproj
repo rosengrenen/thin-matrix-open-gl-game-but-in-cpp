@@ -186,6 +186,7 @@
     <Image Include="res\textures\container.jpg" />
     <Image Include="res\textures\falcon.jpg" />
     <Image Include="res\textures\fern.png" />
+    <Image Include="res\textures\fernAtlas.png" />
     <Image Include="res\textures\flower.png" />
     <Image Include="res\textures\grass.png" />
     <Image Include="res\textures\grassFlowers.png" />

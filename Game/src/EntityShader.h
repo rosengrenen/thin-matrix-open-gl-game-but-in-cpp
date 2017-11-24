@@ -15,6 +15,8 @@ private:
 	unsigned int m_shineDamperLoc;
 	unsigned int m_fakeNormalsLoc;
 	unsigned int m_skyColourLoc;
+	unsigned int m_atlasOffsetLoc;
+	unsigned int m_numRowsLoc;
 public:
 	EntityShader()
 	{
@@ -39,6 +41,8 @@ public:
 		m_shineDamperLoc = getUniformLocation("shineDamper");
 		m_fakeNormalsLoc = getUniformLocation("useFakeLighting");
 		m_skyColourLoc = getUniformLocation("skyColour");
+		m_numRowsLoc = getUniformLocation("numRows");
+		m_atlasOffsetLoc = getUniformLocation("offset");
 	}
 
 	void setModelMatrix(const glm::mat4& matrix) const
@@ -73,8 +77,18 @@ public:
 		setFloat(m_fakeNormalsLoc, useFake);
 	}
 
-	void setSkyColour( float r, float g,float b)
+	void setSkyColour(float r, float g, float b)
 	{
 		setVector3f(m_skyColourLoc, glm::vec3(r, g, b));
+	}
+
+	void setNumRows(int numRows)
+	{
+		setFloat(m_numRowsLoc, numRows);
+	}
+
+	void setAtlasOffset(float x, float y)
+	{
+		setVector2f(m_atlasOffsetLoc, glm::vec2(x, y));
 	}
 };

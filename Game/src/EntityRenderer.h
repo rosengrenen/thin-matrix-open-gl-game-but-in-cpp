@@ -16,7 +16,6 @@ private:
 
 	void bindTexturedModel(const TexturedModel& model)
 	{
-		m_shader.setShineVariables(model.texture.reflectivity, model.texture.shineDamper);
 		glBindVertexArray(model.model.getID());
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
@@ -29,7 +28,9 @@ private:
 		{
 			disableCulling();
 		}
+		m_shader.setShineVariables(model.texture.reflectivity, model.texture.shineDamper);
 		m_shader.setFakeLighting(model.texture.useFakeLighting);
+		m_shader.setNumRows(model.texture.numRows);
 	}
 
 	void unbindTexturedModel()
@@ -45,6 +46,7 @@ private:
 	void prepareInstance(const Entity& entity)
 	{
 		m_shader.setModelMatrix(entity.getModelMatrix());
+		m_shader.setAtlasOffset(entity.getTextureXOffset(), entity.getTextureYOffset());
 	}
 	
 	void enableCulling()
