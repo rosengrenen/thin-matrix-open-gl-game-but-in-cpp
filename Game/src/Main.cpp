@@ -125,8 +125,13 @@ int main(void)
 
 	Player player(playerTM, glm::vec3(800.0f, 0, 800.0f), glm::vec3(0), 1.0f);
 	#pragma endregion
-	
+
+	std::vector<Light> lights;
 	Light light(glm::vec3(100, 200, 700), glm::vec3(1, 1, 1));
+	lights.push_back(light);
+	lights.push_back(Light({ 100.0f, 200, 100 }, { 10.0f, 0, 0 }));
+	lights.push_back(Light({ 700.0f, 200, 100 }, { 0, 10.0f, 0 }));
+	lights.push_back(Light({ 700.0f, 200, 700 }, { 0, 0, 10.0f }));
 	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 30, 0);
 
 	std::vector<GuiTexture> guis;
@@ -225,7 +230,7 @@ int main(void)
 		//renderer.processTerrains(terrain3);
 		//renderer.processTerrains(terrain4);
 
-		renderer.render(light, camera);
+		renderer.render(lights, camera);
 		guiRenderer.render(guis);
 
 		window.swapBuffers();

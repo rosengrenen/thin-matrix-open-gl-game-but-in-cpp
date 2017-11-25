@@ -5,12 +5,13 @@
 class EntityShader : public ShaderProgram
 {
 private:
+	const int MAX_LIGHTS = 4;
 	const std::string m_shaderPath = "res/shaders/entity.shader";
 	unsigned int m_modelMatrixLoc;
 	unsigned int m_viewMatrixLoc;
 	unsigned int m_projectionMatrixLoc;
-	unsigned int m_lightPositionLoc;
-	unsigned int m_lightColourLoc;
+	std::vector<unsigned int> m_lightPositionLoc;
+	std::vector<unsigned int> m_lightColourLoc;
 	unsigned int m_reflectivityLoc;
 	unsigned int m_shineDamperLoc;
 	unsigned int m_fakeNormalsLoc;
@@ -35,14 +36,18 @@ public:
 		m_modelMatrixLoc = getUniformLocation("model");
 		m_projectionMatrixLoc = getUniformLocation("projection");
 		m_viewMatrixLoc = getUniformLocation("view");
-		m_lightPositionLoc = getUniformLocation("lightPosition");
-		m_lightColourLoc = getUniformLocation("lightColour");
 		m_reflectivityLoc = getUniformLocation("reflectivity");
 		m_shineDamperLoc = getUniformLocation("shineDamper");
 		m_fakeNormalsLoc = getUniformLocation("useFakeLighting");
 		m_skyColourLoc = getUniformLocation("skyColour");
 		m_numRowsLoc = getUniformLocation("numRows");
 		m_atlasOffsetLoc = getUniformLocation("offset");
+
+		for (int i = 0; i < MAX_LIGHTS; i++)
+		{
+			m_lightPositionLoc.push_back(getUniformLocation(("lightPosition[", i, "]")));
+			m_lightColourLoc.push_back(getUniformLocation(("lightColour[", i, "]")));
+		}
 	}
 
 	void setModelMatrix(const glm::mat4& matrix) const
@@ -60,10 +65,21 @@ public:
 		setMatrix4x4(m_viewMatrixLoc, matrix);
 	}
 
-	void setLight(const Light& light) const
+	void setLight(const std::vector<Light>& lights) const
 	{
-		setVector3f(m_lightPositionLoc, light.position);
-		setVector3f(m_lightColourLoc, light.colour);
+		for (int i = 0; i < MAX_LIGHTS; i++)
+		{
+			if (i < lights.size())
+			{
+				setVector3f(m_lightPositionLoc[i], lights[i].position);
+				setVector3f(m_lightColourLoc[i], lights[i].colour);
+			}
+			else
+			{
+				setVector3f(m_lightPositionLoc[i], { 0.0f, 0.0f, 0.0f });
+				setVector3f(m_lightColourLoc[i], { 0.0f, 0.0f, 0.0f });
+			}
+		}
 	}
 
 	void setShineVariables(float reflectivity, float damper)

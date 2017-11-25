@@ -32,12 +32,12 @@ public:
 		m_skyColour(glm::vec3(0.5f, 0.5f, 0.5f))
 	{ }
 
-	void render(const Light& sun, const Camera& camera)
+	void render(const std::vector<Light>& lights, const Camera& camera)
 	{
 		prepare();
 		entityShader.use();
 		entityShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
-		entityShader.setLight(sun);
+		entityShader.setLight(lights);
 		entityShader.setViewMatrix(camera.getViewMatrix());
 		entityShader.setProjectionMatrix(camera.getProjectionMatrix(800.0f / 600.0f));
 		entityRenderer.render(entities);
@@ -45,7 +45,7 @@ public:
 
 		terrainShader.use();
 		terrainShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
-		terrainShader.setLight(sun);
+		//terrainShader.setLight(lights);
 		terrainShader.setViewMatrix(camera.getViewMatrix());
 		terrainShader.setProjectionMatrix(camera.getProjectionMatrix(800.0f / 600.0f));
 		terrainRenderer.render(terrains);
