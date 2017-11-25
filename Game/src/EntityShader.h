@@ -45,8 +45,9 @@ public:
 
 		for (int i = 0; i < MAX_LIGHTS; i++)
 		{
-			m_lightPositionLoc.push_back(getUniformLocation(("lightPosition[", i, "]")));
-			m_lightColourLoc.push_back(getUniformLocation(("lightColour[", i, "]")));
+			std::string posLoc ( "lightPosition[" + std::to_string(i) + "]");
+			m_lightPositionLoc.push_back(getUniformLocation(("lightPosition[" + std::to_string(i) + "]")));
+			m_lightColourLoc.push_back(getUniformLocation(("lightColour[" + std::to_string(i) + "]")));
 		}
 	}
 
