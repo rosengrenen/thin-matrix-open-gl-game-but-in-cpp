@@ -35,7 +35,7 @@ private:
 		unsigned int vbo;
 		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &data.front(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
 		glVertexAttribPointer(attribNum, size, GL_FLOAT, GL_FALSE, 0, nullptr);
 	}
 
@@ -44,7 +44,7 @@ private:
 		unsigned int ibo;
 		glGenBuffers(1, &ibo);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), &indices.front(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
 	}
 	Loader() = delete;
 public:
@@ -61,6 +61,17 @@ public:
 		bindIndicesBuffer(indices);
 
 		return Model(vao, indices.size());
+	}
+
+	static Model loadToVao(const std::vector<float>& positions)
+	{
+		unsigned int vao;
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+
+		storeDataInAttribList(0, 2, positions);
+
+		return Model(vao, positions.size() / 2);
 	}
 
 	static Model loadObj(const std::string& filePath)

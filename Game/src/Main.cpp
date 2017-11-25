@@ -29,6 +29,8 @@
 #include "TerrainTexture.h"
 #include "TerrainTexturePack.h"
 #include "Player.h"
+#include "GuiTexture.h"
+#include "GuiRenderer.h"
 
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -81,9 +83,7 @@ int main(void)
 	Mouse::init(window.getWindow());
 	Scroll::init(window.getWindow());
 
-	/* TEXTURE STUFF */
-
-
+	#pragma region TERRAIN TEXTURE
 	TerrainTexture bgTexture(Texture("grassy2.png").getID());
 	TerrainTexture rTexture(Texture("mud.png").getID());
 	TerrainTexture gTexture(Texture("grassFlowers.png").getID());
@@ -94,7 +94,9 @@ int main(void)
 	//TODO: pass heightmap texture instead of string
 	//TODO: Options to image creation to decide number of channels
 	Terrain terrain(0, 0, texturePack, blendMap, "heightmap.png");
+	#pragma endregion
 
+	#pragma region FERN
 	Model fernModel = Loader::loadObj("fern");
 	Texture fernTex("fernAtlas.png");
 	fernTex.hasTransparency = true;
@@ -112,7 +114,9 @@ int main(void)
 		glm::vec3 position(x, terrain.getHeightOfTerrain(x, z), z);
 		ferns.push_back(Entity(fern, position, glm::vec3(0, static_cast<float>(rand() % 180), 0), 2.0f, rand() % 4));
 	}
+	#pragma endregion
 
+	#pragma region PLAYER
 	Model playerModel = Loader::loadObj("person");
 	Texture playerTexture("playerTexture.png");
 	playerTexture.shineDamper = 10.0f;
@@ -120,10 +124,18 @@ int main(void)
 	TexturedModel playerTM(playerModel, playerTexture);
 
 	Player player(playerTM, glm::vec3(800.0f, 0, 800.0f), glm::vec3(0), 1.0f);
-
+	#pragma endregion
+	
 	Light light(glm::vec3(100, 200, 700), glm::vec3(1, 1, 1));
-
 	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 30, 0);
+
+	std::vector<GuiTexture> guis;
+	GuiTexture gui(Loader::loadTexture("socuwan.png").id, { 0.5f,0.5f }, { 0.25f, 0.25f });
+	guis.push_back(gui);
+	GuiTexture gui2(Loader::loadTexture("thinmatrix.png").id, { 0.4f,0.6f }, { 0.25f, 0.25f });
+	guis.push_back(gui2);
+
+	GuiRenderer guiRenderer;
 
 	TerrainShader terrainShader;
 	TerrainRenderer terrainRenderer(terrainShader);
@@ -214,6 +226,7 @@ int main(void)
 		//renderer.processTerrains(terrain4);
 
 		renderer.render(light, camera);
+		guiRenderer.render(guis);
 
 		window.swapBuffers();
 

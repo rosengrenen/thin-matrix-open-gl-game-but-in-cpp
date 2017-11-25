@@ -152,10 +152,14 @@
     <ClCompile Include="src\Scroll.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\gui.shader" />
     <None Include="res\shaders\terrain.shader" />
     <None Include="res\shaders\entity.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GuiRenderer.h" />
+    <ClInclude Include="src\GuiShader.h" />
+    <ClInclude Include="src\GuiTexture.h" />
     <ClInclude Include="src\Image.h" />
     <ClInclude Include="src\Math.h" />
     <ClInclude Include="src\Scroll.h" />
@@ -183,7 +187,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\blendMap.png" />
+    <Image Include="res\textures\box.png" />
     <Image Include="res\textures\container.jpg" />
+    <Image Include="res\textures\dirt.png" />
     <Image Include="res\textures\falcon.jpg" />
     <Image Include="res\textures\fern.png" />
     <Image Include="res\textures\fernAtlas.png" />
@@ -193,14 +199,22 @@
     <Image Include="res\textures\grassTexture.png" />
     <Image Include="res\textures\grassy.png" />
     <Image Include="res\textures\grassy2.png" />
+    <Image Include="res\textures\grassy3.png" />
+    <Image Include="res\textures\health.png" />
+    <Image Include="res\textures\heightmap perlin.jpg" />
     <Image Include="res\textures\heightmap.png" />
     <Image Include="res\textures\image.png" />
     <Image Include="res\textures\lowPolyTree.png" />
+    <Image Include="res\textures\mossPath256.png" />
     <Image Include="res\textures\mud.png" />
     <Image Include="res\textures\path.png" />
+    <Image Include="res\textures\pine.png" />
+    <Image Include="res\textures\pinkFlowers.png" />
     <Image Include="res\textures\playerTexture.png" />
+    <Image Include="res\textures\socuwan.png" />
     <Image Include="res\textures\stallTexture.png" />
     <Image Include="res\textures\test.png" />
+    <Image Include="res\textures\thinmatrix.png" />
     <Image Include="res\textures\tree.png" />
     <Image Include="res\textures\wall.jpg" />
     <Image Include="res\textures\white.png" />
@@ -252,6 +266,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\objects\person.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\objects\box.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\pine.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\stanfordBunny.obj">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

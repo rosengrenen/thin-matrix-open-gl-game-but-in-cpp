@@ -46,6 +46,12 @@
     <Filter Include="Header Files\Dependencies">
       <UniqueIdentifier>{950ccbeb-d2e2-431a-8914-025248d12a3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{aaa0e133-e772-4b44-a625-4eb4acef8869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUIs">
+      <UniqueIdentifier>{fc264f92-bea9-4516-872a-b4fcd40b2fa5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -132,6 +138,15 @@
       <Filter>Source Files\RenderEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\Math.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiTexture.h">
+      <Filter>Source Files\GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -202,6 +217,36 @@
     <Image Include="res\textures\fernAtlas.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\box.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\dirt.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\heightmap perlin.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\health.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\grassy3.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\mossPath256.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\pine.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\pinkFlowers.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\socuwan.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\thinmatrix.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\objects\stall.obj">
@@ -246,5 +291,11 @@
     <None Include="res\objects\person.obj">
       <Filter>Resource Files\Objects</Filter>
     </None>
+    <None Include="res\objects\stanfordBunny.obj" />
+    <None Include="res\shaders\gui.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="res\objects\box.obj" />
+    <Object Include="res\objects\pine.obj" />
   </ItemGroup>
 </Project>
