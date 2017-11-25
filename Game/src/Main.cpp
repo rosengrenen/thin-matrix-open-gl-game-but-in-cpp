@@ -129,16 +129,14 @@ int main(void)
 	std::vector<Light> lights;
 	Light light(glm::vec3(100, 200, 700), glm::vec3(1, 1, 1));
 	lights.push_back(light);
-	lights.push_back(Light({ 100.0f, 200, 100 }, { 10.0f, 0, 0 }));
-	lights.push_back(Light({ 700.0f, 200, 100 }, { 0, 10.0f, 0 }));
-	lights.push_back(Light({ 700.0f, 200, 700 }, { 0, 0, 10.0f }));
+	lights.push_back(Light({ 100.0f, 200, 100 }, { 1.5f, 0, 0 }));
+	lights.push_back(Light({ 700.0f, 200, 100 }, { 0, 1.5f, 0 }));
+	lights.push_back(Light({ 700.0f, 200, 700 }, { 0, 0, 1.5f }));
 	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 30, 0);
 
 	std::vector<GuiTexture> guis;
-	GuiTexture gui(Loader::loadTexture("socuwan.png").id, { 0.5f,0.5f }, { 0.25f, 0.25f });
+	GuiTexture gui(Loader::loadTexture("health.png").id, { -0.72f,0.88f }, { 0.25f, 0.25f });
 	guis.push_back(gui);
-	GuiTexture gui2(Loader::loadTexture("thinmatrix.png").id, { 0.4f,0.6f }, { 0.25f, 0.25f });
-	guis.push_back(gui2);
 
 	GuiRenderer guiRenderer;
 
