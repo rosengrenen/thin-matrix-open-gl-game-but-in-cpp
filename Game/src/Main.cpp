@@ -127,11 +127,21 @@ int main(void)
 	#pragma endregion
 
 	std::vector<Light> lights;
-	Light light(glm::vec3(100, 200, 700), glm::vec3(1, 1, 1));
+	Light light(glm::vec3(100, 200, 700), glm::vec3(0.4f, 0.4f, 0.4f));
 	lights.push_back(light);
-	lights.push_back(Light({ 100.0f, 200, 100 }, { 1.5f, 0, 0 }));
-	lights.push_back(Light({ 700.0f, 200, 100 }, { 0, 1.5f, 0 }));
-	lights.push_back(Light({ 700.0f, 200, 700 }, { 0, 0, 1.5f }));
+	lights.push_back(Light({ 450.0f, terrain.getHeightOfTerrain(450, 450) + 14, 450 }, { 3.5f, 0, 0 }, { 1, 0.01f, 0.002f }));
+	lights.push_back(Light({ 400.0f, terrain.getHeightOfTerrain(400, 400) + 14, 400 }, { 3.5f, 3.5f, 0 }, { 1, 0.01f, 0.002f }));
+	lights.push_back(Light({ 350.0f, terrain.getHeightOfTerrain(350, 350) + 14, 350 }, { 0, 3.5f, 3.5f }, { 1, 0.01f, 0.002f }));
+
+	Model lampModel = Loader::loadObj("lamp");
+	Texture lampTex("lamp.png");
+	lampTex.useFakeLighting = true;
+	TexturedModel lamp(lampModel, lampTex);
+
+	std::vector<Entity> lamps;
+	lamps.push_back(Entity(lamp, { 450.0f, terrain.getHeightOfTerrain(450, 450), 450 }));
+	lamps.push_back(Entity(lamp, { 400.0f, terrain.getHeightOfTerrain(400, 400), 400 }));
+	lamps.push_back(Entity(lamp, { 350.0f, terrain.getHeightOfTerrain(350, 350), 350 }));
 	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 30, 0);
 
 	std::vector<GuiTexture> guis;
@@ -197,6 +207,14 @@ int main(void)
 			//camera.move(0, movementSpeed, 0);
 			player.jump();
 		}
+		if (Keyboard::getKey(GLFW_KEY_DOWN))
+		{
+			lights[3].position.y -= 0.1f;
+		}
+		else if (Keyboard::getKey(GLFW_KEY_UP))
+		{
+			lights[3].position.y += 0.1f;
+		}
 		Mouse::update();
 		Keyboard::update();
 		Scroll::update();
@@ -224,9 +242,11 @@ int main(void)
 		renderer.processEntity(player);
 
 		renderer.processTerrains(terrain);
-		//renderer.processTerrains(terrain2);
-		//renderer.processTerrains(terrain3);
-		//renderer.processTerrains(terrain4);
+
+		for (int i = 0; i < lamps.size(); i++)
+		{
+			renderer.processEntity(lamps.at(i));
+		}
 
 		renderer.render(lights, camera);
 		guiRenderer.render(guis);

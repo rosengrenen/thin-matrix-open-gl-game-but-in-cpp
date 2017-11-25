@@ -15,6 +15,7 @@ private:
 	unsigned int m_projectionMatrixLoc;
 	std::vector<unsigned int> m_lightPositionLoc;
 	std::vector<unsigned int> m_lightColourLoc;
+	std::vector<unsigned int> m_lightAttenuationLoc;
 	unsigned int m_reflectivityLoc;
 	unsigned int m_shineDamperLoc;
 	unsigned int m_skyColourLoc;
@@ -53,6 +54,7 @@ public:
 		{
 			m_lightPositionLoc.push_back(getUniformLocation("lightPosition[" + std::to_string(i) + "]"));
 			m_lightColourLoc.push_back(getUniformLocation("lightColour[" + std::to_string(i) + "]"));
+			m_lightAttenuationLoc.push_back(getUniformLocation("attenuation[" + std::to_string(i) + "]"));
 		}
 	}
 
@@ -79,11 +81,13 @@ public:
 			{
 				setVector3f(m_lightPositionLoc[i], lights[i].position);
 				setVector3f(m_lightColourLoc[i], lights[i].colour);
+				setVector3f(m_lightAttenuationLoc[i], lights[i].attenuation);
 			}
 			else
 			{
-				setVector3f(m_lightPositionLoc[i], { 0,0,0 });
-				setVector3f(m_lightColourLoc[i], { 0,0,0 });
+				setVector3f(m_lightPositionLoc[i], { 0.0f, 0.0f, 0.0f });
+				setVector3f(m_lightColourLoc[i], { 0.0f ,0.0f ,0.0f });
+				setVector3f(m_lightAttenuationLoc[i], { 1.0f,0.0f,0.0f });
 			}
 		}
 	}

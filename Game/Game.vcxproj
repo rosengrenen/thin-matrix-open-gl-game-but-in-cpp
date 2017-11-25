@@ -157,6 +157,7 @@
     <None Include="res\shaders\entity.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\GuiRenderer.h" />
     <ClInclude Include="src\GuiShader.h" />
     <ClInclude Include="src\GuiTexture.h" />
@@ -277,6 +278,11 @@
       <FileType>Document</FileType>
     </None>
     <None Include="res\objects\stanfordBunny.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\objects\lamp.obj">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

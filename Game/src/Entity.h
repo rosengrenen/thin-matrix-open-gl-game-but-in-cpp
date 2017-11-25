@@ -13,7 +13,7 @@ public:
 	int textureIndex;
 	TexturedModel texturedModel;
 public:
-	Entity(const TexturedModel& texturedModel, const glm::vec3& position, const glm::vec3& rotation, float scale = 1.0f, int textureIndex = 0) : texturedModel(texturedModel), m_position(position), m_rotation(rotation), m_scale(scale), textureIndex(textureIndex)
+	Entity(const TexturedModel& texturedModel, const glm::vec3& position, const glm::vec3& rotation = glm::vec3(0.0f), float scale = 1.0f, int textureIndex = 0) : texturedModel(texturedModel), m_position(position), m_rotation(rotation), m_scale(scale), textureIndex(textureIndex)
 	{ }
 
 	void move(float dx, float dy, float dz)

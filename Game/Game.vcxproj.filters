@@ -149,6 +149,9 @@
     <ClInclude Include="src\GuiShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Debug.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\wall.jpg">
@@ -293,9 +296,8 @@
     </None>
     <None Include="res\objects\stanfordBunny.obj" />
     <None Include="res\shaders\gui.shader" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="res\objects\box.obj" />
-    <Object Include="res\objects\pine.obj" />
+    <None Include="res\objects\box.obj" />
+    <None Include="res\objects\pine.obj" />
+    <None Include="res\objects\lamp.obj" />
   </ItemGroup>
 </Project>
