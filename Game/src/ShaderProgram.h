@@ -98,7 +98,12 @@ public:
 
 	unsigned int getUniformLocation(const std::string& name)
 	{
-		return glGetUniformLocation(m_program, name.c_str());
+		GLint loc = glGetUniformLocation(m_program, name.c_str());
+		if (loc == -1)
+		{
+			__debugbreak();
+		}
+		return loc;
 	}
 
 	void use() const
