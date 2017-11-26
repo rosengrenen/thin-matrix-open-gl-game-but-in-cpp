@@ -10,6 +10,10 @@ private:
 	const std::string m_shaderPath = "res/shaders/skybox.shader";
 	GLuint m_projectionMatrixLoc;
 	GLuint m_viewMatrixLoc;
+	GLuint m_fogColourLoc;
+	GLuint m_blendFactorLoc;
+	GLuint m_cubeMapLoc;
+	GLuint m_cubeMapLoc2;
 public:
 	SkyboxShader()
 	{
@@ -24,7 +28,13 @@ public:
 	void getUniformLocations() override
 	{
 		m_projectionMatrixLoc = getUniformLocation("projection");
-		m_viewMatrixLoc=getUniformLocation("view");
+		m_viewMatrixLoc = getUniformLocation("view");
+		m_fogColourLoc = getUniformLocation("fogColour");
+		m_blendFactorLoc = getUniformLocation("blendFactor");
+		m_cubeMapLoc = getUniformLocation("cubeMap");
+		m_cubeMapLoc2 = getUniformLocation("cubeMap2");
+		setInt(m_cubeMapLoc, 0);
+		setInt(m_cubeMapLoc2, 1);
 	}
 
 	void setProjectionMatrix(const glm::mat4& projection)
@@ -39,5 +49,15 @@ public:
 		view[3][1] = 0;
 		view[3][2] = 0;
 		setMatrix4x4(m_viewMatrixLoc, view);
+	}
+
+	void setFogColour(float r, float g, float b)
+	{
+		setVector3f(m_fogColourLoc, { r, g, b });
+	}
+
+	void setBlendFactor(float f)
+	{
+		setFloat(m_blendFactorLoc, f);
 	}
 };

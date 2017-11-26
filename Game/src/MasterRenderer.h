@@ -54,7 +54,7 @@ public:
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 
-		skyboxRenderer.render(camera);
+		skyboxRenderer.render(camera, m_skyColour.x, m_skyColour.y, m_skyColour.z);
 
 		terrains.clear();
 		entities.clear();
