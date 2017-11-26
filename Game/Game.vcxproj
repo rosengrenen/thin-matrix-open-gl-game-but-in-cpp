@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\gui.shader" />
+    <None Include="res\shaders\skybox.shader" />
     <None Include="res\shaders\terrain.shader" />
     <None Include="res\shaders\entity.shader" />
   </ItemGroup>
@@ -177,6 +178,8 @@
     <ClInclude Include="src\Player.h" />
     <ClInclude Include="src\ShaderProgram.h" />
     <ClInclude Include="src\EntityShader.h" />
+    <ClInclude Include="src\SkyboxRenderer.h" />
+    <ClInclude Include="src\SkyboxShader.h" />
     <ClInclude Include="src\Terrain.h" />
     <ClInclude Include="src\TerrainRenderer.h" />
     <ClInclude Include="src\TerrainShader.h" />

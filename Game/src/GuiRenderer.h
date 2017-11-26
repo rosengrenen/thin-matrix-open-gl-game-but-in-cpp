@@ -14,7 +14,7 @@ public:
 	Model quad;
 	GuiShader shader;
 public:
-	GuiRenderer() : quad(Loader::loadToVao({ -1.0f,  1.0f,-1.0f, -1.0f, 1.0f,  1.0f, 1.0f, -1.0f }))
+	GuiRenderer() : quad(Loader::loadToVao({ -1.0f,  1.0f,-1.0f, -1.0f, 1.0f,  1.0f, 1.0f, -1.0f }, 2))
 	{ }
 
 	void render(std::vector<GuiTexture> guis)

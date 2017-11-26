@@ -10,6 +10,7 @@
 #include "TerrainRenderer.h"
 #include "TerrainShader.h"
 #include "TexturedModel.h"
+#include "SkyboxRenderer.h"
 
 class MasterRenderer
 {
@@ -19,6 +20,8 @@ private:
 
 	TerrainShader terrainShader;
 	TerrainRenderer terrainRenderer;
+
+	SkyboxRenderer skyboxRenderer;
 
 	std::unordered_map<TexturedModel, std::vector<Entity>> entities;
 	std::vector<Terrain> terrains;
@@ -50,6 +53,8 @@ public:
 		terrainShader.setProjectionMatrix(camera.getProjectionMatrix(800.0f / 600.0f));
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
+
+		skyboxRenderer.render(camera);
 
 		terrains.clear();
 		entities.clear();

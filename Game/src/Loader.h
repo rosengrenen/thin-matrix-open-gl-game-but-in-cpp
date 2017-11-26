@@ -5,7 +5,6 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <bitset>
 
 #include "Model.h"
 #include "Image.h"
@@ -48,6 +47,28 @@ private:
 	}
 	Loader() = delete;
 public:
+	static int loadCubeMap(std::vector<std::string> textureFilePaths)
+	{
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+
+		for (int i = 0; i < textureFilePaths.size(); i++)
+		{
+			//TODO: rename Image to TextureData and make it only hold the data, not a texture buffer
+			Image image = loadTexture(textureFilePaths[i]);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data.data());
+		}
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		return texture;
+	}
+
 	static Model loadToVao(const std::vector<float>& vertices, const std::vector<float>& texCoords, const std::vector<float>& normals, const std::vector<int>& indices)
 	{
 		unsigned int vao;
@@ -63,15 +84,15 @@ public:
 		return Model(vao, indices.size());
 	}
 
-	static Model loadToVao(const std::vector<float>& positions)
+	static Model loadToVao(const std::vector<float>& positions, GLint dimensions)
 	{
 		unsigned int vao;
 		glGenVertexArrays(1, &vao);
 		glBindVertexArray(vao);
 
-		storeDataInAttribList(0, 2, positions);
+		storeDataInAttribList(0, dimensions, positions);
 
-		return Model(vao, positions.size() / 2);
+		return Model(vao, positions.size() / dimensions);
 	}
 
 	static Model loadObj(const std::string& filePath)
@@ -161,16 +182,6 @@ public:
 		{
 			pixelData[i] = data[i];
 		}
-		/*std::vector<std::vector<unsigned char>> pixelData(height);
-		for (int h = 0; h < height; h++)
-		{
-			std::vector<unsigned char> row(width * 4);
-			for (int w = 0; w < width * 4; w++)
-			{
-				row.at(w) = data[h * width * 4 + w];
-			}
-			pixelData.at(h) = row;
-		}*/
 		glBindTexture(GL_TEXTURE_2D, id);
 		glTexImage2D(
 			GL_TEXTURE_2D, // Target/type of texture

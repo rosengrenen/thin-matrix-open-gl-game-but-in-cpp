@@ -34,9 +34,6 @@
     <Filter Include="Source Files\RenderEngine">
       <UniqueIdentifier>{5f453054-92a9-40a0-a9b8-27e58a6f2fba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Shaders">
-      <UniqueIdentifier>{fb60acf7-97ea-4b74-a903-36abeeba95b8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Terrains">
       <UniqueIdentifier>{74b61db7-0e8b-44fd-ba0b-5ec1c4b8a9a2}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,9 @@
     </Filter>
     <Filter Include="Source Files\GUIs">
       <UniqueIdentifier>{fc264f92-bea9-4516-872a-b4fcd40b2fa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Skybox">
+      <UniqueIdentifier>{a82f8194-6aac-43cd-ba5d-cc97bce7000a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -107,21 +107,6 @@
     <ClInclude Include="src\Terrain.h">
       <Filter>Source Files\Terrains</Filter>
     </ClInclude>
-    <ClInclude Include="src\TerrainShader.h">
-      <Filter>Source Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ShaderProgram.h">
-      <Filter>Source Files\Shaders</Filter>
-    </ClInclude>
-    <ClInclude Include="src\TerrainRenderer.h">
-      <Filter>Source Files\RenderEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EntityRenderer.h">
-      <Filter>Source Files\RenderEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\EntityShader.h">
-      <Filter>Source Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="src\TerrainTexture.h">
       <Filter>Source Files\Textures</Filter>
     </ClInclude>
@@ -143,14 +128,35 @@
     <ClInclude Include="src\GuiTexture.h">
       <Filter>Source Files\GUIs</Filter>
     </ClInclude>
-    <ClInclude Include="src\GuiRenderer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\EntityRenderer.h">
+      <Filter>Source Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\GuiShader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\EntityShader.h">
+      <Filter>Source Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainRenderer.h">
+      <Filter>Source Files\Terrains</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainShader.h">
+      <Filter>Source Files\Terrains</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ShaderProgram.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Debug.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiShader.h">
+      <Filter>Source Files\GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GuiRenderer.h">
+      <Filter>Source Files\GUIs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SkyboxRenderer.h">
+      <Filter>Source Files\Skybox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SkyboxShader.h">
+      <Filter>Source Files\Skybox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -217,38 +223,38 @@
     <Image Include="res\textures\test.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="res\textures\fernAtlas.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="res\textures\box.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\dirt.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="res\textures\heightmap perlin.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\health.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\textures\fernAtlas.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\grassy3.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\health.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\heightmap perlin.jpg">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\mossPath256.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\pine.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\pinkFlowers.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\socuwan.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\thinmatrix.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -294,10 +300,23 @@
     <None Include="res\objects\person.obj">
       <Filter>Resource Files\Objects</Filter>
     </None>
-    <None Include="res\objects\stanfordBunny.obj" />
-    <None Include="res\shaders\gui.shader" />
-    <None Include="res\objects\box.obj" />
-    <None Include="res\objects\pine.obj" />
-    <None Include="res\objects\lamp.obj" />
+    <None Include="res\shaders\skybox.shader">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="res\shaders\gui.shader">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="res\objects\stanfordBunny.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\box.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\lamp.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\pine.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
   </ItemGroup>
 </Project>
