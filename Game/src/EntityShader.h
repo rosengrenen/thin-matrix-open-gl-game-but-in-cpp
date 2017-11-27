@@ -23,6 +23,7 @@ private:
 	unsigned int m_skyColourLoc;
 	unsigned int m_atlasOffsetLoc;
 	unsigned int m_numRowsLoc;
+	unsigned int m_planeLoc;
 public:
 	EntityShader();
 
@@ -47,4 +48,6 @@ public:
 	void setNumRows(int numRows);
 
 	void setAtlasOffset(float x, float y);
+
+	void setClipPlane(const glm::vec4& plane);
 };

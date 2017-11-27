@@ -67,7 +67,12 @@ void Camera::calcCamPos()
 	m_position = player.m_position + m_front * distanceFromPlayer;
 }
 
-glm::vec3 Camera::getPosition() const
+glm::vec3& Camera::getPosition()
 {
 	return m_position;
+}
+
+void Camera::invertPitch()
+{
+	m_yaw = -m_yaw;
 }

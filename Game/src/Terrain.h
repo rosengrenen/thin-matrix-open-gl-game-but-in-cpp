@@ -12,7 +12,7 @@
 class Terrain
 {
 private:
-	const float SIZE = 800.0f;
+	const float SIZE = 120.0f;
 	int VERTEX_COUNT = 128;
 	int MAX_PIXEL_COLOUR = 256 * 256 * 256;
 	float MAX_HEIGHT = 200.0f;

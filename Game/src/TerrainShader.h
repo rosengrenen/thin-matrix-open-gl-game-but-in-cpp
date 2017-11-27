@@ -24,6 +24,7 @@ private:
 	unsigned int m_gTexLoc;
 	unsigned int m_bTexLoc;
 	unsigned int m_blendMapLoc;
+	unsigned int m_planeLoc;
 public:
 	TerrainShader()
 	{
@@ -50,6 +51,7 @@ public:
 		m_gTexLoc = getUniformLocation("gTexture");
 		m_bTexLoc = getUniformLocation("bTexture");
 		m_blendMapLoc = getUniformLocation("blendMap");
+		m_planeLoc = getUniformLocation("plane");
 		for (int i = 0; i < MAX_LIGHTS; i++)
 		{
 			m_lightPositionLoc.push_back(getUniformLocation("lightPosition[" + std::to_string(i) + "]"));
@@ -110,5 +112,10 @@ public:
 		setInt(m_gTexLoc, 2);
 		setInt(m_bTexLoc, 3);
 		setInt(m_blendMapLoc, 4);
+	}
+
+	void setClipPlane(const glm::vec4& plane)
+	{
+		setVector4f(m_planeLoc, plane);
 	}
 };

@@ -38,5 +38,7 @@ public:
 
 	void calcCamPos();
 
-	glm::vec3 getPosition() const;
+	glm::vec3& getPosition();
+
+	void invertPitch();
 };

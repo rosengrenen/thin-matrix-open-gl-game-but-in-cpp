@@ -101,6 +101,11 @@ void ShaderProgram::setMatrix4f(unsigned int location, const glm::mat4& matrix) 
 	glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 }
 
+void ShaderProgram::setVector4f(unsigned int location, const glm::vec4& vector) const
+{
+	glUniform4f(location, vector.x, vector.y, vector.z, vector.w);
+}
+
 void ShaderProgram::setVector3f(unsigned int location, const glm::vec3& vector) const
 {
 	glUniform3f(location, vector.x, vector.y, vector.z);

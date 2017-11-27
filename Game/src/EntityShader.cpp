@@ -23,6 +23,7 @@ void EntityShader::getUniformLocations()
 	m_skyColourLoc = getUniformLocation("skyColour");
 	m_numRowsLoc = getUniformLocation("numRows");
 	m_atlasOffsetLoc = getUniformLocation("offset");
+	m_planeLoc = getUniformLocation("plane");
 
 	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
@@ -90,4 +91,9 @@ void EntityShader::setNumRows(int numRows)
 void EntityShader::setAtlasOffset(float x, float y)
 {
 	setVector2f(m_atlasOffsetLoc, glm::vec2(x, y));
+}
+
+void EntityShader::setClipPlane(const glm::vec4& plane)
+{
+	setVector4f(m_planeLoc, plane);
 }

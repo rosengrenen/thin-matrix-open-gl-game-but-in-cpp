@@ -87,7 +87,7 @@ public:
 		shader.setViewMatrix(camera.getViewMatrix());
 		shader.setProjectionMatrix(camera.getProjectionMatrix());
 		shader.setFogColour(r, g, b);
-		shader.setBlendFactor(0.5f);
+		shader.setBlendFactor(0.0f);
 		cube.bind();
 		glEnableVertexAttribArray(0);
 		glActiveTexture(GL_TEXTURE0);

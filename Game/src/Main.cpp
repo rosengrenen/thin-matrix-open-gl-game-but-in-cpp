@@ -96,7 +96,7 @@ int main(void)
 
 	//TODO: pass heightmap texture instead of string
 	//TODO: Options to image creation to decide number of channels
-	Terrain terrain(0, 0, texturePack, blendMap, "heightmap.png");
+	Terrain terrain(0, 0, texturePack, blendMap, "ownheightmap.png");
 	#pragma endregion
 	terrains.push_back(terrain);
 
@@ -144,7 +144,8 @@ int main(void)
 	#pragma endregion
 
 	std::vector<WaterTile> waters;
-	waters.push_back(WaterTile(75, -75, 0));
+	WaterTile water(60, 60, 96);
+	waters.push_back(water);
 
 	WaterFrameBuffers fbos;
 
@@ -153,8 +154,10 @@ int main(void)
 	Light lampLight(glm::vec3(0.0), { 10.0f, 10.0f, 0.0f }, { 1, 0.01f, 0.002f });
 	lights.push_back(lampLight);
 
-	GuiTexture frameRender(fbos.getReflectionTexture(), glm::vec2(-0.5f, 0.5f), glm::vec2(0.5f));
-	guis.push_back(frameRender);
+	GuiTexture reflection(fbos.getReflectionTexture(), glm::vec2(0.5f, 0.5f), glm::vec2(0.25f));
+	guis.push_back(reflection);
+	GuiTexture refraction(fbos.getRefractionTexture(), glm::vec2(-0.5f, 0.5f), glm::vec2(0.25f));
+	guis.push_back(refraction);
 
 	#pragma region FPS
 	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?
@@ -173,6 +176,7 @@ int main(void)
 	while (Window::isOpen())
 	{
 		//Window::clear();
+		glEnable(GL_CLIP_DISTANCE0);
 		/* Rotate camera from mouse input */
 		camera.zoom(-Scroll::getOffsetY() * 4);
 		if (Mouse::getKey(GLFW_MOUSE_BUTTON_RIGHT))
@@ -211,11 +215,22 @@ int main(void)
 		renderer.processEntities(entities);
 		renderer.processTerrains(terrains);
 
+		// Render to reflection texture
 		fbos.bindReflectionFrameBuffer();
-		renderer.renderScene(entities, terrains, lights, camera);
-		fbos.unbindCurrentFrameBuffer();
+		float distance = 2 * (camera.getPosition().y - water.getHeight());
+		camera.getPosition().y -= distance;
+		camera.invertPitch();
+		renderer.renderScene(entities, terrains, lights, camera, glm::vec4(0, 1, 0, -water.getHeight()));
+		camera.getPosition().y += distance;
+		camera.invertPitch();
+		// Render to refraction texture
+		fbos.bindRefractionFrameBuffer();
+		renderer.renderScene(entities, terrains, lights, camera, glm::vec4(0, -1, 0, water.getHeight()));
 
-		renderer.renderScene(entities, terrains, lights, camera);
+		// Render to screen
+		fbos.unbindCurrentFrameBuffer();
+		glDisable(GL_CLIP_DISTANCE0);
+		renderer.renderScene(entities, terrains, lights, camera, glm::vec4(0, -1, 0, 15));
 		waterRenderer.render(waters, camera);
 		guiRenderer.render(guis);
 

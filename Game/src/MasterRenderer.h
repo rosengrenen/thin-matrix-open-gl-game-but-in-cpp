@@ -35,7 +35,7 @@ public:
 		m_skyColour(glm::vec3(0.5f, 0.5f, 0.5f))
 	{ }
 
-	void renderScene(const std::vector<Entity>& entities, const std::vector<Terrain>& terrains, const std::vector<Light>& lights, Camera& camera)
+	void renderScene(const std::vector<Entity>& entities, const std::vector<Terrain>& terrains, const std::vector<Light>& lights, Camera& camera, const glm::vec4& clipPlane)
 	{
 		for (Entity e : entities)
 		{
@@ -45,13 +45,14 @@ public:
 		{
 			processTerrain(t);
 		}
-		render(lights, camera);
+		render(lights, camera, clipPlane);
 	}
 
-	void render(const std::vector<Light>& lights, Camera& camera)
+	void render(const std::vector<Light>& lights, Camera& camera, const glm::vec4& clipPlane)
 	{
 		prepare();
 		entityShader.use();
+		entityShader.setClipPlane(clipPlane);
 		entityShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
 		entityShader.setLight(lights);
 		entityShader.setViewMatrix(camera.getViewMatrix());
@@ -60,6 +61,7 @@ public:
 		entityShader.stop();
 
 		terrainShader.use();
+		terrainShader.setClipPlane(clipPlane);
 		terrainShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
 		terrainShader.setLights(lights);
 		terrainShader.setViewMatrix(camera.getViewMatrix());

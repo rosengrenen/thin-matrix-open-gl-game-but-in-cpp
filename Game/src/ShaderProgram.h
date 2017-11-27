@@ -40,6 +40,8 @@ public:
 
 	void setMatrix4f(unsigned int location, const glm::mat4& matrix) const;
 
+	void setVector4f(unsigned int location, const glm::vec4& vector) const;
+
 	void setVector3f(unsigned int location, const glm::vec3& vector) const;
 
 	void setVector2f(unsigned int location, const glm::vec2& vector) const;

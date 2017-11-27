@@ -243,6 +243,7 @@
     <Image Include="res\textures\nightLeft.png" />
     <Image Include="res\textures\nightRight.png" />
     <Image Include="res\textures\nightTop.png" />
+    <Image Include="res\textures\ownheightmap.png" />
     <Image Include="res\textures\path.png" />
     <Image Include="res\textures\pine.png" />
     <Image Include="res\textures\pinkFlowers.png" />

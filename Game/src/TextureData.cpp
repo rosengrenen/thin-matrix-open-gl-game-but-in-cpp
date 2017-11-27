@@ -22,7 +22,7 @@ const int TextureData::getRGB(int x, int y) const
 const unsigned char TextureData::getR(int x, int y) const
 {
 	int index = y * m_width * 4 + x * 4;
-	if (index < m_width * m_height * m_channels)
+	if (index < m_width * m_height * 4)
 		return m_data[index];
 	return 0;
 }
@@ -30,7 +30,7 @@ const unsigned char TextureData::getR(int x, int y) const
 const unsigned char TextureData::getG(int x, int y) const
 {
 	int index = y * m_width * 4 + x * 4 + 1;
-	if (index < m_width * m_height * m_channels)
+	if (index < m_width * m_height * 4)
 		return m_data[index];
 	return 0;
 }
@@ -38,7 +38,7 @@ const unsigned char TextureData::getG(int x, int y) const
 const unsigned char TextureData::getB(int x, int y) const
 {
 	int index = y * m_width * 4 + x * 4 + 2;
-	if (index < m_width * m_height * m_channels)
+	if (index < m_width * m_height * 4)
 		return m_data[index];
 	return 0;
 }
@@ -46,7 +46,7 @@ const unsigned char TextureData::getB(int x, int y) const
 unsigned char TextureData::getA(int x, int y) const
 {
 	int index = y * m_width * 4 + x * 4 + 3;
-	if (index < m_width * m_height * m_channels)
+	if (index < m_width * m_height * 4)
 		return m_data[index];
 	return 0;
 }

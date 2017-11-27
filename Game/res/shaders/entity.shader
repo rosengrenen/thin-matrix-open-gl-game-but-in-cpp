@@ -26,9 +26,13 @@ uniform float useFakeLighting;
 const float density = 0.0035;
 const float gradient = 5.0;
 
+uniform vec4 plane;
+
 void main()
 {
 	vec4 worldPosition = model * vec4(position, 1.0);
+
+	gl_ClipDistance[0] = dot(worldPosition, plane);
 
 	vec4 positionRelativeToCam = view * worldPosition;
 
