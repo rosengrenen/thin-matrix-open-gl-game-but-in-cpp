@@ -158,6 +158,9 @@
     <ClInclude Include="src\SkyboxShader.h">
       <Filter>Source Files\Skybox</Filter>
     </ClInclude>
+    <ClInclude Include="src\MousePicker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\wall.jpg">

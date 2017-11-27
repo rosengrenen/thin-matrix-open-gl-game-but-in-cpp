@@ -31,6 +31,7 @@
 #include "Player.h"
 #include "GuiTexture.h"
 #include "GuiRenderer.h"
+#include "MousePicker.h"
 
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -131,7 +132,7 @@ int main(void)
 	lights.push_back(light);
 	lights.push_back(Light({ 450.0f, terrain.getHeightOfTerrain(450, 450) + 14, 450 }, { 3.5f, 0, 0 }, { 1, 0.01f, 0.002f }));
 	lights.push_back(Light({ 400.0f, terrain.getHeightOfTerrain(400, 400) + 14, 400 }, { 3.5f, 3.5f, 0 }, { 1, 0.01f, 0.002f }));
-	lights.push_back(Light({ 350.0f, terrain.getHeightOfTerrain(350, 350) + 14, 350 }, { 0, 3.5f, 3.5f }, { 1, 0.01f, 0.002f }));
+
 
 	Model lampModel = Loader::loadObj("lamp");
 	Texture lampTex("lamp.png");
@@ -142,7 +143,7 @@ int main(void)
 	lamps.push_back(Entity(lamp, { 450.0f, terrain.getHeightOfTerrain(450, 450), 450 }));
 	lamps.push_back(Entity(lamp, { 400.0f, terrain.getHeightOfTerrain(400, 400), 400 }));
 	lamps.push_back(Entity(lamp, { 350.0f, terrain.getHeightOfTerrain(350, 350), 350 }));
-	Camera camera(player, glm::vec3(800.0f, 12.0f, 805.0f), 30, 0);
+	Camera camera(player, glm::vec3(400.0f, 12.0f, 405.0f), 30, 0);
 
 	std::vector<GuiTexture> guis;
 	GuiTexture gui(Loader::loadTexture("health.png").id, { -0.72f,0.88f }, { 0.25f, 0.25f });
@@ -158,13 +159,19 @@ int main(void)
 
 	MasterRenderer renderer(entityRenderer, terrainRenderer, entityShader, terrainShader);
 
+	MousePicker picker(camera, terrain);
+
+	Entity lampEntity(lamp, glm::vec3(0));
+	Light lampLight(glm::vec3(0.0), { 10.0f, 10.0f, 0.0f }, { 1, 0.01f, 0.002f });
+	lights.push_back(lampLight);
+
+	#pragma region FPS
 	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?
 	float deltaTime = 0.0f;	// Time between current frame and last frame
 	float lastFrame = 0.0f; // Time of last frame
 	int frames = 0;
 	float frameTime = 0;
-
-	double mouseSensitivity = 0.3;
+	#pragma endregion
 
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -184,41 +191,32 @@ int main(void)
 		/* Mouve the player from keyboard input */
 		if (Keyboard::getKey(GLFW_KEY_A))
 		{
-			//camera.moveRight(-movementSpeed, 0, -movementSpeed);
 			player.rotateACW();
 		}
 		else if (Keyboard::getKey(GLFW_KEY_D))
 		{
-			//camera.moveRight(movementSpeed, 0, movementSpeed);
 			player.rotateCW();
 		}
 		if (Keyboard::getKey(GLFW_KEY_W))
 		{
-			//camera.moveFront(movementSpeed, 0, movementSpeed);
 			player.moveFront();
 		}
 		else if (Keyboard::getKey(GLFW_KEY_S))
 		{
-			//camera.moveFront(-movementSpeed, 0, -movementSpeed);
 			player.moveBack();
 		}
 		if (Keyboard::getKey(GLFW_KEY_SPACE))
 		{
-			//camera.move(0, movementSpeed, 0);
 			player.jump();
 		}
-		if (Keyboard::getKey(GLFW_KEY_DOWN))
-		{
-			lights[3].position.y -= 0.1f;
-		}
-		else if (Keyboard::getKey(GLFW_KEY_UP))
-		{
-			lights[3].position.y += 0.1f;
-		}
+		glm::vec3 terrainPoint = picker.currentTerrainPoint;
+		lampEntity.m_position = terrainPoint;
+		lights[3].position = terrainPoint;
+		lights[3].position.y = terrainPoint.y + 15.0f;
+		picker.update();
 		Mouse::update();
 		Keyboard::update();
 		Scroll::update();
-
 		player.moveP(terrain);
 		for (int i = 0; i < ferns.size(); i++)
 		{
@@ -227,19 +225,13 @@ int main(void)
 
 		camera.calcCamPos();
 
-		/*for (int i = 0; i < grass.size(); i++)
-		{
-			renderer.processEntity(grass.at(i));
-		}
 		for (int i = 0; i < ferns.size(); i++)
 		{
 			renderer.processEntity(ferns.at(i));
 		}
-		for (int i = 0; i < trees.size(); i++)
-		{
-			renderer.processEntity(trees.at(i));
-		}*/
+
 		renderer.processEntity(player);
+		renderer.processEntity(lampEntity);
 
 		renderer.processTerrains(terrain);
 

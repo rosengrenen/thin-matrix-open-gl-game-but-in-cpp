@@ -4,7 +4,7 @@
 
 class Camera
 {
-private:
+public:
 	glm::vec3 m_position;
 	glm::vec3 m_front;
 	glm::vec3 m_up;
@@ -20,7 +20,7 @@ private:
 	Player& player;
 	float distanceFromPlayer = 50;
 	float angleAroundPlayer = 0;
-private:
+public:
 	void updateVectors()
 	{
 		m_front.x = glm::cos(glm::radians(m_pitch)) * glm::cos(glm::radians(m_yaw));
@@ -47,9 +47,6 @@ public:
 
 	glm::mat4 getViewMatrix() const
 	{
-		// Free camera
-		//return glm::lookAt(m_position, m_position + m_front, m_up);
-		// Player locked camera
 		return glm::lookAt(m_position, player.m_position, m_up);
 	}
 
@@ -72,8 +69,6 @@ public:
 		{
 			m_yaw = 1.0f;
 		}
-		//updateVectors();
-		calcCamPos();
 	}
 
 	void move(float dx, float dy = 0, float dz = 0)

@@ -35,7 +35,7 @@ public:
 		m_skyColour(glm::vec3(0.5f, 0.5f, 0.5f))
 	{ }
 
-	void render(const std::vector<Light>& lights, const Camera& camera)
+	void render(const std::vector<Light>& lights, Camera& camera)
 	{
 		prepare();
 		entityShader.use();
