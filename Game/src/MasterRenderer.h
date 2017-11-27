@@ -35,6 +35,19 @@ public:
 		m_skyColour(glm::vec3(0.5f, 0.5f, 0.5f))
 	{ }
 
+	void renderScene(const std::vector<Entity>& entities, const std::vector<Terrain>& terrains, const std::vector<Light>& lights, Camera& camera)
+	{
+		for (Entity e : entities)
+		{
+			processEntity(e);
+		}
+		for (Terrain t : terrains)
+		{
+			processTerrain(t);
+		}
+		render(lights, camera);
+	}
+
 	void render(const std::vector<Light>& lights, Camera& camera)
 	{
 		prepare();
@@ -53,6 +66,9 @@ public:
 		terrainShader.setProjectionMatrix(camera.getProjectionMatrix());
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
+
+		entities.clear();
+		terrains.clear();
 
 		skyboxRenderer.render(camera, m_skyColour.x, m_skyColour.y, m_skyColour.z);
 	}

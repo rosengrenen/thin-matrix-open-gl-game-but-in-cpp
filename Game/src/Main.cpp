@@ -33,6 +33,7 @@
 #include "WaterTile.h"
 #include "WaterRenderer.h"
 #include "WaterShader.h"
+#include "WaterFrameBuffers.h"
 
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -106,7 +107,7 @@ int main(void)
 	playerTexture.reflectivity = 0.7f;
 	TexturedModel playerTM(playerModel, playerTexture);
 
-	Player player(playerTM, glm::vec3(800.0f, 0, 800.0f), glm::vec3(0), 1.0f);
+	Player player(playerTM, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0), 1.0f);
 	#pragma endregion
 	entities.push_back(player);
 
@@ -125,7 +126,7 @@ int main(void)
 	entities.push_back(Entity(lamp, { 350.0f, terrain.getHeightOfTerrain(350, 350), 350 }));
 	Camera camera(player, glm::vec3(400.0f, 12.0f, 405.0f), 30, 0);
 
-	GuiTexture gui(Loader::loadTexture2D("health.png"), { -0.72f,0.88f }, { 0.25f, 0.25f });
+	GuiTexture gui(Loader::loadTexture2D("health.png").getID(), { -0.72f,0.88f }, { 0.25f, 0.25f });
 	guis.push_back(gui);
 
 	#pragma region RENDERERS
@@ -145,13 +146,15 @@ int main(void)
 	std::vector<WaterTile> waters;
 	waters.push_back(WaterTile(75, -75, 0));
 
+	WaterFrameBuffers fbos;
+
 	Entity lampEntity(lamp, glm::vec3(0));
 	entities.push_back(lampEntity);
 	Light lampLight(glm::vec3(0.0), { 10.0f, 10.0f, 0.0f }, { 1, 0.01f, 0.002f });
 	lights.push_back(lampLight);
 
-	renderer.processEntities(entities);
-	renderer.processTerrains(terrains);
+	GuiTexture frameRender(fbos.getReflectionTexture(), glm::vec2(-0.5f, 0.5f), glm::vec2(0.5f));
+	guis.push_back(frameRender);
 
 	#pragma region FPS
 	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?
@@ -205,7 +208,14 @@ int main(void)
 
 		camera.calcCamPos();
 
-		renderer.render(lights, camera);
+		renderer.processEntities(entities);
+		renderer.processTerrains(terrains);
+
+		fbos.bindReflectionFrameBuffer();
+		renderer.renderScene(entities, terrains, lights, camera);
+		fbos.unbindCurrentFrameBuffer();
+
+		renderer.renderScene(entities, terrains, lights, camera);
 		waterRenderer.render(waters, camera);
 		guiRenderer.render(guis);
 

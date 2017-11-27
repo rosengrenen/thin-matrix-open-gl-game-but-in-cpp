@@ -204,6 +204,7 @@
     <ClInclude Include="src\Time.h" />
     <ClInclude Include="src\Timer.h" />
     <ClInclude Include="src\Utilities.h" />
+    <ClInclude Include="src\WaterFrameBuffers.h" />
     <ClInclude Include="src\WaterRenderer.h" />
     <ClInclude Include="src\WaterShader.h" />
     <ClInclude Include="src\WaterTile.h" />

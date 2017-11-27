@@ -28,7 +28,7 @@ public:
 		for (auto& a : guis)
 		{
 			glActiveTexture(GL_TEXTURE0);
-			a.texture.bind();
+			glBindTexture(GL_TEXTURE_2D, a.texture);
 			shader.setTransformationMatrix(a.transformationMatrix());
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
 		}

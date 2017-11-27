@@ -9,11 +9,11 @@ class GuiTexture
 {
 private:
 public:
-	Texture texture;
+	GLuint texture;
 	glm::vec2 position;
 	glm::vec2 scale;
 public:
-	GuiTexture(const Texture& texture, const glm::vec2& position, const glm::vec2& scale) : texture(texture), position(position), scale(scale)
+	GuiTexture(GLuint texture, const glm::vec2& position, const glm::vec2& scale) : texture(texture), position(position), scale(scale)
 	{ }
 
 	glm::mat4 transformationMatrix()
