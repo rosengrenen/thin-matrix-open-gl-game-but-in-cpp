@@ -29,11 +29,7 @@ namespace std
 			using std::hash;
 			using std::string;
 
-			// Compute individual hash values for first,
-			// second and third and combine them using XOR
-			// and bit shifting:
-
 			return ((hash<unsigned int>()(k.model.getID()) ^ (hash<unsigned int>()(k.texture.getID()) << 1)) >> 1);
 		}
 	};
-}
+};

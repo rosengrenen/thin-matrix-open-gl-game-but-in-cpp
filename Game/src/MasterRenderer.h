@@ -42,7 +42,7 @@ public:
 		entityShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
 		entityShader.setLight(lights);
 		entityShader.setViewMatrix(camera.getViewMatrix());
-		entityShader.setProjectionMatrix(camera.getProjectionMatrix(800.0f / 600.0f));
+		entityShader.setProjectionMatrix(camera.getProjectionMatrix());
 		entityRenderer.render(entities);
 		entityShader.stop();
 
@@ -50,14 +50,11 @@ public:
 		terrainShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
 		terrainShader.setLights(lights);
 		terrainShader.setViewMatrix(camera.getViewMatrix());
-		terrainShader.setProjectionMatrix(camera.getProjectionMatrix(800.0f / 600.0f));
+		terrainShader.setProjectionMatrix(camera.getProjectionMatrix());
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 
 		skyboxRenderer.render(camera, m_skyColour.x, m_skyColour.y, m_skyColour.z);
-
-		terrains.clear();
-		entities.clear();
 	}
 
 	void prepare()
@@ -88,10 +85,25 @@ public:
 			entities.insert({ entity.texturedModel, std::vector<Entity>{ entity } });
 		}
 	}
+	void processEntities(const std::vector<Entity>& entities)
+	{
+		for (Entity e : entities)
+		{
+			processEntity(e);
+		}
+	}
 
-	void processTerrains(Terrain terrain)
+	void processTerrain(Terrain terrain)
 	{
 		terrains.push_back(terrain);
+	}
+
+	void processTerrains(const std::vector<Terrain>& terrains)
+	{
+		for (Terrain t : terrains)
+		{
+			processTerrain(t);
+		}
 	}
 
 	void skyColour(float r, float g, float b)

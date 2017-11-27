@@ -30,6 +30,10 @@
 #include "GuiRenderer.h"
 #include "MousePicker.h"
 
+#include "WaterTile.h"
+#include "WaterRenderer.h"
+#include "WaterShader.h"
+
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Scroll.h"
@@ -62,7 +66,7 @@ int main(void)
 	if (!glfwInit())
 		return 0;
 
-	Window window(800, 600, "New window");
+	Window::create(800, 600, "New window");
 
 	#pragma region GLEW_INIT
 	unsigned int err = glewInit();
@@ -72,14 +76,14 @@ int main(void)
 	fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 	#pragma endregion
 
-	/* Create a windowed mode window and its OpenGL context
-	* Keyboard and Mouse classes should be separate to the Window class, they'll just take the Window pointer as a constructor argument
-	*/
+	Keyboard::init(Window::getWindow());
+	Mouse::init(Window::getWindow());
+	Scroll::init(Window::getWindow());
 
-
-	Keyboard::init(window.getWindow());
-	Mouse::init(window.getWindow());
-	Scroll::init(window.getWindow());
+	std::vector<Entity> entities;
+	std::vector<Terrain> terrains;
+	std::vector<Light> lights;
+	std::vector<GuiTexture> guis;
 
 	#pragma region TERRAIN TEXTURE
 	TerrainTexture bgTexture(Loader::loadTexture2D("grassy2.png"));
@@ -93,6 +97,7 @@ int main(void)
 	//TODO: Options to image creation to decide number of channels
 	Terrain terrain(0, 0, texturePack, blendMap, "heightmap.png");
 	#pragma endregion
+	terrains.push_back(terrain);
 
 	#pragma region PLAYER
 	RawModel playerModel = Loader::loadObj("person");
@@ -103,34 +108,27 @@ int main(void)
 
 	Player player(playerTM, glm::vec3(800.0f, 0, 800.0f), glm::vec3(0), 1.0f);
 	#pragma endregion
+	entities.push_back(player);
 
-	std::vector<Light> lights;
 	Light light(glm::vec3(100, 200, 700), glm::vec3(0.4f, 0.4f, 0.4f));
 	lights.push_back(light);
 	lights.push_back(Light({ 450.0f, terrain.getHeightOfTerrain(450, 450) + 14, 450 }, { 3.5f, 0, 0 }, { 1, 0.01f, 0.002f }));
 	lights.push_back(Light({ 400.0f, terrain.getHeightOfTerrain(400, 400) + 14, 400 }, { 3.5f, 3.5f, 0 }, { 1, 0.01f, 0.002f }));
-
-	std::vector<Light*> lights2;
-	{
-		lights2.push_back(&light);
-		lights2.push_back(&Light(glm::vec3(0.0f), glm::vec3(2.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.01f, 0.002f)));
-	}
 
 	RawModel lampModel = Loader::loadObj("lamp");
 	Texture lampTex = Loader::loadTexture2D("lamp.png");
 	lampTex.useFakeLighting = true;
 	TexturedModel lamp(lampModel, lampTex);
 
-	std::vector<Entity> lamps;
-	lamps.push_back(Entity(lamp, { 450.0f, terrain.getHeightOfTerrain(450, 450), 450 }));
-	lamps.push_back(Entity(lamp, { 400.0f, terrain.getHeightOfTerrain(400, 400), 400 }));
-	lamps.push_back(Entity(lamp, { 350.0f, terrain.getHeightOfTerrain(350, 350), 350 }));
+	entities.push_back(Entity(lamp, { 450.0f, terrain.getHeightOfTerrain(450, 450), 450 }));
+	entities.push_back(Entity(lamp, { 400.0f, terrain.getHeightOfTerrain(400, 400), 400 }));
+	entities.push_back(Entity(lamp, { 350.0f, terrain.getHeightOfTerrain(350, 350), 350 }));
 	Camera camera(player, glm::vec3(400.0f, 12.0f, 405.0f), 30, 0);
 
-	std::vector<GuiTexture> guis;
 	GuiTexture gui(Loader::loadTexture2D("health.png"), { -0.72f,0.88f }, { 0.25f, 0.25f });
 	guis.push_back(gui);
 
+	#pragma region RENDERERS
 	GuiRenderer guiRenderer;
 
 	TerrainShader terrainShader;
@@ -139,13 +137,21 @@ int main(void)
 	EntityShader entityShader;
 	EntityRenderer entityRenderer(entityShader);
 
-	MasterRenderer renderer(entityRenderer, terrainRenderer, entityShader, terrainShader);
+	WaterRenderer waterRenderer;
 
-	MousePicker picker(camera, terrain);
+	MasterRenderer renderer(entityRenderer, terrainRenderer, entityShader, terrainShader);
+	#pragma endregion
+
+	std::vector<WaterTile> waters;
+	waters.push_back(WaterTile(75, -75, 0));
 
 	Entity lampEntity(lamp, glm::vec3(0));
+	entities.push_back(lampEntity);
 	Light lampLight(glm::vec3(0.0), { 10.0f, 10.0f, 0.0f }, { 1, 0.01f, 0.002f });
 	lights.push_back(lampLight);
+
+	renderer.processEntities(entities);
+	renderer.processTerrains(terrains);
 
 	#pragma region FPS
 	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?
@@ -158,11 +164,12 @@ int main(void)
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	float movementSpeed = 1.0f;
-	glfwSwapInterval(0);
+	glfwSwapInterval(1);
+	Window::show();
 	/* Loop until the user closes the window */
-	while (!window.shouldClose())
+	while (Window::isOpen())
 	{
-
+		//Window::clear();
 		/* Rotate camera from mouse input */
 		camera.zoom(-Scroll::getOffsetY() * 4);
 		if (Mouse::getKey(GLFW_MOUSE_BUTTON_RIGHT))
@@ -198,20 +205,11 @@ int main(void)
 
 		camera.calcCamPos();
 
-		renderer.processEntity(player);
-		renderer.processEntity(lampEntity);
-
-		renderer.processTerrains(terrain);
-
-		for (int i = 0; i < lamps.size(); i++)
-		{
-			renderer.processEntity(lamps.at(i));
-		}
-
 		renderer.render(lights, camera);
+		waterRenderer.render(waters, camera);
 		guiRenderer.render(guis);
 
-		window.update();
+		Window::update();
 
 		/* Poll for and process events !! WINDOW?? */
 		glfwPollEvents();

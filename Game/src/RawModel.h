@@ -33,11 +33,8 @@ public:
 
 	const int getVertexCount() const;
 
-	//TODO: Remove
-	GLuint getID() const
-	{
-		return m_vao;
-	}
+	// Returns the OpenGL Vertex Array Object ID of the RawModel
+	const GLuint getID() const;
 private:
 	void bindIndicesBuffer(const std::vector<int>& indices);
 

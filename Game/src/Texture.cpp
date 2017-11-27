@@ -12,3 +12,8 @@ void Texture::unbind() const
 {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+GLuint Texture::getID() const
+{
+	return m_id;
+}

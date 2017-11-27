@@ -26,6 +26,6 @@ public:
 
 	void setTransformationMatrix(const glm::mat4& matrix) const
 	{
-		setMatrix4x4(m_transformationMatrixLoc, matrix);
+		setMatrix4f(m_transformationMatrixLoc, matrix);
 	}
 };

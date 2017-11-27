@@ -39,7 +39,7 @@ public:
 
 	void setProjectionMatrix(const glm::mat4& projection)
 	{
-		setMatrix4x4(m_projectionMatrixLoc, projection);
+		setMatrix4f(m_projectionMatrixLoc, projection);
 	}
 
 	void setViewMatrix(glm::mat4& view)
@@ -48,7 +48,7 @@ public:
 		view[3][0] = 0;
 		view[3][1] = 0;
 		view[3][2] = 0;
-		setMatrix4x4(m_viewMatrixLoc, view);
+		setMatrix4f(m_viewMatrixLoc, view);
 	}
 
 	void setFogColour(float r, float g, float b)

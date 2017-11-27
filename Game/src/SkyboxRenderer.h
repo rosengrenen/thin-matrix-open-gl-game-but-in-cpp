@@ -85,7 +85,7 @@ public:
 	{
 		shader.use();
 		shader.setViewMatrix(camera.getViewMatrix());
-		shader.setProjectionMatrix(camera.getProjectionMatrix(1.33333f));
+		shader.setProjectionMatrix(camera.getProjectionMatrix());
 		shader.setFogColour(r, g, b);
 		shader.setBlendFactor(0.5f);
 		cube.bind();

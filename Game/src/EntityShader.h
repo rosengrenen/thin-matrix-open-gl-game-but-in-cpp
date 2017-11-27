@@ -1,5 +1,9 @@
 #pragma once
 
+#include <glm\mat4x4.hpp>
+#include <vector>
+
+#include "Light.h"
 #include "ShaderProgram.h"
 
 class EntityShader : public ShaderProgram
@@ -20,95 +24,27 @@ private:
 	unsigned int m_atlasOffsetLoc;
 	unsigned int m_numRowsLoc;
 public:
-	EntityShader()
-	{
-		ShaderProgram::createShaderProgram(m_shaderPath);
-	}
+	EntityShader();
 
-	virtual void bindAttribLocations() override
-	{
-		bindAttribLocation(0, "position");
-		bindAttribLocation(1, "texCoords");
-		bindAttribLocation(2, "normal");
-	}
+	virtual void bindAttribLocations() override;
 
-	virtual void getUniformLocations() override
-	{
-		m_modelMatrixLoc = getUniformLocation("model");
-		m_projectionMatrixLoc = getUniformLocation("projection");
-		m_viewMatrixLoc = getUniformLocation("view");
-		m_reflectivityLoc = getUniformLocation("reflectivity");
-		m_shineDamperLoc = getUniformLocation("shineDamper");
-		m_fakeNormalsLoc = getUniformLocation("useFakeLighting");
-		m_skyColourLoc = getUniformLocation("skyColour");
-		m_numRowsLoc = getUniformLocation("numRows");
-		m_atlasOffsetLoc = getUniformLocation("offset");
+	virtual void getUniformLocations() override;
 
-		for (int i = 0; i < MAX_LIGHTS; i++)
-		{
-			m_lightPositionLoc.push_back(getUniformLocation("lightPosition[" + std::to_string(i) + "]"));
-			m_lightColourLoc.push_back(getUniformLocation("lightColour[" + std::to_string(i) + "]"));
-			m_lightAttenuationLoc.push_back(getUniformLocation("attenuation[" + std::to_string(i) + "]"));
-		}
-	}
+	void setModelMatrix(const glm::mat4& matrix) const;
 
-	void setModelMatrix(const glm::mat4& matrix) const
-	{
-		setMatrix4x4(m_modelMatrixLoc, matrix);
-	}
+	void setProjectionMatrix(const glm::mat4& matrix) const;
 
-	void setProjectionMatrix(const glm::mat4& matrix) const
-	{
-		setMatrix4x4(m_projectionMatrixLoc, matrix);
-	}
+	void setViewMatrix(const glm::mat4& matrix) const;
 
-	void setViewMatrix(const glm::mat4& matrix) const
-	{
-		setMatrix4x4(m_viewMatrixLoc, matrix);
-	}
+	void setLight(const std::vector<Light>& lights) const;
 
-	void setLight(const std::vector<Light>& lights) const
-	{
-		for (int i = 0; i < MAX_LIGHTS; i++)
-		{
-			if (i < lights.size())
-			{
-				setVector3f(m_lightPositionLoc[i], lights[i].position);
-				setVector3f(m_lightColourLoc[i], lights[i].colour);
-				setVector3f(m_lightAttenuationLoc[i], lights[i].attenuation);
-			}
-			else
-			{
-				setVector3f(m_lightPositionLoc[i], { 0.0f, 0.0f, 0.0f });
-				setVector3f(m_lightColourLoc[i], { 0.0f, 0.0f, 0.0f });
-				setVector3f(m_lightAttenuationLoc[i], { 1.0f,0.0f,0.0f });
-			}
-		}
-	}
+	void setShineVariables(float reflectivity, float damper);
 
-	void setShineVariables(float reflectivity, float damper)
-	{
-		setFloat(m_reflectivityLoc, reflectivity);
-		setFloat(m_shineDamperLoc, damper);
-	}
+	void setFakeLighting(bool useFake);
 
-	void setFakeLighting(bool useFake)
-	{
-		setFloat(m_fakeNormalsLoc, useFake);
-	}
+	void setSkyColour(float r, float g, float b);
 
-	void setSkyColour(float r, float g, float b)
-	{
-		setVector3f(m_skyColourLoc, glm::vec3(r, g, b));
-	}
+	void setNumRows(int numRows);
 
-	void setNumRows(int numRows)
-	{
-		setFloat(m_numRowsLoc, numRows);
-	}
-
-	void setAtlasOffset(float x, float y)
-	{
-		setVector2f(m_atlasOffsetLoc, glm::vec2(x, y));
-	}
+	void setAtlasOffset(float x, float y);
 };

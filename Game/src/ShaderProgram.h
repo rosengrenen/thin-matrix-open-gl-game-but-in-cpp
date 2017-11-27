@@ -1,9 +1,14 @@
 #pragma once
 
+#include <GL\glew.h>
+
+#include <glm\mat4x4.hpp>
+#include <glm\vec2.hpp>
+#include <glm\vec3.hpp>
+
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
 #include <tuple>
 
 class ShaderProgram
@@ -15,130 +20,32 @@ private:
 	std::string vsource;
 	std::string fsource;
 private:
-	std::tuple<std::string, std::string> parseShaderSource(const std::string& filePath)
-	{
-		std::ifstream stream;
+	std::tuple<std::string, std::string> parseShaderSource(const std::string& filePath);
 
-		std::string line;
-		std::stringstream ss[2];
-		int type = -1;
-		stream.open(filePath);
-		while (getline(stream, line))
-		{
-			if (line.find("#shader") != std::string::npos)
-			{
-				if (line.find("vertex") != std::string::npos)
-					type = 0;
-				else if (line.find("fragment") != std::string::npos)
-					type = 1;
-			}
-			else
-			{
-				if (type == -1)
-					std::cout << "[ERROR] Shader type not found for " << filePath.c_str() << std::endl;
-				ss[(int) type] << line << '\n';
-			}
-		}
-		return std::make_tuple<std::string, std::string>(ss[0].str(), ss[1].str());
-	}
-
-	unsigned int createShaderFromSource(unsigned int type, const std::string& source, const std::string& path)
-	{
-		unsigned int shader = glCreateShader(type);
-		const char* temp = source.c_str();
-		glShaderSource(shader, 1, &temp, nullptr);
-		glCompileShader(shader);
-
-		int result;
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
-		if (result == GL_FALSE)
-		{
-			int length;
-			glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-			char* message = (char*) alloca(length * sizeof(char));
-			glGetShaderInfoLog(shader, length, &length, message);
-			std::cout << "[ERROR] Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex" : "fragment") << " shader for " << path << " with message: " << message << std::endl;
-			glDeleteShader(shader);
-		}
-		return shader;
-	}
+	unsigned int createShaderFromSource(unsigned int type, const std::string& source, const std::string& path);
 public:
-	void createShaderProgram(const std::string& shaderPath)
-	{
-		m_program = glCreateProgram();
-
-		std::tuple<std::string, std::string> shaderSource = parseShaderSource(shaderPath);
-
-		vsource = std::get<0>(shaderSource);
-		fsource = std::get<1>(shaderSource);
-		m_vs = createShaderFromSource(GL_VERTEX_SHADER, std::get<0>(shaderSource), shaderPath);
-		m_fs = createShaderFromSource(GL_FRAGMENT_SHADER, std::get<1>(shaderSource), shaderPath);
-
-		glAttachShader(m_program, m_vs);
-		glAttachShader(m_program, m_fs);
-
-		bindAttribLocations();
-
-		glLinkProgram(m_program);
-		glValidateProgram(m_program);
-
-		glUseProgram(m_program);
-
-		getUniformLocations();
-	}
+	void createShaderProgram(const std::string& shaderPath);
 
 	virtual void bindAttribLocations() = 0;
 
-	void bindAttribLocation(unsigned int location, const std::string& name)
-	{
-		glBindAttribLocation(m_program, location, name.c_str());
-	}
+	void bindAttribLocation(unsigned int location, const std::string& name);
 
 	virtual void getUniformLocations() = 0;
 
-	unsigned int getUniformLocation(const std::string& name)
-	{
-		GLint loc = glGetUniformLocation(m_program, name.c_str());
-		if (loc == -1)
-		{
-			__debugbreak();
-		}
-		return loc;
-	}
+	unsigned int getUniformLocation(const std::string& name);
 
-	void use() const
-	{
-		glUseProgram(m_program);
-	}
+	void use() const;
 
-	void stop() const
-	{
-		glUseProgram(0);
-	}
+	void stop() const;
 
-	void setMatrix4x4(unsigned int location, const glm::mat4& matrix) const
-	{
-		glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
-	}
+	void setMatrix4f(unsigned int location, const glm::mat4& matrix) const;
 
-	void setVector3f(unsigned int location, const glm::vec3& vector) const
-	{
-		glUniform3f(location, vector.x, vector.y, vector.z);
-	}
+	void setVector3f(unsigned int location, const glm::vec3& vector) const;
 
-	void setVector2f(unsigned int location, const glm::vec2& vector) const
-	{
-		glUniform2f(location, vector.x, vector.y);
-	}
+	void setVector2f(unsigned int location, const glm::vec2& vector) const;
 
-	void setFloat(unsigned int location, float value)
-	{
-		glUniform1f(location, value);
-	}
+	void setFloat(unsigned int location, float value);
 
-	void setInt(unsigned int location, int value)
-	{
-		glUniform1i(location, value);
-	}
+	void setInt(unsigned int location, int value);
 };
 

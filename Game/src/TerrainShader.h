@@ -60,17 +60,17 @@ public:
 
 	void setModelMatrix(const glm::mat4& matrix) const
 	{
-		setMatrix4x4(m_modelMatrixLoc, matrix);
+		setMatrix4f(m_modelMatrixLoc, matrix);
 	}
 
 	void setProjectionMatrix(const glm::mat4& matrix) const
 	{
-		setMatrix4x4(m_projectionMatrixLoc, matrix);
+		setMatrix4f(m_projectionMatrixLoc, matrix);
 	}
 
 	void setViewMatrix(const glm::mat4& matrix) const
 	{
-		setMatrix4x4(m_viewMatrixLoc, matrix);
+		setMatrix4f(m_viewMatrixLoc, matrix);
 	}
 
 	void setLights(const std::vector<Light>& lights) const

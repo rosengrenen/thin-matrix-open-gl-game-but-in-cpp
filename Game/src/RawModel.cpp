@@ -42,6 +42,11 @@ const int RawModel::getVertexCount() const
 	return m_vertexCount;
 }
 
+const GLuint RawModel::getID() const
+{
+	return m_vao;
+}
+
 /* PRIVATE METHODS */
 
 void RawModel::bindIndicesBuffer(const std::vector<int>& indices)

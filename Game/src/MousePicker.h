@@ -45,7 +45,7 @@ public:
 
 		glm::vec2 normalizedCoords(ndcX, ndcY);
 		glm::vec4 rayClip(normalizedCoords.x, normalizedCoords.y, -1.0f, 1.0f);
-		glm::vec4 rayEye = glm::inverse(camera.getProjectionMatrix(800.0f / 600.0f)) * rayClip;
+		glm::vec4 rayEye = glm::inverse(camera.getProjectionMatrix()) * rayClip;
 		rayEye = glm::vec4(rayEye.x, rayEye.y, -1.0f, 0.0f);
 		glm::vec3 rayWorld = glm::inverse(camera.getViewMatrix()) * rayEye;
 		rayWorld = glm::normalize(rayWorld);
@@ -56,7 +56,7 @@ public:
 
 	glm::vec3 getPointOnRay(const glm::vec3& ray, float distance)
 	{
-		glm::vec3 camPos = camera.m_position;
+		glm::vec3 camPos = camera.getPosition();
 		glm::vec3 start(camPos.x, camPos.y, camPos.z);
 		glm::vec3 scaledRay(ray.x * distance, ray.y * distance, ray.z * distance);
 		return start + scaledRay;

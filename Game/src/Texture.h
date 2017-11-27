@@ -7,7 +7,7 @@
 class Texture
 {
 private:
-	GLuint m_id;
+	const GLuint m_id;
 public:
 	const int numberOfRows = 1;
 	float reflectivity = 0;
@@ -15,7 +15,7 @@ public:
 	bool hasTransparency = false;
 	bool useFakeLighting = false;
 public:
-	Texture(const GLuint id);
+	Texture(GLuint id);
 
 	// Binds the texture
 	void bind() const;
@@ -23,9 +23,6 @@ public:
 	// Unbinds the texture
 	void unbind() const;
 
-	//TODO: Remove
-	GLuint getID() const
-	{
-		return m_id;
-	}
+	// Returns the OpenGL ID of the texture
+	GLuint getID() const;
 };
