@@ -1,16 +1,19 @@
 #pragma once
 
+#include <glm\mat4x4.hpp>
 #include <glm\vec2.hpp>
+
+#include "Texture.h"
 
 class GuiTexture
 {
 private:
 public:
-	unsigned int texture;
+	Texture texture;
 	glm::vec2 position;
 	glm::vec2 scale;
 public:
-	GuiTexture(unsigned int texture, const glm::vec2& position, const glm::vec2& scale) : texture(texture), position(position), scale(scale)
+	GuiTexture(const Texture& texture, const glm::vec2& position, const glm::vec2& scale) : texture(texture), position(position), scale(scale)
 	{ }
 
 	glm::mat4 transformationMatrix()

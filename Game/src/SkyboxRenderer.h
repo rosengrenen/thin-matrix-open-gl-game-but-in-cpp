@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "Model.h"
+#include "RawModel.h"
 #include "SkyboxShader.h"
 #include <GL\glew.h>
 #include "Loader.h"
@@ -71,12 +71,12 @@ public:
 		"nightBack.png",
 		"nightFront.png"
 	};
-	Model cube;
-	GLint texture;
-	GLint nightTexture;
+	RawModel cube;
+	Texture texture;
+	Texture nightTexture;
 	SkyboxShader shader;
 public:
-	SkyboxRenderer() : cube(Loader::loadToVao(VERTICES, 3)), texture(Loader::loadCubeMap(TEXTURE_FILES)), nightTexture(Loader::loadCubeMap(NIGHT_TEXTURE_FILES))
+	SkyboxRenderer() : cube(RawModel(VERTICES, 3)), texture(Loader::loadCubeMap(TEXTURE_FILES)), nightTexture(Loader::loadCubeMap(NIGHT_TEXTURE_FILES))
 	{ 
 
 	}
@@ -88,13 +88,13 @@ public:
 		shader.setProjectionMatrix(camera.getProjectionMatrix(1.33333f));
 		shader.setFogColour(r, g, b);
 		shader.setBlendFactor(0.5f);
-		glBindVertexArray(cube.getID());
+		cube.bind();
 		glEnableVertexAttribArray(0);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+		texture.bind();
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, nightTexture);
-		glDrawArrays(GL_TRIANGLES, 0, cube.numVertices);
+		nightTexture.bind();
+		glDrawArrays(GL_TRIANGLES, 0, cube.getVertexCount());
 		glDisableVertexAttribArray(0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 		glBindVertexArray(0);

@@ -148,21 +148,27 @@
   <ItemGroup>
     <ClCompile Include="src\Keyboard.cpp" />
     <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\RawModel.cpp" />
     <ClCompile Include="src\Mouse.cpp" />
     <ClCompile Include="src\Scroll.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\TextureData.cpp" />
+    <ClCompile Include="src\TexturedModel.cpp" />
+    <ClCompile Include="src\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\gui.shader" />
     <None Include="res\shaders\skybox.shader" />
     <None Include="res\shaders\terrain.shader" />
     <None Include="res\shaders\entity.shader" />
+    <None Include="res\shaders\water.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Debug.h" />
     <ClInclude Include="src\GuiRenderer.h" />
     <ClInclude Include="src\GuiShader.h" />
     <ClInclude Include="src\GuiTexture.h" />
-    <ClInclude Include="src\Image.h" />
+    <ClInclude Include="src\TextureData.h" />
     <ClInclude Include="src\Math.h" />
     <ClInclude Include="src\MousePicker.h" />
     <ClInclude Include="src\Scroll.h" />
@@ -173,7 +179,7 @@
     <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Loader.h" />
     <ClInclude Include="src\MasterRenderer.h" />
-    <ClInclude Include="src\Model.h" />
+    <ClInclude Include="src\RawModel.h" />
     <ClInclude Include="src\Mouse.h" />
     <ClInclude Include="src\EntityRenderer.h" />
     <ClInclude Include="src\Player.h" />
@@ -188,6 +194,10 @@
     <ClInclude Include="src\TerrainTexturePack.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\TexturedModel.h" />
+    <ClInclude Include="src\Utilities.h" />
+    <ClInclude Include="src\WaterRenderer.h" />
+    <ClInclude Include="src\WaterShader.h" />
+    <ClInclude Include="src\WaterTile.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
   <ItemGroup>

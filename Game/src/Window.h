@@ -17,15 +17,15 @@ public:
 	Window(int width, int height, const char* name)
 	{
 		m_window = glfwCreateWindow(width, height, name, nullptr, nullptr);
-		makeCurrentContext();
+		makeContext();
 	}
 
-	void makeCurrentContext()
+	void makeContext()
 	{
 		glfwMakeContextCurrent(m_window);
 	}
 
-	void swapBuffers()
+	void update()
 	{
 		glfwSwapBuffers(m_window);
 	}

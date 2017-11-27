@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Model.h"
+#include "RawModel.h"
 #include "Loader.h"
 #include "GuiTexture.h"
 #include "GuiShader.h"
@@ -11,16 +11,16 @@ class GuiRenderer
 {
 private:
 public:
-	Model quad;
+	RawModel quad;
 	GuiShader shader;
 public:
-	GuiRenderer() : quad(Loader::loadToVao({ -1.0f,  1.0f,-1.0f, -1.0f, 1.0f,  1.0f, 1.0f, -1.0f }, 2))
+	GuiRenderer() : quad(RawModel({ -1.0f,  1.0f,-1.0f, -1.0f, 1.0f,  1.0f, 1.0f, -1.0f }, 2))
 	{ }
 
 	void render(std::vector<GuiTexture> guis)
 	{
 		shader.use();
-		glBindVertexArray(quad.getID());
+		quad.bind();
 		glEnableVertexAttribArray(0);
 		glEnable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
@@ -28,9 +28,9 @@ public:
 		for (auto& a : guis)
 		{
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, a.texture);
+			a.texture.bind();
 			shader.setTransformationMatrix(a.transformationMatrix());
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.numVertices);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
 		}
 		glEnable(GL_DEPTH_TEST);
 		glDisable(GL_BLEND);

@@ -16,13 +16,13 @@ private:
 
 	void bindTexturedModel(const TexturedModel& model)
 	{
-		glBindVertexArray(model.model.getID());
+		model.model.bind();
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, model.texture.getID());
+		model.texture.bind();
 
 		if (model.texture.hasTransparency)
 		{
@@ -30,7 +30,7 @@ private:
 		}
 		m_shader.setShineVariables(model.texture.reflectivity, model.texture.shineDamper);
 		m_shader.setFakeLighting(model.texture.useFakeLighting);
-		m_shader.setNumRows(model.texture.numRows);
+		m_shader.setNumRows(model.texture.numberOfRows);
 	}
 
 	void unbindTexturedModel()
@@ -73,7 +73,7 @@ public:
 		for (auto& t : entities)
 		{
 			bindTexturedModel(t.first);
-			int numVertices = t.first.model.numVertices;
+			int numVertices = t.first.model.getVertexCount();
 			for (Entity& e : t.second)
 			{
 				prepareInstance(e);

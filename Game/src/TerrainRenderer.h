@@ -15,7 +15,7 @@ private:
 private:
 	void bindTerrain(const Terrain& terrain)
 	{
-		glBindVertexArray(terrain.model.getID());
+		terrain.model.bind();
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
@@ -28,15 +28,15 @@ private:
 	void bindTexture(Terrain terrain)
 	{
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, terrain.texturePack.bgTex.textureID);
+		terrain.texturePack.bgTex.texture.bind();
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, terrain.texturePack.rTex.textureID);
+		terrain.texturePack.rTex.texture.bind();
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, terrain.texturePack.gTex.textureID);
+		terrain.texturePack.gTex.texture.bind();
 		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, terrain.texturePack.bTex.textureID);
+		terrain.texturePack.bTex.texture.bind();
 		glActiveTexture(GL_TEXTURE4);
-		glBindTexture(GL_TEXTURE_2D, terrain.blendMap.textureID);
+		terrain.blendMap.texture.bind();
 	}
 
 	void unbindTerrain()
@@ -59,7 +59,7 @@ public:
 		{
 			bindTerrain(terrain);
 			shader.setModelMatrix(terrain.getModelMatrix());
-			glDrawElements(GL_TRIANGLES, terrain.model.numVertices, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, terrain.model.getVertexCount(), GL_UNSIGNED_INT, nullptr);
 			unbindTerrain();
 		}
 	}

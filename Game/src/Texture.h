@@ -1,34 +1,30 @@
 #pragma once
 
-#include "Loader.h"
+#include <GL\glew.h>
+
+#include "TextureData.h"
 
 class Texture
 {
 private:
-	unsigned int m_id;
+	GLuint m_id;
 public:
-	float shineDamper = 1;
+	const int numberOfRows = 1;
 	float reflectivity = 0;
+	float shineDamper = 1;
 	bool hasTransparency = false;
 	bool useFakeLighting = false;
-	int numRows = 1;
 public:
-	Texture(const std::string& filePath)
-	{
-		m_id = Loader::loadTexture(filePath).id;
-	}
+	Texture(const GLuint id);
 
-	void bind() const
-	{
-		glBindTexture(GL_TEXTURE_2D, m_id);
-	}
+	// Binds the texture
+	void bind() const;
 
-	void unbind() const
-	{
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
+	// Unbinds the texture
+	void unbind() const;
 
-	unsigned int getID() const
+	//TODO: Remove
+	GLuint getID() const
 	{
 		return m_id;
 	}

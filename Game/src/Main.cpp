@@ -13,9 +13,6 @@
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\constants.hpp>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "dependencies\stb_image.h"
-
 #include "Camera.h"
 #include "Entity.h"
 #include "Light.h"
@@ -85,41 +82,21 @@ int main(void)
 	Scroll::init(window.getWindow());
 
 	#pragma region TERRAIN TEXTURE
-	TerrainTexture bgTexture(Texture("grassy2.png").getID());
-	TerrainTexture rTexture(Texture("mud.png").getID());
-	TerrainTexture gTexture(Texture("grassFlowers.png").getID());
-	TerrainTexture bTexture(Texture("path.png").getID());
+	TerrainTexture bgTexture(Loader::loadTexture2D("grassy2.png"));
+	TerrainTexture rTexture(Loader::loadTexture2D("mud.png"));
+	TerrainTexture gTexture(Loader::loadTexture2D("grassFlowers.png"));
+	TerrainTexture bTexture(Loader::loadTexture2D("path.png"));
 	TerrainTexturePack texturePack(bgTexture, rTexture, gTexture, bTexture);
-	TerrainTexture blendMap(Texture("blendMap.png").getID());
+	TerrainTexture blendMap(Loader::loadTexture2D("blendMap.png"));
 
 	//TODO: pass heightmap texture instead of string
 	//TODO: Options to image creation to decide number of channels
 	Terrain terrain(0, 0, texturePack, blendMap, "heightmap.png");
 	#pragma endregion
 
-	#pragma region FERN
-	Model fernModel = Loader::loadObj("fern");
-	Texture fernTex("fernAtlas.png");
-	fernTex.hasTransparency = true;
-	fernTex.reflectivity = 0.3f;
-	fernTex.shineDamper = 7.0f;
-	fernTex.numRows = 2;
-	TexturedModel fern(fernModel, fernTex);
-
-	srand(time(0));
-	std::vector<Entity> ferns;
-	for (int i = 0; i < 50; i++)
-	{
-		float x = rand() % 700 + 50.0f;
-		float z = rand() % 700 + 50.0f;
-		glm::vec3 position(x, terrain.getHeightOfTerrain(x, z), z);
-		ferns.push_back(Entity(fern, position, glm::vec3(0, static_cast<float>(rand() % 180), 0), 2.0f, rand() % 4));
-	}
-	#pragma endregion
-
 	#pragma region PLAYER
-	Model playerModel = Loader::loadObj("person");
-	Texture playerTexture("playerTexture.png");
+	RawModel playerModel = Loader::loadObj("person");
+	Texture playerTexture = Loader::loadTexture2D("playerTexture.png");
 	playerTexture.shineDamper = 10.0f;
 	playerTexture.reflectivity = 0.7f;
 	TexturedModel playerTM(playerModel, playerTexture);
@@ -133,9 +110,14 @@ int main(void)
 	lights.push_back(Light({ 450.0f, terrain.getHeightOfTerrain(450, 450) + 14, 450 }, { 3.5f, 0, 0 }, { 1, 0.01f, 0.002f }));
 	lights.push_back(Light({ 400.0f, terrain.getHeightOfTerrain(400, 400) + 14, 400 }, { 3.5f, 3.5f, 0 }, { 1, 0.01f, 0.002f }));
 
+	std::vector<Light*> lights2;
+	{
+		lights2.push_back(&light);
+		lights2.push_back(&Light(glm::vec3(0.0f), glm::vec3(2.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.01f, 0.002f)));
+	}
 
-	Model lampModel = Loader::loadObj("lamp");
-	Texture lampTex("lamp.png");
+	RawModel lampModel = Loader::loadObj("lamp");
+	Texture lampTex = Loader::loadTexture2D("lamp.png");
 	lampTex.useFakeLighting = true;
 	TexturedModel lamp(lampModel, lampTex);
 
@@ -146,7 +128,7 @@ int main(void)
 	Camera camera(player, glm::vec3(400.0f, 12.0f, 405.0f), 30, 0);
 
 	std::vector<GuiTexture> guis;
-	GuiTexture gui(Loader::loadTexture("health.png").id, { -0.72f,0.88f }, { 0.25f, 0.25f });
+	GuiTexture gui(Loader::loadTexture2D("health.png"), { -0.72f,0.88f }, { 0.25f, 0.25f });
 	guis.push_back(gui);
 
 	GuiRenderer guiRenderer;
@@ -176,7 +158,7 @@ int main(void)
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	float movementSpeed = 1.0f;
-	glfwSwapInterval(1);
+	glfwSwapInterval(0);
 	/* Loop until the user closes the window */
 	while (!window.shouldClose())
 	{
@@ -209,26 +191,12 @@ int main(void)
 		{
 			player.jump();
 		}
-		glm::vec3 terrainPoint = picker.currentTerrainPoint;
-		lampEntity.m_position = terrainPoint;
-		lights[3].position = terrainPoint;
-		lights[3].position.y = terrainPoint.y + 15.0f;
-		picker.update();
 		Mouse::update();
 		Keyboard::update();
 		Scroll::update();
 		player.moveP(terrain);
-		for (int i = 0; i < ferns.size(); i++)
-		{
-			renderer.processEntity(ferns.at(i));
-		}
 
 		camera.calcCamPos();
-
-		for (int i = 0; i < ferns.size(); i++)
-		{
-			renderer.processEntity(ferns.at(i));
-		}
 
 		renderer.processEntity(player);
 		renderer.processEntity(lampEntity);
@@ -243,7 +211,7 @@ int main(void)
 		renderer.render(lights, camera);
 		guiRenderer.render(guis);
 
-		window.swapBuffers();
+		window.update();
 
 		/* Poll for and process events !! WINDOW?? */
 		glfwPollEvents();

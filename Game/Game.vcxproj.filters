@@ -52,6 +52,9 @@
     <Filter Include="Source Files\Skybox">
       <UniqueIdentifier>{a82f8194-6aac-43cd-ba5d-cc97bce7000a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Water">
+      <UniqueIdentifier>{905fd036-a568-40e9-b10b-0699e0d6063c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -65,6 +68,21 @@
     </ClCompile>
     <ClCompile Include="src\Scroll.cpp">
       <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureData.cpp">
+      <Filter>Source Files\RenderEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Texture.cpp">
+      <Filter>Source Files\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TexturedModel.cpp">
+      <Filter>Source Files\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utilities.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RawModel.cpp">
+      <Filter>Source Files\Models</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,9 +100,6 @@
     </ClInclude>
     <ClInclude Include="src\Window.h">
       <Filter>Source Files\RenderEngine</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Model.h">
-      <Filter>Source Files\Models</Filter>
     </ClInclude>
     <ClInclude Include="src\Mouse.h">
       <Filter>Source Files\Input</Filter>
@@ -118,9 +133,6 @@
     </ClInclude>
     <ClInclude Include="src\Scroll.h">
       <Filter>Source Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Image.h">
-      <Filter>Source Files\RenderEngine</Filter>
     </ClInclude>
     <ClInclude Include="src\Math.h">
       <Filter>Source Files\Utilities</Filter>
@@ -159,7 +171,25 @@
       <Filter>Source Files\Skybox</Filter>
     </ClInclude>
     <ClInclude Include="src\MousePicker.h">
-      <Filter>Header Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WaterRenderer.h">
+      <Filter>Source Files\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WaterShader.h">
+      <Filter>Source Files\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WaterTile.h">
+      <Filter>Source Files\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureData.h">
+      <Filter>Source Files\RenderEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utilities.h">
+      <Filter>Source Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RawModel.h">
+      <Filter>Source Files\Models</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -359,6 +389,9 @@
     </None>
     <None Include="res\objects\pine.obj">
       <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\shaders\water.shader">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

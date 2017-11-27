@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "Model.h"
+#include "RawModel.h"
 #include "Texture.h"
 #include "Loader.h"
 #include "TerrainTexturePack.h"
@@ -20,17 +20,17 @@ private:
 public:
 	float posX;
 	float posZ;
-	Model model;
+	RawModel model;
 	TerrainTexturePack texturePack;
 	TerrainTexture blendMap;
 private:
-	Model generateTerrain(const std::string& heightMapPath)
+	RawModel generateTerrain(const std::string& heightMapPath)
 	{
 		double startTime = glfwGetTime();
 
-		Image texture = Loader::loadTexture(heightMapPath);
+		TextureData texture(heightMapPath);
 
-		VERTEX_COUNT = texture.height;
+		VERTEX_COUNT = texture.getHeight();
 
 		int count = VERTEX_COUNT * VERTEX_COUNT;
 
@@ -87,13 +87,13 @@ private:
 
 		std::cout << "[INFO] Generated terrain in " << glfwGetTime() - startTime << " seconds" << std::endl;
 
-		return Loader::loadToVao(vertices, texCoords, normals, indices);
+		return RawModel(vertices, texCoords, normals, indices);
 	}
 
 
-	float getHeight(int x, int z, const Image& image)
+	float getHeight(int x, int z, const TextureData& image)
 	{
-		if (x < 0 || x >= image.height || z < 0 || z >= image.width)
+		if (x < 0 || x >= image.getHeight() || z < 0 || z >= image.getWidth())
 		{
 			return 0;
 		}
@@ -107,7 +107,7 @@ private:
 		return height;
 	}
 
-	glm::vec3 calcNormal(int x, int z, Image heightMap)
+	glm::vec3 calcNormal(int x, int z, TextureData heightMap)
 	{
 		glm::vec3 positionL(x - 1, getHeight(x - 1, z, heightMap), z);
 		glm::vec3 positionR(x + 1, getHeight(x + 1, z, heightMap), z);

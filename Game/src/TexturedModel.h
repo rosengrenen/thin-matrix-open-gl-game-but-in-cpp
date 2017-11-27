@@ -1,26 +1,15 @@
 #pragma once
 
-#include "Model.h"
+#include "RawModel.h"
 #include "Texture.h"
 
 class TexturedModel
 {
 public:
-	Model model;
+	RawModel model;
 	Texture texture;
 public:
-	TexturedModel(const Model& model, const Texture& texture) : model(model), texture(texture)
-	{}
-
-	Model getModel() const
-	{
-		return model;
-	}
-
-	Texture getTexture() const
-	{
-		return texture;
-	}
+	TexturedModel(const RawModel& model, const Texture& texture);
 
 	bool operator==(const TexturedModel& other) const
 	{

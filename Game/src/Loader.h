@@ -6,98 +6,68 @@
 #include <vector>
 #include <fstream>
 
-#include "Model.h"
-#include "Image.h"
-
-const std::vector<std::string> explode(const std::string& s, const char& c)
-{
-	std::string buff { "" };
-	std::vector<std::string> v;
-
-	for (auto n : s)
-	{
-		if (n != c) buff += n; else
-			if (n == c && buff != "")
-			{
-				v.push_back(buff); buff = "";
-			}
-	}
-	if (buff != "") v.push_back(buff);
-	return v;
-}
+#include "RawModel.h"
+#include "Texture.h"
+#include "TextureData.h"
+#include "Utilities.h"
 
 class Loader
 {
 private:
-	static void storeDataInAttribList(int attribNum, int size, const std::vector<float>& data)
-	{
-		unsigned int vbo;
-		glGenBuffers(1, &vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), data.data(), GL_STATIC_DRAW);
-		glVertexAttribPointer(attribNum, size, GL_FLOAT, GL_FALSE, 0, nullptr);
-	}
-
-	static void bindIndicesBuffer(const std::vector<int>& indices)
-	{
-		unsigned int ibo;
-		glGenBuffers(1, &ibo);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(int), indices.data(), GL_STATIC_DRAW);
-	}
 	Loader() = delete;
 public:
-	static int loadCubeMap(std::vector<std::string> textureFilePaths)
-	{
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
+	/* LOAD TO TEXTURE */
 
-		for (int i = 0; i < textureFilePaths.size(); i++)
+	static Texture loadTexture2D(const std::string& path)
+	{
+		GLuint id;
+		TextureData data(path);
+		glGenTextures(1, &id);
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexImage2D(
+			GL_TEXTURE_2D, // Target/type of texture
+			0, // Level, always 0
+			GL_RGBA, // Format to store the texture in, always store with Alpha channel
+			data.getWidth(), // Width of texture
+			data.getHeight(), // Height of texture
+			0, // Border, always 0
+			GL_RGBA, // Channels of input texture
+			GL_UNSIGNED_BYTE, // Data type of input texture
+			data.getData() // Texture data
+		);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		return Texture(id);
+	}
+
+	static Texture loadCubeMap(std::vector<std::string> paths)
+	{
+		GLuint id;
+		glGenTextures(1, &id);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+
+		for (int i = 0; i < paths.size(); i++)
 		{
 			//TODO: rename Image to TextureData and make it only hold the data, not a texture buffer
-			Image image = loadTexture(textureFilePaths[i]);
+			TextureData texture(paths[i]);
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, texture);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data.data());
+			glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, texture.getWidth(), texture.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.getData());
 		}
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		return texture;
+		//TODO: Move stuff from texture to Loader class, but make the constructor of Texture Take what requires for a cube map
+		return Texture(id);
 	}
 
-	static Model loadToVao(const std::vector<float>& vertices, const std::vector<float>& texCoords, const std::vector<float>& normals, const std::vector<int>& indices)
+	/* LOAD TO RAW MODEL */
+	
+	static RawModel loadObj(const std::string& path)
 	{
-		unsigned int vao;
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
-
-		storeDataInAttribList(0, 3, vertices);
-		storeDataInAttribList(1, 2, texCoords);
-		storeDataInAttribList(2, 3, normals);
-
-		bindIndicesBuffer(indices);
-
-		return Model(vao, indices.size());
-	}
-
-	static Model loadToVao(const std::vector<float>& positions, GLint dimensions)
-	{
-		unsigned int vao;
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
-
-		storeDataInAttribList(0, dimensions, positions);
-
-		return Model(vao, positions.size() / dimensions);
-	}
-
-	static Model loadObj(const std::string& filePath)
-	{
-		std::ifstream stream("res/objects/" + filePath + ".obj");
+		std::ifstream stream("res/objects/" + path + ".obj");
 		std::string line;
 		std::vector<float> vertices;
 		std::vector<glm::vec2> texCoords;
@@ -107,13 +77,10 @@ public:
 		std::vector<float> outNormals;
 
 		bool first = true;
-		double startTime = glfwGetTime();
-
-
 
 		while (getline(stream, line))
 		{
-			std::vector<std::string> currentLine { explode(line, ' ') };
+			std::vector<std::string> currentLine { Utilities::stringExplode(line, ' ') };
 			if (line.substr(0, 2) == "v ")
 			{
 				vertices.emplace_back(::atof(currentLine[1].c_str()));
@@ -136,17 +103,16 @@ public:
 					outTexCoords.resize(vertices.size() * 2 / 3);
 					outNormals.resize(vertices.size());
 				}
-				std::vector<std::string> vertex1 = explode(currentLine[1], '/');
-				std::vector<std::string> vertex2 = explode(currentLine[2], '/');
-				std::vector<std::string> vertex3 = explode(currentLine[3], '/');
+				std::vector<std::string> vertex1 = Utilities::stringExplode(currentLine[1], '/');
+				std::vector<std::string> vertex2 = Utilities::stringExplode(currentLine[2], '/');
+				std::vector<std::string> vertex3 = Utilities::stringExplode(currentLine[3], '/');
 				processVertex(vertex1, indices, texCoords, normals, outTexCoords, outNormals);
 				processVertex(vertex2, indices, texCoords, normals, outTexCoords, outNormals);
 				processVertex(vertex3, indices, texCoords, normals, outTexCoords, outNormals);
 			}
 		}
-		std::cout << "[INFO] Loading wavefront model \"" << filePath.c_str() << "\" in " << glfwGetTime() - startTime << " seconds" << std::endl;
 
-		return loadToVao(vertices, outTexCoords, outNormals, indices);
+		return RawModel(vertices, outTexCoords, outNormals, indices);
 	}
 
 	static void processVertex(
@@ -165,39 +131,4 @@ public:
 		outNormals.at(currentVertexPointer * 3 + 2) = currentNorm.z;
 	}
 
-	static Image loadTexture(const std::string& path)
-	{
-		double startTime = glfwGetTime();
-		unsigned int id;
-		glGenTextures(1, &id);
-		int width, height, nrChannels;
-		unsigned char* data = stbi_load(("res/textures/" + path).c_str(), &width, &height, &nrChannels, 4);
-		if (!data)
-		{
-			std::cout << "[ERROR] Couldn't load texture: " << path.c_str() << std::endl;
-			throw "Texture file not found";
-		}
-		std::vector<unsigned char> pixelData(width * height * 4);
-		for (int i = 0; i < width * height * 4; i++)
-		{
-			pixelData[i] = data[i];
-		}
-		glBindTexture(GL_TEXTURE_2D, id);
-		glTexImage2D(
-			GL_TEXTURE_2D, // Target/type of texture
-			0, // Level, always 0
-			GL_RGBA, // Format to store the texture in, always store with Alpha channel
-			width, // Width of texture
-			height, // Height of texture
-			0, // Border, always 0
-			GL_RGBA, // Channels of input texture
-			GL_UNSIGNED_BYTE, // Data type of input texture
-			data // Texture data
-		);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		std::cout << "[INFO] Successfully loaded texture: " << path.c_str() << " in " << glfwGetTime() - startTime << " seconds" << std::endl;
-
-		return Image(id, width, height, nrChannels, pixelData);
-	}
 };

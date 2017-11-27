@@ -46,13 +46,13 @@ public:
 
 	float getTextureXOffset() const
 	{
-		int column = textureIndex % texturedModel.texture.numRows;
-		return static_cast<float>(column) / texturedModel.texture.numRows;
+		int column = textureIndex % texturedModel.texture.numberOfRows;
+		return static_cast<float>(column) / texturedModel.texture.numberOfRows;
 	}
 
 	float getTextureYOffset() const
 	{
-		int row = textureIndex / texturedModel.texture.numRows;
-		return static_cast<float>(row) / texturedModel.texture.numRows;
+		int row = textureIndex / texturedModel.texture.numberOfRows;
+		return static_cast<float>(row) / texturedModel.texture.numberOfRows;
 	}
 };

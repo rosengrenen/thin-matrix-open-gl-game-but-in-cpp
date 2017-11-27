@@ -2,10 +2,9 @@
 
 class TerrainTexture
 {
-private:
 public:
-	unsigned int textureID;
+	Texture texture;
 public:
-	TerrainTexture(unsigned int id) : textureID(id)
+	TerrainTexture(const Texture& texture) : texture(texture)
 	{ }
 };
