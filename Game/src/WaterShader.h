@@ -15,6 +15,9 @@ private:
 	int m_dudvMapLoc;
 	int m_moveFactorLoc;
 	int m_camLoc;
+	int m_normalMapLoc;
+	int m_lightColourLoc;
+	int m_lightPositionLoc;
 public:
 	WaterShader()
 	{
@@ -36,9 +39,13 @@ public:
 		m_moveFactorLoc = getUniformLocation("moveFactor");
 		m_dudvMapLoc = getUniformLocation("dudvMap");
 		m_camLoc = getUniformLocation("cameraPosition");
+		m_normalMapLoc = getUniformLocation("normalMap");
+		m_lightColourLoc = getUniformLocation("lightColour");
+		m_lightPositionLoc = getUniformLocation("lightPosition");
 		setInt(m_reflectionLoc, 0);
 		setInt(m_refractionLoc, 1);
 		setInt(m_dudvMapLoc, 2);
+		setInt(m_normalMapLoc, 3);
 	}
 
 	void setProjectionMatrix(const Camera& camera)
@@ -60,5 +67,11 @@ public:
 	void setMoveFactor(float factor)
 	{
 		setFloat(m_moveFactorLoc, factor);
+	}
+
+	void setLight(Light& sun)
+	{
+		setVector3f(m_lightColourLoc, sun.colour);
+		setVector3f(m_lightPositionLoc, sun.position);
 	}
 };

@@ -235,6 +235,7 @@
     <Image Include="res\textures\lamp.png" />
     <Image Include="res\textures\left.png" />
     <Image Include="res\textures\lowPolyTree.png" />
+    <Image Include="res\textures\matchingNormalMap.png" />
     <Image Include="res\textures\mossPath256.png" />
     <Image Include="res\textures\mud.png" />
     <Image Include="res\textures\nightBack.png" />
@@ -243,6 +244,7 @@
     <Image Include="res\textures\nightLeft.png" />
     <Image Include="res\textures\nightRight.png" />
     <Image Include="res\textures\nightTop.png" />
+    <Image Include="res\textures\normalMap.png" />
     <Image Include="res\textures\ownheightmap.png" />
     <Image Include="res\textures\path.png" />
     <Image Include="res\textures\pine.png" />

@@ -111,8 +111,8 @@ int main(void)
 	#pragma endregion
 	entities.push_back(player);
 
-	Light light(glm::vec3(100, 200, 700), glm::vec3(0.4f, 0.4f, 0.4f));
-	lights.push_back(light);
+	Light sun(glm::vec3(100, 200, 700), glm::vec3(0.4f, 0.4f, 0.4f));
+	lights.push_back(sun);
 	lights.push_back(Light({ 450.0f, terrain.getHeightOfTerrain(450, 450) + 14, 450 }, { 3.5f, 0, 0 }, { 1, 0.01f, 0.002f }));
 	lights.push_back(Light({ 400.0f, terrain.getHeightOfTerrain(400, 400) + 14, 400 }, { 3.5f, 3.5f, 0 }, { 1, 0.01f, 0.002f }));
 
@@ -232,7 +232,7 @@ int main(void)
 		fbos.unbindCurrentFrameBuffer();
 		glDisable(GL_CLIP_DISTANCE0);
 		renderer.renderScene(entities, terrains, lights, camera, glm::vec4(0, -1, 0, 15));
-		waterRenderer.render(waters, camera);
+		waterRenderer.render(waters, camera, sun);
 		guiRenderer.render(guis);
 
 		Window::update();

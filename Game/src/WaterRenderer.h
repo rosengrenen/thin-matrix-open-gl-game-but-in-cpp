@@ -15,14 +15,19 @@ private:
 	WaterShader m_shader;
 	WaterFrameBuffers& m_fbos;
 	Texture m_dudvTex;
+	Texture m_normalMap;
 	float moveFactor;
 public:
-	WaterRenderer(WaterFrameBuffers& fbos) : m_quad(RawModel({ -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f }, 2)), m_fbos(fbos), m_dudvTex(Loader::loadTexture2D("waterDUDV.png"))
+	WaterRenderer(WaterFrameBuffers& fbos) : 
+		m_quad(RawModel({ -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f }, 2)), 
+		m_fbos(fbos), 
+		m_dudvTex(Loader::loadTexture2D("waterDUDV.png")),
+		m_normalMap(Loader::loadTexture2D("matchingNormalMap.png"))
 	{ }
 
-	void render(const std::vector<WaterTile>& water, Camera& camera)
+	void render(const std::vector<WaterTile>& water, Camera& camera, Light& sun)
 	{
-		prepareRender(camera);
+		prepareRender(camera, sun);
 		for (const WaterTile& tile : water)
 		{
 			m_shader.setModelMatrix(tile.getModelMatrix());
@@ -31,11 +36,12 @@ public:
 		unbind();
 	}
 
-	void prepareRender(Camera& camera)
+	void prepareRender(Camera& camera, Light& sun)
 	{
 		m_shader.use();
 		m_shader.setViewMatrix(camera);
 		m_shader.setProjectionMatrix(camera);
+		m_shader.setLight(sun);
 		moveFactor += WAVE_SPEED * 0.016f;
 		moveFactor = ::fmod(moveFactor, 1.0f);
 		m_shader.setMoveFactor(moveFactor);
@@ -47,6 +53,8 @@ public:
 		glBindTexture(GL_TEXTURE_2D, m_fbos.getRefractionTexture());
 		glActiveTexture(GL_TEXTURE2);
 		m_dudvTex.bind();
+		glActiveTexture(GL_TEXTURE3);
+		m_normalMap.bind();
 	}
 
 	void unbind()
