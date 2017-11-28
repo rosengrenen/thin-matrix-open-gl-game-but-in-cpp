@@ -29,11 +29,18 @@ uniform float blendFactor;
 const float lowerLimit = -15.0;
 const float upperLimit = 15.0;
 
+const float levels = 10.0;
+
 void main(void)
 {
 	vec4 texture1 = texture(cubeMap, texCoords);
 	vec4 texture2 = texture(cubeMap2, texCoords);
 	vec4 finalColour = mix(texture1, texture2, blendFactor);
+
+	/* CEL SHADING
+	float amount = (finalColour.r + finalColour.g + finalColour.b) / 3.0;
+	amount = floor(amount * levels) / levels;
+	finalColour.rgb = amount * fogColour;*/
 
 	float factor = (texCoords.y - lowerLimit) / (upperLimit - lowerLimit);
 	factor = clamp(factor, 0.0, 1.0);

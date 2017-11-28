@@ -370,6 +370,66 @@
     <Image Include="res\textures\matchingNormalMap.png">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="res\textures\blue.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\bobbleTree.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\dudv.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\dudvMap.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\font.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\fontSegoe2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\footNormal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\foot.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\sLeft.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\sFront.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\sDown.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\sBack.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\rocks.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\rockNormal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\rockDiffuse.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\toonRocks.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\text.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\sUp.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\sRight.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\objects\stall.obj">
@@ -435,5 +495,16 @@
     <None Include="res\shaders\water.shader">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="res\objects\bobbleTree.obj" />
+    <Object Include="res\objects\Box2.obj" />
+    <Object Include="res\objects\dirt.obj" />
+    <Object Include="res\objects\foot.obj" />
+    <Object Include="res\objects\newRock.obj" />
+    <Object Include="res\objects\plane.obj" />
+    <Object Include="res\objects\rocks (1).obj" />
+    <Object Include="res\objects\rocks.obj" />
+    <Object Include="res\objects\toonRocks.obj" />
   </ItemGroup>
 </Project>

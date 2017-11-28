@@ -213,14 +213,22 @@
   <ItemGroup>
     <Image Include="res\textures\back.png" />
     <Image Include="res\textures\blendMap.png" />
+    <Image Include="res\textures\blue.png" />
+    <Image Include="res\textures\bobbleTree.png" />
     <Image Include="res\textures\bottom.png" />
     <Image Include="res\textures\box.png" />
     <Image Include="res\textures\container.jpg" />
     <Image Include="res\textures\dirt.png" />
+    <Image Include="res\textures\dudv.png" />
+    <Image Include="res\textures\dudvMap.png" />
     <Image Include="res\textures\falcon.jpg" />
     <Image Include="res\textures\fern.png" />
     <Image Include="res\textures\fernAtlas.png" />
     <Image Include="res\textures\flower.png" />
+    <Image Include="res\textures\font.png" />
+    <Image Include="res\textures\fontSegoe2.png" />
+    <Image Include="res\textures\foot.png" />
+    <Image Include="res\textures\footNormal.png" />
     <Image Include="res\textures\front.png" />
     <Image Include="res\textures\grass.png" />
     <Image Include="res\textures\grassFlowers.png" />
@@ -244,6 +252,7 @@
     <Image Include="res\textures\nightLeft.png" />
     <Image Include="res\textures\nightRight.png" />
     <Image Include="res\textures\nightTop.png" />
+    <Image Include="res\textures\normal.png" />
     <Image Include="res\textures\normalMap.png" />
     <Image Include="res\textures\ownheightmap.png" />
     <Image Include="res\textures\path.png" />
@@ -251,10 +260,21 @@
     <Image Include="res\textures\pinkFlowers.png" />
     <Image Include="res\textures\playerTexture.png" />
     <Image Include="res\textures\right.png" />
+    <Image Include="res\textures\rockDiffuse.png" />
+    <Image Include="res\textures\rockNormal.png" />
+    <Image Include="res\textures\rocks.png" />
+    <Image Include="res\textures\sBack.png" />
+    <Image Include="res\textures\sDown.png" />
+    <Image Include="res\textures\sFront.png" />
+    <Image Include="res\textures\sLeft.png" />
     <Image Include="res\textures\socuwan.png" />
+    <Image Include="res\textures\sRight.png" />
     <Image Include="res\textures\stallTexture.png" />
+    <Image Include="res\textures\sUp.png" />
     <Image Include="res\textures\test.png" />
+    <Image Include="res\textures\text.png" />
     <Image Include="res\textures\thinmatrix.png" />
+    <Image Include="res\textures\toonRocks.png" />
     <Image Include="res\textures\top.png" />
     <Image Include="res\textures\tree.png" />
     <Image Include="res\textures\wall.jpg" />
@@ -324,6 +344,35 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\objects\lamp.obj">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\objects\bobbleTree.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\Box2.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\dirt.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\foot.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\newRock.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\plane.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\rocks (1).obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\rocks.obj">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="res\objects\toonRocks.obj">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

@@ -111,11 +111,11 @@ int main(void)
 	#pragma endregion
 	entities.push_back(player);
 
-	Light sun(glm::vec3(100, 200, 700), glm::vec3(0.4f, 0.4f, 0.4f));
+	Light sun(glm::vec3(400, 200, 400), glm::vec3(0.9f, 0.9f, 0.9f));
 	lights.push_back(sun);
 
-	RawModel lampModel = Loader::loadObj("lamp");
-	Texture lampTex = Loader::loadTexture2D("lamp.png");
+	RawModel lampModel = Loader::loadObj("bobbleTree");
+	Texture lampTex = Loader::loadTexture2D("bobbleTree.png");
 	lampTex.useFakeLighting = false;
 	TexturedModel lamp(lampModel, lampTex);
 
@@ -162,10 +162,10 @@ int main(void)
 	Light lampLight(glm::vec3(0.0), { 10.0f, 10.0f, 0.0f }, { 1, 0.01f, 0.002f });
 	lights.push_back(lampLight);
 
-	GuiTexture reflection(fbos.getReflectionTexture(), glm::vec2(0.5f, 0.5f), glm::vec2(0.25f));
-	guis.push_back(reflection);
-	GuiTexture refraction(fbos.getRefractionTexture(), glm::vec2(-0.5f, 0.5f), glm::vec2(0.25f));
-	guis.push_back(refraction);
+	//GuiTexture reflection(fbos.getReflectionTexture(), glm::vec2(0.5f, 0.5f), glm::vec2(0.25f));
+	//guis.push_back(reflection);
+	//GuiTexture refraction(fbos.getRefractionTexture(), glm::vec2(-0.5f, 0.5f), glm::vec2(0.25f));
+	//guis.push_back(refraction);
 
 	#pragma region FPS
 	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?
@@ -227,10 +227,6 @@ int main(void)
 
 		// Render to reflection texture
 		fbos.bindReflectionFrameBuffer();
-		std::cout << "camX: " << camera.getPosition().x
-			<< "camY: " << camera.getPosition().y
-			<< "camZ: " << camera.getPosition().z
-			<< std::endl;
 		camera.invertPitchAndPlayer();
 		camera.calcCamPos();
 		renderer.renderScene(entities, terrains, lights, camera, glm::vec4(0, 1, 0, -water.getHeight()+1.0f));
