@@ -20,7 +20,7 @@ public:
 	WaterRenderer(WaterFrameBuffers& fbos) : m_quad(RawModel({ -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f }, 2)), m_fbos(fbos), m_dudvTex(Loader::loadTexture2D("waterDUDV.png"))
 	{ }
 
-	void render(const std::vector<WaterTile>& water, const Camera& camera)
+	void render(const std::vector<WaterTile>& water, Camera& camera)
 	{
 		prepareRender(camera);
 		for (const WaterTile& tile : water)
@@ -31,7 +31,7 @@ public:
 		unbind();
 	}
 
-	void prepareRender(const Camera& camera)
+	void prepareRender(Camera& camera)
 	{
 		m_shader.use();
 		m_shader.setViewMatrix(camera);

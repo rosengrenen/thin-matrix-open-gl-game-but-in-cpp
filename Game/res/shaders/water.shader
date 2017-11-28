@@ -5,18 +5,22 @@ in vec2 position;
 
 out vec4 clipSpace;
 out vec2 textureCoords;
+out vec3 toCameraVector;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
+uniform vec3 cameraPosition;
 
 const float tiling = 6.0;
 
 void main(void)
 {
-	clipSpace = projectionMatrix * viewMatrix * modelMatrix * vec4(position.x, 0.0, position.y, 1.0);
+	vec4 worldPosition = modelMatrix * vec4(position.x, 0.0, position.y, 1.0);
+	clipSpace = projectionMatrix * viewMatrix * worldPosition;
 	gl_Position = clipSpace;
 	textureCoords = vec2(position.x / 2.0 + 0.5, position.y / 2.0 + 0.5) * tiling;
+	toCameraVector = cameraPosition - worldPosition.xyz;
 }
 
 #shader fragment
@@ -26,6 +30,7 @@ out vec4 out_Colour;
 
 in vec4 clipSpace;
 in vec2 textureCoords;
+in vec3 toCameraVector;
 
 uniform sampler2D reflection;
 uniform sampler2D refraction;
@@ -54,6 +59,10 @@ void main(void)
 	vec4 reflectionColour = texture(reflection, reflectTexCoords);
 	vec4 refractionColour = texture(refraction, refractTexCoords);
 
-	out_Colour = mix(reflectionColour, refractionColour, 0.5);
+	vec3 viewVector = normalize(toCameraVector);
+	float refractiveFactor = dot(viewVector, vec3(0.0, 1.0, 0.0));
+	refractiveFactor = pow(refractiveFactor, 0.7);
+
+	out_Colour = mix(reflectionColour, refractionColour, refractiveFactor);
 	out_Colour = mix(out_Colour, vec4(0.0, 0.3, 0.5, 1.0), 0.2);
 }
