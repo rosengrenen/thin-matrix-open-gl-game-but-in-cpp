@@ -12,6 +12,8 @@ private:
 	int location_projectionMatrix;
 	int m_reflectionLoc;
 	int m_refractionLoc;
+	int m_dudvMapLoc;
+	int m_moveFactorLoc;
 public:
 	WaterShader()
 	{
@@ -30,8 +32,11 @@ public:
 		location_modelMatrix = getUniformLocation("modelMatrix");
 		m_reflectionLoc = getUniformLocation("reflection");
 		m_refractionLoc = getUniformLocation("refraction");
+		m_moveFactorLoc = getUniformLocation("moveFactor");
+		m_dudvMapLoc = getUniformLocation("dudvMap");
 		setInt(m_reflectionLoc, 0);
 		setInt(m_refractionLoc, 1);
+		setInt(m_dudvMapLoc, 2);
 	}
 
 	void setProjectionMatrix(const Camera& camera)
@@ -49,4 +54,8 @@ public:
 		setMatrix4f(location_modelMatrix, modelMatrix);
 	}
 
+	void setMoveFactor(float factor)
+	{
+		setFloat(m_moveFactorLoc, factor);
+	}
 };
