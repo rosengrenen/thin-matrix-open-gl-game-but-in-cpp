@@ -38,6 +38,8 @@ public:
 
 	void prepareRender(Camera& camera, Light& sun)
 	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		m_shader.use();
 		m_shader.setViewMatrix(camera);
 		m_shader.setProjectionMatrix(camera);
@@ -55,10 +57,13 @@ public:
 		m_dudvTex.bind();
 		glActiveTexture(GL_TEXTURE3);
 		m_normalMap.bind();
+		glActiveTexture(GL_TEXTURE4);
+		glBindTexture(GL_TEXTURE_2D, m_fbos.getRefractionDepthTexture());
 	}
 
 	void unbind()
 	{
+		glDisable(GL_BLEND);
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
 		m_shader.stop();

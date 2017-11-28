@@ -3,7 +3,7 @@
 class WaterTile
 {
 public:
-	const float TILE_SIZE = 60;
+	const float TILE_SIZE = 400;
 private:
 	float m_x, m_z;
 	float m_height;

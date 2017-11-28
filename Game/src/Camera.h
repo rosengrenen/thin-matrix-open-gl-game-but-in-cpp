@@ -20,9 +20,9 @@ private:
 	float m_nearPlane;
 	float m_farPlane;
 
-	Player& player;
-	float distanceFromPlayer = 50;
-	float angleAroundPlayer = 0;
+	Player& m_player;
+	float m_distanceFromPlayer = 50;
+	float m_angleAroundPlayer = 0;
 public:
 	void updateVectors();
 public:
@@ -40,5 +40,5 @@ public:
 
 	glm::vec3& getPosition();
 
-	void invertPitch();
+	void invertPitchAndPlayer();
 };

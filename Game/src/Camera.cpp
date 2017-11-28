@@ -19,14 +19,15 @@ Camera::Camera(Player& player, const glm::vec3& position, float yaw, float pitch
 	m_fieldOfView(fov),
 	m_nearPlane(0.1f),
 	m_farPlane(4000.0f),
-	player(player)
+	m_player(player)
 {
 	updateVectors();
 }
 
 glm::mat4 Camera::getViewMatrix() const
 {
-	return glm::lookAt(m_position, player.m_position, m_up);
+	return glm::lookAt(m_position, m_position - m_front, m_up);
+	//return glm::lookAt(m_position, m_player.m_position, m_up);
 }
 
 glm::mat4 Camera::getProjectionMatrix() const
@@ -52,19 +53,19 @@ void Camera::rotate(float yaw, float pitch, float roll)
 
 void Camera::zoom(float value)
 {
-	distanceFromPlayer += value;
+	m_distanceFromPlayer += value;
 }
 
 void Camera::calcCamPos()
 {
-	float theta = m_pitch - player.m_rotation.y;
+	float theta = m_pitch - m_player.m_rotation.y;
 	m_front.x = glm::cos(glm::radians(theta)) * glm::cos(glm::radians(m_yaw));
 	m_front.y = glm::sin(glm::radians(m_yaw));
 	m_front.z = glm::sin(glm::radians(theta)) * glm::cos(glm::radians(m_yaw));
 	m_front = glm::normalize(m_front);
 	m_right = glm::normalize(glm::cross(m_front, m_worldUp));
 	m_up = glm::normalize(glm::cross(m_right, m_front));
-	m_position = player.m_position + m_front * distanceFromPlayer;
+	m_position = m_player.m_position + m_front * m_distanceFromPlayer;
 }
 
 glm::vec3& Camera::getPosition()
@@ -72,7 +73,8 @@ glm::vec3& Camera::getPosition()
 	return m_position;
 }
 
-void Camera::invertPitch()
+void Camera::invertPitchAndPlayer()
 {
-	m_yaw = -m_yaw;
+	m_yaw *= -1;;
+	m_player.m_position.y *= -1;
 }

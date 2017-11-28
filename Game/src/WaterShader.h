@@ -18,6 +18,7 @@ private:
 	int m_normalMapLoc;
 	int m_lightColourLoc;
 	int m_lightPositionLoc;
+	int m_depthMapLoc;
 public:
 	WaterShader()
 	{
@@ -42,10 +43,12 @@ public:
 		m_normalMapLoc = getUniformLocation("normalMap");
 		m_lightColourLoc = getUniformLocation("lightColour");
 		m_lightPositionLoc = getUniformLocation("lightPosition");
+		m_depthMapLoc = getUniformLocation("depthMap");
 		setInt(m_reflectionLoc, 0);
 		setInt(m_refractionLoc, 1);
 		setInt(m_dudvMapLoc, 2);
 		setInt(m_normalMapLoc, 3);
+		setInt(m_depthMapLoc, 4);
 	}
 
 	void setProjectionMatrix(const Camera& camera)
