@@ -10,6 +10,8 @@ private:
 	int location_modelMatrix;
 	int location_viewMatrix;
 	int location_projectionMatrix;
+	int m_reflectionLoc;
+	int m_refractionLoc;
 public:
 	WaterShader()
 	{
@@ -26,6 +28,10 @@ public:
 		location_projectionMatrix = getUniformLocation("projectionMatrix");
 		location_viewMatrix = getUniformLocation("viewMatrix");
 		location_modelMatrix = getUniformLocation("modelMatrix");
+		m_reflectionLoc = getUniformLocation("reflection");
+		m_refractionLoc = getUniformLocation("refraction");
+		setInt(m_reflectionLoc, 0);
+		setInt(m_refractionLoc, 1);
 	}
 
 	void setProjectionMatrix(const Camera& camera)

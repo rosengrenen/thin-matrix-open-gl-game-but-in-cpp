@@ -138,26 +138,27 @@ int main(void)
 	EntityShader entityShader;
 	EntityRenderer entityRenderer(entityShader);
 
-	WaterRenderer waterRenderer;
+	WaterFrameBuffers fbos;
+	WaterRenderer waterRenderer(fbos);
 
 	MasterRenderer renderer(entityRenderer, terrainRenderer, entityShader, terrainShader);
 	#pragma endregion
 
 	std::vector<WaterTile> waters;
-	WaterTile water(60, 60, 96);
+	WaterTile water(60, 60, 24);
 	waters.push_back(water);
 
-	WaterFrameBuffers fbos;
+	
 
 	Entity lampEntity(lamp, glm::vec3(0));
 	entities.push_back(lampEntity);
 	Light lampLight(glm::vec3(0.0), { 10.0f, 10.0f, 0.0f }, { 1, 0.01f, 0.002f });
 	lights.push_back(lampLight);
 
-	GuiTexture reflection(fbos.getReflectionTexture(), glm::vec2(0.5f, 0.5f), glm::vec2(0.25f));
-	guis.push_back(reflection);
-	GuiTexture refraction(fbos.getRefractionTexture(), glm::vec2(-0.5f, 0.5f), glm::vec2(0.25f));
-	guis.push_back(refraction);
+	//GuiTexture reflection(fbos.getReflectionTexture(), glm::vec2(0.5f, 0.5f), glm::vec2(0.25f));
+	//guis.push_back(reflection);
+	//GuiTexture refraction(fbos.getRefractionTexture(), glm::vec2(-0.5f, 0.5f), glm::vec2(0.25f));
+	//guis.push_back(refraction);
 
 	#pragma region FPS
 	// !! WINDOW <- SCRAP THAT -> FPS COUNTER CLASS?

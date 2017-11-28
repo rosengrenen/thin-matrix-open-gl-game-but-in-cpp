@@ -91,9 +91,9 @@ public:
 		cube.bind();
 		glEnableVertexAttribArray(0);
 		glActiveTexture(GL_TEXTURE0);
-		texture.bind();
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texture.getID());
 		glActiveTexture(GL_TEXTURE1);
-		nightTexture.bind();
+		glBindTexture(GL_TEXTURE_CUBE_MAP, nightTexture.getID());
 		glDrawArrays(GL_TRIANGLES, 0, cube.getVertexCount());
 		glDisableVertexAttribArray(0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);

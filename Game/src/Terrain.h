@@ -15,7 +15,7 @@ private:
 	const float SIZE = 120.0f;
 	int VERTEX_COUNT = 128;
 	int MAX_PIXEL_COLOUR = 256 * 256 * 256;
-	float MAX_HEIGHT = 200.0f;
+	float MAX_HEIGHT = 50.0f;
 	std::vector<float> heights;
 public:
 	float posX;

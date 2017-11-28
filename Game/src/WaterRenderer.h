@@ -3,6 +3,7 @@
 #include "RawModel.h"
 #include "WaterShader.h"
 #include "WaterTile.h"
+#include "WaterFrameBuffers.h"
 #include "Camera.h"
 
 class WaterRenderer
@@ -10,9 +11,10 @@ class WaterRenderer
 private:
 	RawModel m_quad;
 	WaterShader m_shader;
+	WaterFrameBuffers& m_fbos;
 public:
-	WaterRenderer() : m_quad(RawModel({ -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f }, 2))
-	{	}
+	WaterRenderer(WaterFrameBuffers& fbos) : m_quad(RawModel({ -1.0f, -1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f }, 2)), m_fbos(fbos)
+	{ }
 
 	void render(const std::vector<WaterTile>& water, const Camera& camera)
 	{
@@ -32,6 +34,10 @@ public:
 		m_shader.setProjectionMatrix(camera);
 		m_quad.bind();
 		glEnableVertexAttribArray(0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_fbos.getReflectionTexture());
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, m_fbos.getRefractionTexture());
 	}
 
 	void unbind()
