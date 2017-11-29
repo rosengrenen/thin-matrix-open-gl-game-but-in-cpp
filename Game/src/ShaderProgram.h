@@ -46,8 +46,8 @@ public:
 
 	void setVector2f(unsigned int location, const glm::vec2& vector) const;
 
-	void setFloat(unsigned int location, float value);
+	void setFloat(unsigned int location, float value) const;
 
-	void setInt(unsigned int location, int value);
+	void setInt(unsigned int location, int value) const;
 };
 

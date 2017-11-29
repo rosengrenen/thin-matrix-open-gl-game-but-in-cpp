@@ -55,6 +55,9 @@
     <Filter Include="Source Files\Water">
       <UniqueIdentifier>{905fd036-a568-40e9-b10b-0699e0d6063c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\NormalMapping">
+      <UniqueIdentifier>{11716de7-9678-4428-8eaf-f3a72a291ea1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -68,9 +71,6 @@
     </ClCompile>
     <ClCompile Include="src\Scroll.cpp">
       <Filter>Source Files\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="src\TextureData.cpp">
-      <Filter>Source Files\RenderEngine</Filter>
     </ClCompile>
     <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files\Textures</Filter>
@@ -107,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="src\Window.cpp">
       <Filter>Source Files\RenderEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureData.cpp">
+      <Filter>Source Files\Textures</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,9 +206,6 @@
     <ClInclude Include="src\WaterTile.h">
       <Filter>Source Files\Water</Filter>
     </ClInclude>
-    <ClInclude Include="src\TextureData.h">
-      <Filter>Source Files\RenderEngine</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utilities.h">
       <Filter>Source Files\Utilities</Filter>
     </ClInclude>
@@ -220,6 +220,21 @@
     </ClInclude>
     <ClInclude Include="src\WaterFrameBuffers.h">
       <Filter>Source Files\Water</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VertexNM.h">
+      <Filter>Source Files\NormalMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ModelDataNM.h">
+      <Filter>Source Files\NormalMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NormalMappingRenderer.h">
+      <Filter>Source Files\NormalMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="src\NormalMappingShader.h">
+      <Filter>Source Files\NormalMapping</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureData.h">
+      <Filter>Source Files\Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -364,71 +379,89 @@
     <Image Include="res\textures\waterDUDV.png">
       <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="res\textures\normalMap.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\textures\barrel.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="res\textures\matchingNormalMap.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\textures\barrelNormal.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\blue.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\bobbleTree.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\boulder.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\boulderNormal.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\crate.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\crateNormal.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\dudv.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\dudvMap.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\font.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\fontSegoe2.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\footNormal.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\foot.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\footNormal.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\matchingNormalMap.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\normal.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="res\textures\sLeft.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\sFront.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\sDown.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\sBack.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\rocks.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="res\textures\rockNormal.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\textures\normalMap.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\rockDiffuse.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="res\textures\toonRocks.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\textures\rockNormal.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="res\textures\text.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\textures\rocks.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
-    <Image Include="res\textures\sUp.png">
-      <Filter>Resource Files</Filter>
+    <Image Include="res\textures\sBack.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\sDown.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\sFront.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\sLeft.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
     <Image Include="res\textures\sRight.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\sUp.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\text.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+    <Image Include="res\textures\toonRocks.png">
+      <Filter>Resource Files\Textures</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -495,16 +528,46 @@
     <None Include="res\shaders\water.shader">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="res\shaders\normalMap.shader">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="res\objects\toonRocks.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\bobbleTree.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\boulder.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\Box2.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\crate.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\dirt.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\foot.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\newRock.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\plane.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\rocks (1).obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
+    <None Include="res\objects\rocks.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Object Include="res\objects\bobbleTree.obj" />
-    <Object Include="res\objects\Box2.obj" />
-    <Object Include="res\objects\dirt.obj" />
-    <Object Include="res\objects\foot.obj" />
-    <Object Include="res\objects\newRock.obj" />
-    <Object Include="res\objects\plane.obj" />
-    <Object Include="res\objects\rocks (1).obj" />
-    <Object Include="res\objects\rocks.obj" />
-    <Object Include="res\objects\toonRocks.obj" />
+    <Object Include="res\objects\barrel.obj">
+      <Filter>Resource Files\Objects</Filter>
+    </Object>
   </ItemGroup>
 </Project>

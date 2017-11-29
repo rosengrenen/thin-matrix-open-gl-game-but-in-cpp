@@ -11,6 +11,7 @@
 #include "TerrainShader.h"
 #include "TexturedModel.h"
 #include "SkyboxRenderer.h"
+#include "NormalMappingRenderer.h"
 
 class MasterRenderer
 {
@@ -23,7 +24,11 @@ private:
 
 	SkyboxRenderer skyboxRenderer;
 
+	NormalMappingShader normalShader;
+	NormalMappingRenderer normalRenderer;
+
 	std::unordered_map<TexturedModel, std::vector<Entity>> entities;
+	std::unordered_map<TexturedModel, std::vector<Entity>> normalEntities;
 	std::vector<Terrain> terrains;
 	glm::vec3 m_skyColour;
 public:
@@ -35,11 +40,15 @@ public:
 		m_skyColour(glm::vec3(0.5f, 0.5f, 0.5f))
 	{ }
 
-	void renderScene(const std::vector<Entity>& entities, const std::vector<Terrain>& terrains, const std::vector<Light>& lights, Camera& camera, const glm::vec4& clipPlane)
+	void renderScene(const std::vector<Entity>& entities, const std::vector<Entity>& normalEntities, const std::vector<Terrain>& terrains, const std::vector<Light>& lights, Camera& camera, const glm::vec4& clipPlane)
 	{
 		for (Entity e : entities)
 		{
 			processEntity(e);
+		}
+		for (Entity e : normalEntities)
+		{
+			processNormalEntity(e);
 		}
 		for (Terrain t : terrains)
 		{
@@ -60,6 +69,15 @@ public:
 		entityRenderer.render(entities);
 		entityShader.stop();
 
+		normalShader.use();
+		normalShader.setClipPlane(clipPlane);
+		normalShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
+		normalShader.setLights(lights);
+		normalShader.setViewMatrix(camera.getViewMatrix());
+		normalShader.setProjectionMatrix(camera.getProjectionMatrix());
+		normalRenderer.render(normalEntities);
+		normalShader.stop();
+
 		terrainShader.use();
 		terrainShader.setClipPlane(clipPlane);
 		terrainShader.setSkyColour(m_skyColour.x, m_skyColour.y, m_skyColour.z);
@@ -70,6 +88,7 @@ public:
 		terrainShader.stop();
 
 		entities.clear();
+		normalEntities.clear();
 		terrains.clear();
 
 		skyboxRenderer.render(camera, m_skyColour.x, m_skyColour.y, m_skyColour.z);
@@ -103,11 +122,16 @@ public:
 			entities.insert({ entity.texturedModel, std::vector<Entity>{ entity } });
 		}
 	}
-	void processEntities(const std::vector<Entity>& entities)
+
+	void processNormalEntity(const Entity& normalEntity)
 	{
-		for (Entity e : entities)
+		if (normalEntities.find(normalEntity.texturedModel) != normalEntities.end())
 		{
-			processEntity(e);
+			normalEntities.at(normalEntity.texturedModel).push_back(normalEntity);
+		}
+		else
+		{
+			normalEntities.insert({ normalEntity.texturedModel, std::vector<Entity>{ normalEntity } });
 		}
 	}
 

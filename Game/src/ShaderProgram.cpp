@@ -116,12 +116,12 @@ void ShaderProgram::setVector2f(unsigned int location, const glm::vec2& vector) 
 	glUniform2f(location, vector.x, vector.y);
 }
 
-void ShaderProgram::setFloat(unsigned int location, float value)
+void ShaderProgram::setFloat(unsigned int location, float value)  const
 {
 	glUniform1f(location, value);
 }
 
-void ShaderProgram::setInt(unsigned int location, int value)
+void ShaderProgram::setInt(unsigned int location, int value) const
 {
 	glUniform1i(location, value);
 }

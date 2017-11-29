@@ -9,7 +9,10 @@ class Texture
 private:
 	const GLuint m_id;
 public:
-	const int numberOfRows = 1;
+	//TODO: temporary
+	GLuint m_normalMap = -1;
+public:
+	const int numberOfRows;
 	float reflectivity = 0;
 	float shineDamper = 1;
 	bool hasTransparency = false;

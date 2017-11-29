@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-Texture::Texture(const GLuint id) : m_id(id)
+Texture::Texture(const GLuint id) : m_id(id), numberOfRows(1)
 { }
 
 void Texture::bind() const

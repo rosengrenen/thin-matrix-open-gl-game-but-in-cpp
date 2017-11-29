@@ -16,6 +16,21 @@ RawModel::RawModel(const std::vector<float>& vertices, const std::vector<float>&
 	m_vertexCount = indices.size();
 }
 
+RawModel::RawModel(const std::vector<float>& vertices, const std::vector<float>& texCoords, const std::vector<float>& normals, const std::vector<float>& tangents, const std::vector<int>& indices)
+{ 
+	glGenVertexArrays(1, &m_vao);
+	glBindVertexArray(m_vao);
+
+	storeDataInAttribList(0, 3, vertices);
+	storeDataInAttribList(1, 2, texCoords);
+	storeDataInAttribList(2, 3, normals);
+	storeDataInAttribList(3, 3, tangents);
+
+	bindIndicesBuffer(indices);
+
+	m_vertexCount = indices.size();
+}
+
 RawModel::RawModel(const std::vector<float>& positions, GLint dimensions)
 {
 	glGenVertexArrays(1, &m_vao);

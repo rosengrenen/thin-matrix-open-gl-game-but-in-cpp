@@ -24,6 +24,9 @@ public:
 	// Create a vertex array object from vertex positions, texture coordinates, normals and indices
 	RawModel(const std::vector<float>& vertices, const std::vector<float>& texCoords, const std::vector<float>& normals, const std::vector<int>& indices);
 
+	// Create a vertex array object from vertex positions, texture coordinates, normals, tangents, and indices
+	RawModel(const std::vector<float>& vertices, const std::vector<float>& texCoords, const std::vector<float>& normals, const std::vector<float>& tangents, const std::vector<int>& indices);
+
 	// Create a simple vertex array object from vertex positions
 	RawModel(const std::vector<float>& positions, GLint dimensions);
 

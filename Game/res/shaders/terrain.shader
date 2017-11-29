@@ -100,8 +100,8 @@ void main()
 		vec3 unitLightVector = normalize(toLightVector[i]);
 		float nDot1 = dot(unitNormal, unitLightVector);
 		float brightness = max(nDot1, 0.2);
-		float level = floor(brightness * levels);
-		brightness = level / levels;
+		/* CEL SHADIN
+		brightness = floor(brightness * levels) / levels;*/
 		vec3 lightDirection = -unitLightVector;
 		vec3 reflectedLightDirection = reflect(lightDirection, unitNormal);
 		float specularFactor = dot(reflectedLightDirection, unitVectorToCamera);

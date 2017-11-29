@@ -45,6 +45,7 @@ void EntityRenderer::disableCulling()
 {
 	glDisable(GL_CULL_FACE);
 }
+
 EntityRenderer::EntityRenderer(const EntityShader shader) : m_shader(shader)
 {
 	glEnable(GL_DEPTH_TEST);

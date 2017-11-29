@@ -67,6 +67,9 @@ int main(void)
 	if (!glfwInit())
 		return 0;
 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
 	Window::create(800, 600, "New window");
 
 	#pragma region GLEW_INIT
@@ -82,6 +85,7 @@ int main(void)
 	Scroll::init(Window::getWindow());
 
 	std::vector<Entity> entities;
+	std::vector<Entity> normalMapEntities;
 	std::vector<Terrain> terrains;
 	std::vector<Light> lights;
 	std::vector<GuiTexture> guis;
@@ -119,6 +123,15 @@ int main(void)
 	lampTex.useFakeLighting = false;
 	TexturedModel lamp(lampModel, lampTex);
 
+	RawModel barrelModel = Loader::loadNormalObj("boulder");
+	Texture barrelTex = Loader::loadTexture2D("boulder.png");
+	barrelTex.shineDamper = 10.0f;
+	barrelTex.reflectivity = 0.5f;
+	barrelTex.m_normalMap = Loader::loadTexture2D("boulderNormal.png").getID();
+	TexturedModel barrelTM(barrelModel, barrelTex);
+
+	normalMapEntities.push_back(Entity(barrelTM, glm::vec3(400.0f, 10.0f, 400.0f)));
+	//entities.push_back(Entity(barrelTM, glm::vec3(400.0f, 10.0f, 400.0f)));
 	srand(time(0));
 	for (int i = 0; i < 100; i++)
 	{
@@ -129,7 +142,7 @@ int main(void)
 			x = rand() % 700 + 50.0f;
 			z = rand() % 700 + 50.0f;
 		}
-		entities.push_back(Entity(lamp, glm::vec3(x, terrain.getHeightOfTerrain(x,z), z), glm::vec3(0.0f, rand() % 180, 0.0f)));
+		entities.push_back(Entity(lamp, glm::vec3(x, terrain.getHeightOfTerrain(x, z), z), glm::vec3(0.0f, rand() % 180, 0.0f)));
 	}
 	Camera camera(player, glm::vec3(400.0f, 12.0f, 405.0f), 30, 0);
 
@@ -155,7 +168,7 @@ int main(void)
 	WaterTile water(400, 400, 0);
 	waters.push_back(water);
 
-	
+
 
 	Entity lampEntity(lamp, glm::vec3(0));
 	entities.push_back(lampEntity);
@@ -184,7 +197,7 @@ int main(void)
 	while (Window::isOpen())
 	{
 		//Window::clear();
-		
+		normalMapEntities.at(0).rotate(0, 0.4f, 0);
 		glEnable(GL_CLIP_DISTANCE0);
 		/* Rotate camera from mouse input */
 		camera.zoom(-Scroll::getOffsetY() * 4);
@@ -220,26 +233,21 @@ int main(void)
 		player.moveP(terrain);
 		camera.calcCamPos();
 
-		
-
-		renderer.processEntities(entities);
-		renderer.processTerrains(terrains);
-
 		// Render to reflection texture
 		fbos.bindReflectionFrameBuffer();
 		camera.invertPitchAndPlayer();
 		camera.calcCamPos();
-		renderer.renderScene(entities, terrains, lights, camera, glm::vec4(0, 1, 0, -water.getHeight()+1.0f));
+		renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, glm::vec4(0, 1, 0, -water.getHeight() + 1.0f));
 		camera.invertPitchAndPlayer();
 		camera.calcCamPos();
 		// Render to refraction texture
 		fbos.bindRefractionFrameBuffer();
-		renderer.renderScene(entities, terrains, lights, camera, glm::vec4(0, -1, 0, water.getHeight()));
+		renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, glm::vec4(0, -1, 0, water.getHeight()));
 
 		// Render to screen
 		fbos.unbindCurrentFrameBuffer();
 		glDisable(GL_CLIP_DISTANCE0);
-		renderer.renderScene(entities, terrains, lights, camera, glm::vec4(0, 0, 0, 0));
+		renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, glm::vec4(0, 0, 0, 0));
 		waterRenderer.render(waters, camera, sun);
 		guiRenderer.render(guis);
 
