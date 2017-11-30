@@ -39,6 +39,8 @@
 #include "Mouse.h"
 #include "Scroll.h"
 
+#include "TextMaster.h"
+
 #pragma region GL_DEBUG_TOOLS
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCall(x) GLClearError();\
@@ -168,12 +170,18 @@ int main(void)
 	WaterTile water(400, 400, 0);
 	waters.push_back(water);
 
-
-
 	Entity lampEntity(lamp, glm::vec3(0));
 	entities.push_back(lampEntity);
 	Light lampLight(glm::vec3(0.0), { 10.0f, 10.0f, 0.0f }, { 1, 0.01f, 0.002f });
 	lights.push_back(lampLight);
+
+	#pragma region TEXT
+
+	FontType font(Loader::loadTexture2D("../fonts/verdana.png").getID(), "verdana");
+
+	GUIText text("Sample text", 1, font, glm::vec2 { 0.0f, 0.0f }, 0.5f, false);
+
+	#pragma endregion
 
 	//GuiTexture reflection(fbos.getReflectionTexture(), glm::vec2(0.5f, 0.5f), glm::vec2(0.25f));
 	//guis.push_back(reflection);
@@ -250,6 +258,7 @@ int main(void)
 		renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, glm::vec4(0, 0, 0, 0));
 		waterRenderer.render(waters, camera, sun);
 		guiRenderer.render(guis);
+		TextMaster::render();
 
 		Window::update();
 

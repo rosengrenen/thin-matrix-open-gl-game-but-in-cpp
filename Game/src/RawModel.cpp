@@ -31,14 +31,25 @@ RawModel::RawModel(const std::vector<float>& vertices, const std::vector<float>&
 	m_vertexCount = indices.size();
 }
 
-RawModel::RawModel(const std::vector<float>& positions, GLint dimensions)
+RawModel::RawModel(const std::vector<float>& vertices, GLint dimensions)
 {
 	glGenVertexArrays(1, &m_vao);
 	glBindVertexArray(m_vao);
 
-	storeDataInAttribList(0, dimensions, positions);
+	storeDataInAttribList(0, dimensions, vertices);
 
-	m_vertexCount = positions.size() / dimensions;
+	m_vertexCount = vertices.size() / dimensions;
+}
+
+RawModel::RawModel(const std::vector<float>& vertices, const std::vector<float>& texCoords)
+{
+	glGenVertexArrays(1, &m_vao);
+	glBindVertexArray(m_vao);
+
+	storeDataInAttribList(0, 2, vertices);
+	storeDataInAttribList(1, 2, texCoords);
+
+	m_vertexCount = vertices.size() / 2;
 }
 
 

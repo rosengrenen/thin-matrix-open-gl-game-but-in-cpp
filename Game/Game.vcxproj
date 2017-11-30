@@ -165,6 +165,7 @@
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\shaders\font.shader" />
     <None Include="res\shaders\gui.shader" />
     <None Include="res\shaders\normalMap.shader" />
     <None Include="res\shaders\skybox.shader" />
@@ -173,12 +174,24 @@
     <None Include="res\shaders\water.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Character.h" />
+    <ClInclude Include="src\FontRenderer.h" />
+    <ClInclude Include="src\FontShader.h" />
+    <ClInclude Include="src\FontType.h" />
     <ClInclude Include="src\GuiRenderer.h" />
     <ClInclude Include="src\GuiShader.h" />
+    <ClInclude Include="src\GUIText.h" />
     <ClInclude Include="src\GuiTexture.h" />
+    <ClInclude Include="src\Line.h" />
+    <ClInclude Include="src\MetaFile.h" />
     <ClInclude Include="src\ModelDataNM.h" />
+    <ClInclude Include="src\newCharacter.h" />
+    <ClInclude Include="src\newFont.h" />
     <ClInclude Include="src\NormalMappingRenderer.h" />
     <ClInclude Include="src\NormalMappingShader.h" />
+    <ClInclude Include="src\TextMaster.h" />
+    <ClInclude Include="src\TextMeshCreator.h" />
+    <ClInclude Include="src\TextMeshData.h" />
     <ClInclude Include="src\TextureData.h" />
     <ClInclude Include="src\Math.h" />
     <ClInclude Include="src\MousePicker.h" />
@@ -214,6 +227,7 @@
     <ClInclude Include="src\WaterShader.h" />
     <ClInclude Include="src\WaterTile.h" />
     <ClInclude Include="src\Window.h" />
+    <ClInclude Include="src\Word.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\back.png" />

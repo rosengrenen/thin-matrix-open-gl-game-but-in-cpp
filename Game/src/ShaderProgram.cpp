@@ -96,6 +96,16 @@ void ShaderProgram::stop() const
 	glUseProgram(0);
 }
 
+void ShaderProgram::setMatrix2f(unsigned int location, const glm::mat2 & matrix) const
+{ 
+	glUniformMatrix2fv(location, 1, GL_FALSE, &matrix[0][0]);
+}
+
+void ShaderProgram::setMatrix3f(unsigned int location, const glm::mat3 & matrix) const
+{ 
+	glUniformMatrix3fv(location, 1, GL_FALSE, &matrix[0][0]);
+}
+
 void ShaderProgram::setMatrix4f(unsigned int location, const glm::mat4& matrix) const
 {
 	glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);

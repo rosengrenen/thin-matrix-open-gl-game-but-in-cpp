@@ -28,7 +28,9 @@ public:
 	RawModel(const std::vector<float>& vertices, const std::vector<float>& texCoords, const std::vector<float>& normals, const std::vector<float>& tangents, const std::vector<int>& indices);
 
 	// Create a simple vertex array object from vertex positions
-	RawModel(const std::vector<float>& positions, GLint dimensions);
+	RawModel(const std::vector<float>& vertices, GLint dimensions);
+
+	RawModel(const std::vector<float>& vertices, const std::vector<float>& texCoords);
 
 	void bind() const;
 

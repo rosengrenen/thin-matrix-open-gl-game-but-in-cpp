@@ -58,6 +58,12 @@
     <Filter Include="Source Files\NormalMapping">
       <UniqueIdentifier>{11716de7-9678-4428-8eaf-f3a72a291ea1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Font">
+      <UniqueIdentifier>{2d268fb5-6fd3-4d65-a5f5-1207506708f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FontData">
+      <UniqueIdentifier>{2fdf99e2-6a0f-4096-b667-7b59eaef55a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp">
@@ -235,6 +241,45 @@
     </ClInclude>
     <ClInclude Include="src\TextureData.h">
       <Filter>Source Files\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontRenderer.h">
+      <Filter>Source Files\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontShader.h">
+      <Filter>Source Files\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Word.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontType.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUIText.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Line.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MetaFile.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextMaster.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextMeshCreator.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextMeshData.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Character.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\newFont.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\newCharacter.h">
+      <Filter>Source Files\FontData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -564,10 +609,11 @@
     <None Include="res\objects\rocks.obj">
       <Filter>Resource Files\Objects</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="res\objects\barrel.obj">
+    <None Include="res\shaders\font.shader">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="res\objects\barrel.obj">
       <Filter>Resource Files\Objects</Filter>
-    </Object>
+    </None>
   </ItemGroup>
 </Project>
