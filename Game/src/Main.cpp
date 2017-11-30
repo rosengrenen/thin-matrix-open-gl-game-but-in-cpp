@@ -39,7 +39,9 @@
 #include "Mouse.h"
 #include "Scroll.h"
 
-#include "TextMaster.h"
+//#include "TextMaster.h"
+
+#include "newFont.h"
 
 #pragma region GL_DEBUG_TOOLS
 #define ASSERT(x) if (!(x)) __debugbreak();
@@ -177,9 +179,12 @@ int main(void)
 
 	#pragma region TEXT
 
-	FontType font(Loader::loadTexture2D("../fonts/verdana.png").getID(), "verdana");
+	//FontType font(Loader::loadTexture2D("../fonts/verdana.png").getID(), "verdana");
 
-	GUIText text("Sample text", 1, font, glm::vec2 { 0.0f, 0.0f }, 0.5f, false);
+	//GUIText text("Sample text", 1, font, glm::vec2 { 0.0f, 0.0f }, 0.5f, false);
+
+	Texture verdanaTexture = Loader::loadTexture2D("../fonts/verdana.png");
+	Font verdana("verdana", verdanaTexture);
 
 	#pragma endregion
 
@@ -258,7 +263,7 @@ int main(void)
 		renderer.renderScene(entities, normalMapEntities, terrains, lights, camera, glm::vec4(0, 0, 0, 0));
 		waterRenderer.render(waters, camera, sun);
 		guiRenderer.render(guis);
-		TextMaster::render();
+		//TextMaster::render();
 
 		Window::update();
 
