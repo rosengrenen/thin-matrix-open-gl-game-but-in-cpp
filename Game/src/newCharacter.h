@@ -1,6 +1,8 @@
 #pragma once
 
-class newCharacter
+#include <unordered_map>
+
+class Character
 {
 public:
 	// The ASCII code
@@ -13,5 +15,6 @@ public:
 	int xoffset;
 	int yoffset;
 	int xadvance;
-	//TODO: Kerning
+	// Kerning <ascii, amount>
+	std::unordered_map<int, int> kerning;
 };

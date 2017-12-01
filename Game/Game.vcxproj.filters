@@ -117,6 +117,9 @@
     <ClCompile Include="src\TextureData.cpp">
       <Filter>Source Files\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="src\newFont.cpp">
+      <Filter>Source Files\FontData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h">
@@ -279,6 +282,15 @@
       <Filter>Source Files\FontData</Filter>
     </ClInclude>
     <ClInclude Include="src\newCharacter.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\newText.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\newLine.h">
+      <Filter>Source Files\FontData</Filter>
+    </ClInclude>
+    <ClInclude Include="src\newWord.h">
       <Filter>Source Files\FontData</Filter>
     </ClInclude>
   </ItemGroup>

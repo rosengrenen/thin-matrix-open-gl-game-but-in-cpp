@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\newFont.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\EntityRenderer.cpp" />
     <ClCompile Include="src\Entity.cpp" />
@@ -174,6 +175,9 @@
     <None Include="res\shaders\water.shader" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\newLine.h" />
+    <ClInclude Include="src\newWord.h" />
+    <ClInclude Include="src\newText.h" />
     <ClInclude Include="src\Character.h" />
     <ClInclude Include="src\FontRenderer.h" />
     <ClInclude Include="src\FontShader.h" />

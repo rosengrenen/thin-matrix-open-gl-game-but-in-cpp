@@ -183,8 +183,7 @@ int main(void)
 
 	//GUIText text("Sample text", 1, font, glm::vec2 { 0.0f, 0.0f }, 0.5f, false);
 
-	Texture verdanaTexture = Loader::loadTexture2D("../fonts/verdana.png");
-	Font verdana("verdana", verdanaTexture);
+	Font verdana("verdana");
 
 	#pragma endregion
 
