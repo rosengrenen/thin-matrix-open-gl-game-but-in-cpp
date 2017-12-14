@@ -31,6 +31,28 @@ Font::Font(const std::string& path)
 
 Text Font::loadText(const std::string & text, float fontSize, const glm::vec2 & position, float maxLineLength, bool centered)
 {
+	std::vector<std::string> unprocessedWords { Utilities::stringExplode(text, ' ') };
+	std::vector<Word> words;
+	for (const std::string& word : unprocessedWords)
+	{
+		if (word != "")
+		{
+			std::vector<Character> characters;
+			for (const char& character : word)
+			{
+				Character c;
+				if (m_characters.find(character) != m_characters.end())
+				{
+					c = m_characters.at(character);
+				}
+				else
+				{
+					c = { 0, 0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f };
+				}
+			}
+			words.push_back(Word(word));
+		}
+	}
 	return Text();
 }
 
@@ -190,7 +212,16 @@ void Font::loadCharacter(const std::string& line)
 			xadvance = ::atoi(lineValueKeyValuePair[1].c_str());
 		}
 	}
-	m_characters.insert({ id, { id, x, y, width, height, xoffset, yoffset, xadvance } });
+	m_characters.insert({ id, {
+		id,
+		static_cast<float>(x) / m_scaleW,
+		static_cast<float>(y) / m_scaleH,
+		static_cast<float>(width) / m_scaleW,
+		static_cast<float>(height) / m_scaleH,
+		static_cast<float>(xoffset) / m_scaleW,
+		static_cast<float>(yoffset) / m_scaleH,
+		static_cast<float>(xadvance) }
+	});
 }
 
 void Font::loadKerning(const std::string& line)

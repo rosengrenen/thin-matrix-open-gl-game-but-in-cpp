@@ -8,13 +8,14 @@ public:
 	// The ASCII code
 	int id;
 	// The 
-	int texOffsetX;
-	int texOffsetY;
-	int width;
-	int height;
-	int xoffset;
-	int yoffset;
-	int xadvance;
+	float texOffsetX;
+	float texOffsetY;
+	float width;
+	float height;
+	float xoffset;
+	float yoffset;
+	float xadvance;
 	// Kerning <ascii, amount>
 	std::unordered_map<int, int> kerning;
+
 };

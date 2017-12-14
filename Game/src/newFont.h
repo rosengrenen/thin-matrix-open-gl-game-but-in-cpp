@@ -13,6 +13,8 @@
 
 #include "newCharacter.h"
 #include "newText.h"
+#include "newWord.h"
+#include "newLine.h"
 
 class Font
 {
